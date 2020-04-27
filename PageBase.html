@@ -11,18 +11,12 @@
     <button type="button" class="button" onclick="stopVideo()">Stop!</button>
     <button type="button" class="button" onclick="onPlayClick()">Play!</button>
 </form>
-<!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
 <div id="player"></div>
-<!--<iframe id="player" width="760" height="560"
-        src="https://www.youtube.com/embed/M7lc1UVf-VE"
-        frameborder="0"
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen></iframe>
-        -->
+
 <div>
     <button id="upLeftButton" type="button" class="button" onmousedown="lookUpLeft()">Up Left</button>
     <button id="upButton" type="button" class="button" onmousedown="lookUp()">Up</button>
-    <button id="upRightButton" type="button" class="button" >Up Right</button>
+    <button id="upRightButton" type="button" class="button" onmousedown="lookUpRight()">Up Right</button>
 </div>
 <div>
     <button id="leftButton" type="button" class="button" onmousedown="lookLeft()">Left</button>
@@ -30,19 +24,22 @@
     <button id="rightButton" type="button" class="button" onmousedown="lookRight()">Right</button>
 </div>
 <div>
-    <button id="downLeftButton" type="button" class="button" >Down Left</button>
+    <button id="downLeftButton" type="button" class="button" onmousedown="lookDownLeft()">Down Left</button>
     <button id="downButton" type="button" class="button" onmousedown="lookDown()">Down</button>
-    <button id="downRightButton" type="button" class="button" >Down Right</button>
+    <button id="downRightButton" type="button" class="button" onmousedown="lookDownRight()">Down Right</button>
 
 </div>
 
 <script>
     document.getElementById("upLeftButton").onmouseup = function(){stopCamera()};
     document.getElementById("upButton").onmouseup = function(){stopCamera()};
+    document.getElementById("upRightButton").onmouseup = function(){stopCamera()};
     document.getElementById("leftButton").onmouseup = function(){stopCamera()};
     document.getElementById("midButton").onmouseup = function(){stopCamera()};
     document.getElementById("rightButton").onmouseup = function(){stopCamera()};
+    document.getElementById("downLeftButton").onmouseup = function(){stopCamera()};
     document.getElementById("downButton").onmouseup = function(){stopCamera()};
+    document.getElementById("downRightButton").onmouseup = function(){stopCamera()};
 
 
     // 2. This code loads the IFrame Player API code asynchronously.
@@ -90,7 +87,7 @@
         player.playVideo();
     }
 
-    var animationID;
+    var animationID; // to keep track of the animation requested if we need to stop/cancel it
     function lookUpLeft(){
         let newSettings = player.getSphericalProperties();
         newSettings['pitch'] += 2.5;
@@ -106,11 +103,12 @@
         animationID = requestAnimationFrame(lookUp);
     }
 
-    function lookDown(){
+    function lookUpRight(){
         let newSettings = player.getSphericalProperties();
-        newSettings['pitch'] -= 5;
+        newSettings['pitch'] += 2.5;
+        newSettings['yaw'] -= 5;
         player.setSphericalProperties(newSettings);
-        animationID = requestAnimationFrame(lookDown);
+        animationID = requestAnimationFrame(lookUpRight);
     }
 
     function lookLeft(){
@@ -120,23 +118,40 @@
         player.setSphericalProperties(newSettings);
         animationID = requestAnimationFrame(lookLeft);
     }
-
-    function lookRight(){
-        let newSettings = player.getSphericalProperties();
-        newSettings['yaw']-=5
-        player.setSphericalProperties(newSettings);
-        animationID = requestAnimationFrame(lookRight);
-    }
-
     //camera reset to default angle
     function lookReset(){
         let newSettings = player.getSphericalProperties();
         newSettings['yaw'] = 0;
         newSettings['pitch'] = 0;
         player.setSphericalProperties(newSettings);
-        animationID = requestAnimationFrame(lookReset);
+        animationID = requestAnimationFrame(lookReset); //may not need to request animation since it just resets camera
     }
-
+    function lookRight(){
+        let newSettings = player.getSphericalProperties();
+        newSettings['yaw'] -= 5
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookRight);
+    }
+    function lookDownLeft(){
+        let newSettings = player.getSphericalProperties();
+        newSettings['pitch'] -= 2.5;
+        newSettings['yaw'] += 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookDownLeft);
+    }
+    function lookDown(){
+        let newSettings = player.getSphericalProperties();
+        newSettings['pitch'] -= 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookDown);
+    }
+    function lookDownRight(){
+        let newSettings = player.getSphericalProperties();
+        newSettings['pitch'] -= 2.5;
+        newSettings['yaw'] -= 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookDownRight);
+    }
     function stopCamera(){
         cancelAnimationFrame(animationID);
     }

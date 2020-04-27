@@ -95,14 +95,12 @@
         player.setSphericalProperties(newSettings);
         animationID = requestAnimationFrame(lookUpLeft);
     }
-
     function lookUp(){
         let newSettings = player.getSphericalProperties();
         newSettings['pitch'] += 5;
         player.setSphericalProperties(newSettings);
         animationID = requestAnimationFrame(lookUp);
     }
-
     function lookUpRight(){
         let newSettings = player.getSphericalProperties();
         newSettings['pitch'] += 2.5;
@@ -110,7 +108,6 @@
         player.setSphericalProperties(newSettings);
         animationID = requestAnimationFrame(lookUpRight);
     }
-
     function lookLeft(){
         let newSettings = player.getSphericalProperties();
         newSettings['yaw'] += 5;

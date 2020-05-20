@@ -11,37 +11,38 @@
     <button type="button" class="button" onclick="stopVideo()">Stop!</button>
     <button type="button" class="button" onclick="onPlayClick()">Play!</button>
 </form>
-<div id="player"></div>
+<div class="row">
+    <div class="holder">
+        <div id="player0"></div>
+    </div>
+    <div id="cursorBox0" class="cursorBox"></div>
+    <p id="mouseCoords" style="clear: none">This shouldn't be here!</p>
+</div>
 
-<div>
-    <button id="upLeftButton" type="button" class="button" onmousedown="lookUpLeft()">Up Left</button>
-    <button id="upButton" type="button" class="button" onmousedown="lookUp()">Up</button>
-    <button id="upRightButton" type="button" class="button" onmousedown="lookUpRight()">Up Right</button>
+<div style="clear: both">
+    <button id="upLeftButton" type="button" class="button" onmousedown="lookUpLeft()" onmouseup="stopCamera()">Up Left</button>
+    <button id="upButton" type="button" class="button" onmousedown="lookUp()" onmouseup="stopCamera()">Up</button>
+    <button id="upRightButton" type="button" class="button" onmousedown="lookUpRight()" onmouseup="stopCamera()">Up Right</button>
 </div>
 <div>
-    <button id="leftButton" type="button" class="button" onmousedown="lookLeft()">Left</button>
-    <button id="midButton" type="button"class="button" onmousedown="lookReset()">Mid</button>
-    <button id="rightButton" type="button" class="button" onmousedown="lookRight()">Right</button>
+    <button id="leftButton" type="button" class="button" onmousedown="lookLeft()" onmouseup="stopCamera()">Left</button>
+    <button id="midButton" type="button"class="button" onmousedown="lookReset()" onmouseup="stopCamera()">Mid</button>
+    <button id="rightButton" type="button" class="button" onmousedown="lookRight()" onmouseup="stopCamera()">Right</button>
 </div>
 <div>
-    <button id="downLeftButton" type="button" class="button" onmousedown="lookDownLeft()">Down Left</button>
-    <button id="downButton" type="button" class="button" onmousedown="lookDown()">Down</button>
-    <button id="downRightButton" type="button" class="button" onmousedown="lookDownRight()">Down Right</button>
+    <button id="downLeftButton" type="button" class="button" onmousedown="lookDownLeft()" onmouseup="stopCamera()">Down Left</button>
+    <button id="downButton" type="button" class="button" onmousedown="lookDown()" onmouseup="stopCamera()">Down</button>
+    <button id="downRightButton" type="button" class="button" onmousedown="lookDownRight()" onmouseup="stopCamera()">Down Right</button>
 
 </div>
 
 <script>
-    //just moved to new machine, testing changes
-    document.getElementById("upLeftButton").onmouseup = function(){stopCamera()};
-    document.getElementById("upButton").onmouseup = function(){stopCamera()};
-    document.getElementById("upRightButton").onmouseup = function(){stopCamera()};
-    document.getElementById("leftButton").onmouseup = function(){stopCamera()};
-    document.getElementById("midButton").onmouseup = function(){stopCamera()};
-    document.getElementById("rightButton").onmouseup = function(){stopCamera()};
-    document.getElementById("downLeftButton").onmouseup = function(){stopCamera()};
-    document.getElementById("downButton").onmouseup = function(){stopCamera()};
-    document.getElementById("downRightButton").onmouseup = function(){stopCamera()};
-
+    let mouseCoords = document.querySelector('#mouseCoords');
+    document.getElementById("cursorBox0").addEventListener('mousemove', showMouseCoords);
+    function showMouseCoords(event){
+        //console.log('showMouseCoords was called');
+        mouseCoords.innerText=`Mouse cursor X/Y: ${event.clientX}, ${event.clientY}`;
+    }
 
     // 2. This code loads the IFrame Player API code asynchronously.
     var tag = document.createElement('script');
@@ -67,7 +68,7 @@
     function onLoadClick(){
         let videoId0 = document.getElementById("textInput").value;
         if( player == null){
-            player = new YT.Player('player', {
+            player = new YT.Player('player0', {
                 height: '700',
                 width: '900',
                 videoId: videoId0,

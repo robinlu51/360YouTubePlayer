@@ -6,3 +6,18 @@ body{
     width: 120px;
     text-align: center;
 }
+.holder{
+    float: left;
+    margin-bottom: 5px;
+    width: 900px;
+    height: 700px;
+    background-color: #aaa;
+}
+.cursorBox {
+    float: left;
+    margin-left: 10px;
+    width: 500px;
+    height: 500px;
+    background-color: lightblue;
+}
+

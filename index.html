@@ -63,23 +63,21 @@
     let mouseCoords = document.querySelector('#mouseCoords');
     document.getElementById("cursorBox0").addEventListener('mousemove', showMouseCoords);
 
-    function showMouseCoords(event) {
+    function showMouseCoords(event) { //need to change to new appropriate function name to describe all functionality
         let offset = $('#cursorBox0').offset();
         let x = Math.round(event.clientX - offset.left);
         let y = Math.round(event.clientY - offset.top);
         mouseCoords.innerText = `Mouse cursor X/Y: ${x}, ${y}`;
-        let centerX = document.getElementById('cursorBox0').offsetWidth/2;
+        let centerX = document.getElementById('cursorBox0').offsetWidth / 2;
         //let centerX = $('#cursorBox0').offsetWidth; // for some reason, this returns undefined
-        let centerY = document.getElementById('cursorBox0').offsetHeight/2;
+        let centerY = document.getElementById('cursorBox0').offsetHeight / 2;
         //console.log('The box center is at '+centerX+', '+centerY);
-        let cameraMultiplier = 0.01;
 
+        let cameraMultiplier = 0.01; //necessary to control the overall camera speed
         let newSettings = player.getSphericalProperties();
         newSettings['yaw'] += cameraMultiplier * (centerX - x);
         newSettings['pitch'] += cameraMultiplier * (centerY - y);
         player.setSphericalProperties(newSettings);
-
-
     }
 
     // 2. This code loads the IFrame Player API code asynchronously.
@@ -106,7 +104,7 @@
 
     function onLoadClick() {
         let videoId0 = document.getElementById("textInput").value;
-        let adjustedWidth = window.innerWidth*2/3-20; //needs to be adjusted if a different bootstrap grid
+        let adjustedWidth = window.innerWidth * 2 / 3 - 20; //needs to be adjusted if a different bootstrap grid
         if (player == null) {
             player = new YT.Player('player0', {
                 height: 700,

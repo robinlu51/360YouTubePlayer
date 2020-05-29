@@ -65,15 +65,28 @@
 
     function showMouseCoords(event) {
         let offset = $('#cursorBox0').offset();
-        //console.log('showMouseCoords was called'+offset.left+', '+offset.top);
-        mouseCoords.innerText = `Mouse cursor X/Y: ${Math.round(event.clientX - offset.left)}, ${Math.round(event.clientY - offset.top)}`;
+        let x = Math.round(event.clientX - offset.left);
+        let y = Math.round(event.clientY - offset.top);
+        mouseCoords.innerText = `Mouse cursor X/Y: ${x}, ${y}`;
+        let centerX = document.getElementById('cursorBox0').offsetWidth/2;
+        //let centerX = $('#cursorBox0').offsetWidth; // for some reason, this returns undefined
+        let centerY = document.getElementById('cursorBox0').offsetHeight/2;
+        //console.log('The box center is at '+centerX+', '+centerY);
+        let cameraMultiplier = 0.01;
+
+        let newSettings = player.getSphericalProperties();
+        newSettings['yaw'] += cameraMultiplier * (centerX - x);
+        newSettings['pitch'] += cameraMultiplier * (centerY - y);
+        player.setSphericalProperties(newSettings);
+
+
     }
 
     // 2. This code loads the IFrame Player API code asynchronously.
-    var tag = document.createElement('script');
+    let tag = document.createElement('script');
 
     tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
+    let firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     var PROPERTIES = ['yaw', 'pitch', 'roll', 'fov'];
@@ -93,10 +106,11 @@
 
     function onLoadClick() {
         let videoId0 = document.getElementById("textInput").value;
+        let adjustedWidth = window.innerWidth*2/3-20; //needs to be adjusted if a different bootstrap grid
         if (player == null) {
             player = new YT.Player('player0', {
-                height: '700',
-                width: '900',
+                height: 700,
+                width: adjustedWidth,
                 videoId: videoId0,
                 events: {
                     'onReady': onPlayerReady,
@@ -158,7 +172,7 @@
 
     function lookRight() {
         let newSettings = player.getSphericalProperties();
-        newSettings['yaw'] -= 5
+        newSettings['yaw'] -= 5;
         player.setSphericalProperties(newSettings);
         animationID = requestAnimationFrame(lookRight);
     }

@@ -7,17 +7,16 @@ body{
     text-align: center;
 }
 .holder{
-    float: left;
+    margin-top: 5px;
     margin-bottom: 5px;
-    width: 900px;
+    width: 100%; /*900px*/
     height: 700px;
-    background-color: #aaa;
+    /*background-color: #aaa;*/
 }
 .cursorBox {
-    float: left;
-    margin-left: 10px;
-    width: 200px;
-    height: 200px;
+    margin-right: 10px;
+    width: 100%; /*500px*/
+    height: 500px;
     background-color: lightblue;
 }
 

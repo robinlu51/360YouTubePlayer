@@ -1,8 +1,15 @@
 <!DOCTYPE html>
-<html>
-<link rel="stylesheet" href="ButtonControl.css">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="ButtonControl.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
 <body>
-<form>
+<form style="padding: 5px">
     <input type="text" id="textInput" value="sPyAQQklc1s">
     <!--
     zUDwSh-1JWI
@@ -11,50 +18,80 @@
     <button type="button" class="button" onclick="stopVideo()">Stop!</button>
     <button type="button" class="button" onclick="onPlayClick()">Play!</button>
 </form>
-<div class="row">
-    <div class="holder">
-        <div id="player0"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="holder">
+                <div id="player0"></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div id="cursorBox0" class="cursorBox"></div>
+            <p id="mouseCoords" style="clear: none">Mouse cursor X/Y: 0, 0</p>
+        </div>
     </div>
-    <div id="cursorBox0" class="cursorBox"></div>
-    <div id="mouseCoords" style="clear: none">This shouldn't be here!</div>
-</div>
 
-<div style="clear: both">
-    <button id="upLeftButton" type="button" class="button" onmousedown="lookUpLeft()" onmouseup="stopCamera()">Up Left</button>
-    <button id="upButton" type="button" class="button" onmousedown="lookUp()" onmouseup="stopCamera()">Up</button>
-    <button id="upRightButton" type="button" class="button" onmousedown="lookUpRight()" onmouseup="stopCamera()">Up Right</button>
+    <div>
+        <button id="upLeftButton" type="button" class="button" onmousedown="lookUpLeft()" onmouseup="stopCamera()">Up
+            Left
+        </button>
+        <button id="upButton" type="button" class="button" onmousedown="lookUp()" onmouseup="stopCamera()">Up</button>
+        <button id="upRightButton" type="button" class="button" onmousedown="lookUpRight()" onmouseup="stopCamera()">Up
+            Right
+        </button>
+    </div>
+    <div>
+        <button id="leftButton" type="button" class="button" onmousedown="lookLeft()" onmouseup="stopCamera()">Left
+        </button>
+        <button id="midButton" type="button" class="button" onmousedown="lookReset()" onmouseup="stopCamera()">Mid
+        </button>
+        <button id="rightButton" type="button" class="button" onmousedown="lookRight()" onmouseup="stopCamera()">Right
+        </button>
+    </div>
+    <div>
+        <button id="downLeftButton" type="button" class="button" onmousedown="lookDownLeft()" onmouseup="stopCamera()">
+            Down Left
+        </button>
+        <button id="downButton" type="button" class="button" onmousedown="lookDown()" onmouseup="stopCamera()">Down
+        </button>
+        <button id="downRightButton" type="button" class="button" onmousedown="lookDownRight()"
+                onmouseup="stopCamera()">Down Right
+        </button>
+    </div>
 </div>
-<div>
-    <button id="leftButton" type="button" class="button" onmousedown="lookLeft()" onmouseup="stopCamera()">Left</button>
-    <button id="midButton" type="button"class="button" onmousedown="lookReset()" onmouseup="stopCamera()">Mid</button>
-    <button id="rightButton" type="button" class="button" onmousedown="lookRight()" onmouseup="stopCamera()">Right</button>
-</div>
-<div>
-    <button id="downLeftButton" type="button" class="button" onmousedown="lookDownLeft()" onmouseup="stopCamera()">Down Left</button>
-    <button id="downButton" type="button" class="button" onmousedown="lookDown()" onmouseup="stopCamera()">Down</button>
-    <button id="downRightButton" type="button" class="button" onmousedown="lookDownRight()" onmouseup="stopCamera()">Down Right</button>
-
-</div>
-
 <script>
     let mouseCoords = document.querySelector('#mouseCoords');
     document.getElementById("cursorBox0").addEventListener('mousemove', showMouseCoords);
-    function showMouseCoords(event){
-        //console.log('showMouseCoords was called');
-        mouseCoords.innerText=`Mouse cursor X/Y: ${event.clientX}, ${event.clientY}`;
+
+    function showMouseCoords(event) { //need to change to new appropriate function name to describe all functionality
+        let offset = $('#cursorBox0').offset();
+        let x = Math.round(event.clientX - offset.left);
+        let y = Math.round(event.clientY - offset.top);
+        mouseCoords.innerText = `Mouse cursor X/Y: ${x}, ${y}`;
+        let centerX = document.getElementById('cursorBox0').offsetWidth / 2;
+        //let centerX = $('#cursorBox0').offsetWidth; // for some reason, this returns undefined
+        let centerY = document.getElementById('cursorBox0').offsetHeight / 2;
+        //console.log('The box center is at '+centerX+', '+centerY);
+
+        let cameraMultiplier = 0.01; //necessary to control the overall camera speed
+        let newSettings = player.getSphericalProperties();
+        newSettings['yaw'] += cameraMultiplier * (centerX - x);
+        newSettings['pitch'] += cameraMultiplier * (centerY - y);
+        player.setSphericalProperties(newSettings);
     }
 
     // 2. This code loads the IFrame Player API code asynchronously.
-    var tag = document.createElement('script');
+    let tag = document.createElement('script');
 
     tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
+    let firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     var PROPERTIES = ['yaw', 'pitch', 'roll', 'fov'];
     // 3. This function creates an <iframe> (and YouTube player)
     //    after the API code downloads.
     var player;
+
     function onYouTubeIframeAPIReady() {
 
     }
@@ -65,18 +102,19 @@
         //event.target.playVideo();
     }
 
-    function onLoadClick(){
+    function onLoadClick() {
         let videoId0 = document.getElementById("textInput").value;
-        if( player == null){
+        let adjustedWidth = window.innerWidth * 2 / 3 - 20; //needs to be adjusted if a different bootstrap grid
+        if (player == null) {
             player = new YT.Player('player0', {
-                height: '700',
-                width: '900',
+                height: 700,
+                width: adjustedWidth,
                 videoId: videoId0,
                 events: {
                     'onReady': onPlayerReady,
                 }
             });
-        }else{
+        } else {
             player.loadVideoById(videoId0);
         }
     }
@@ -85,73 +123,82 @@
         player.stopVideo();
     }
 
-    function onPlayClick(){
+    function onPlayClick() {
         player.playVideo();
     }
 
     var animationID; // to keep track of the animation requested if we need to stop/cancel it
-    function lookUpLeft(){
+    function lookUpLeft() {
         let newSettings = player.getSphericalProperties();
         newSettings['pitch'] += 2.5;
         newSettings['yaw'] += 5;
         player.setSphericalProperties(newSettings);
         animationID = requestAnimationFrame(lookUpLeft);
     }
-    function lookUp(){
+
+    function lookUp() {
         let newSettings = player.getSphericalProperties();
         newSettings['pitch'] += 5;
         player.setSphericalProperties(newSettings);
         animationID = requestAnimationFrame(lookUp);
     }
-    function lookUpRight(){
+
+    function lookUpRight() {
         let newSettings = player.getSphericalProperties();
         newSettings['pitch'] += 2.5;
         newSettings['yaw'] -= 5;
         player.setSphericalProperties(newSettings);
         animationID = requestAnimationFrame(lookUpRight);
     }
-    function lookLeft(){
+
+    function lookLeft() {
         let newSettings = player.getSphericalProperties();
         newSettings['yaw'] += 5;
         console.log(newSettings['yaw']);
         player.setSphericalProperties(newSettings);
         animationID = requestAnimationFrame(lookLeft);
     }
+
     //camera reset to default angle
-    function lookReset(){
+    function lookReset() {
         let newSettings = player.getSphericalProperties();
         newSettings['yaw'] = 0;
         newSettings['pitch'] = 0;
         player.setSphericalProperties(newSettings);
         animationID = requestAnimationFrame(lookReset); //may not need to request animation since it just resets camera
     }
-    function lookRight(){
+
+    function lookRight() {
         let newSettings = player.getSphericalProperties();
-        newSettings['yaw'] -= 5
+        newSettings['yaw'] -= 5;
         player.setSphericalProperties(newSettings);
         animationID = requestAnimationFrame(lookRight);
     }
-    function lookDownLeft(){
+
+    function lookDownLeft() {
         let newSettings = player.getSphericalProperties();
         newSettings['pitch'] -= 2.5;
         newSettings['yaw'] += 5;
         player.setSphericalProperties(newSettings);
         animationID = requestAnimationFrame(lookDownLeft);
     }
-    function lookDown(){
+
+    function lookDown() {
         let newSettings = player.getSphericalProperties();
         newSettings['pitch'] -= 5;
         player.setSphericalProperties(newSettings);
         animationID = requestAnimationFrame(lookDown);
     }
-    function lookDownRight(){
+
+    function lookDownRight() {
         let newSettings = player.getSphericalProperties();
         newSettings['pitch'] -= 2.5;
         newSettings['yaw'] -= 5;
         player.setSphericalProperties(newSettings);
         animationID = requestAnimationFrame(lookDownRight);
     }
-    function stopCamera(){
+
+    function stopCamera() {
         cancelAnimationFrame(animationID);
     }
 

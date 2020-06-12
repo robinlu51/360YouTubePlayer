@@ -63,6 +63,7 @@
     let mouseCoords = document.querySelector('#mouseCoords');
     document.getElementById("cursorBox0").addEventListener('mouseenter', showMouseCoords);
 
+    let mouseInsideBox;
     let animateID;
     function showMouseCoords(event) { //need to change to new appropriate function name to describe all functionality
         let offset = $('#cursorBox0').offset();
@@ -83,6 +84,8 @@
         newSettings['pitch'] += cameraMultiplier * (centerY - y);
         player.setSphericalProperties(newSettings);
         animateID = requestAnimationFrame(showMouseCoords);
+        if(mouseInsideBox)
+            setTimeout(showMouseCoords,100);
     }
 
     // 2. This code loads the IFrame Player API code asynchronously.

@@ -27,7 +27,8 @@
         </div>
         <div class="col-md-4">
             <div id="cursorBox0" class="cursorBox"></div>
-            <p id="mouseCoords" style="clear: none">Mouse cursor X/Y: 0, 0</p>
+            <div id="cursorSafeZone" class="safeZone"></div>
+            <p id="mouseCoords" style="clear: none; position: absolute;">Mouse cursor X/Y: 0, 0</p>
         </div>
     </div>
 
@@ -60,32 +61,46 @@
     </div>
 </div>
 <script>
-    let mouseCoords = document.querySelector('#mouseCoords');
+    let mouseInsideBox = false;
+    document.getElementById("cursorBox0").addEventListener('mouseenter', function () {
+        mouseInsideBox = true;
+    });
+    document.getElementById("cursorBox0").addEventListener('mouseleave', function () {
+        mouseInsideBox = false;
+    });
+
+    let mouseX = 0;
+    let mouseY = 0;
+    document.getElementById("cursorBox0").addEventListener('mouseenter', updateCoords);
+    document.getElementById("cursorBox0").addEventListener('mousemove', updateCoords);
+    let mouseCoordsText = document.querySelector('#mouseCoords');
     document.getElementById("cursorBox0").addEventListener('mouseenter', showMouseCoords);
 
-    let mouseInsideBox;
-    let animateID;
-    function showMouseCoords(event) { //need to change to new appropriate function name to describe all functionality
-        let offset = $('#cursorBox0').offset();
+    function updateCoords(event) { //update the mouse's coordinates in the global variable
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+    }
 
+    let offset = $('#cursorBox0').offset();//the offset for cursorBox's coordinates
+    let centerX = document.getElementById('cursorBox0').offsetWidth / 2;
+    //let centerX = $('#cursorBox0').offsetWidth; // for some reason, this returns undefined
+    let centerY = document.getElementById('cursorBox0').offsetHeight / 2;
+    //console.log('The box center is at '+centerX+', '+centerY);
+    function showMouseCoords() { //need to change to new appropriate function name to describe all functionality
         //get the mouse cursor's current coordinates
-        let x = Math.round(event.clientX - offset.left);
-        let y = Math.round(event.clientY - offset.top);
-        mouseCoords.innerText = `Mouse cursor X/Y: ${x}, ${y}`;
+        let x = Math.round(mouseX - offset.left);
+        let y = Math.round(mouseY - offset.top);
+        mouseCoordsText.innerText = `Mouse cursor X/Y: ${x}, ${y}`;
 
-        let centerX = document.getElementById('cursorBox0').offsetWidth / 2;
-        //let centerX = $('#cursorBox0').offsetWidth; // for some reason, this returns undefined
-        let centerY = document.getElementById('cursorBox0').offsetHeight / 2;
-        //console.log('The box center is at '+centerX+', '+centerY);
-
-        let cameraMultiplier = 0.007; //necessary to control the overall camera speed
+        let cameraMultiplierX = 0.007; //necessary to control the overall camera speed
+        let cameraMultiplierY = 0.005;
         let newSettings = player.getSphericalProperties();
-        newSettings['yaw'] += cameraMultiplier * (centerX - x);
-        newSettings['pitch'] += cameraMultiplier * (centerY - y);
+        newSettings['yaw'] += cameraMultiplierX * (centerX - x);
+        newSettings['pitch'] += cameraMultiplierY * (centerY - y);
         player.setSphericalProperties(newSettings);
-        animateID = requestAnimationFrame(showMouseCoords);
-        if(mouseInsideBox)
-            setTimeout(showMouseCoords,100);
+        if (mouseInsideBox) {
+            setTimeout(showMouseCoords, 16); //timeout at 16ms to ensure around 60 updates/second
+        }
     }
 
     // 2. This code loads the IFrame Player API code asynchronously.

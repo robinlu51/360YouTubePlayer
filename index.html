@@ -12,7 +12,7 @@
 <form style="padding: 5px">
     <input type="text" id="textInput" value="sPyAQQklc1s">
     <!--
-    zUDwSh-1JWI
+    NLB4Fcxh1iU
     -->
     <button type="button" class="button" onclick="onLoadClick()">Load!</button>
     <button type="button" class="button" onclick="stopVideo()">Stop!</button>
@@ -26,10 +26,22 @@
             </div>
         </div>
         <div class="col-md-4">
+            <input type="checkbox" id="x_axis">
+            <label for="x_axis" style="margin-right: 50px">Inverse X-axis control</label>
+            <input type="checkbox" id="y_axis">
+            <label for="y_axis">Inverse Y-axis control</label>
+            <p id="massValue">This should be default mass value, you shouldn't see this!</p>
+            <!--
+            Although conceptually, mass isn't a percentage, we are presenting it to this way,
+            to make it easier to understand for the user
+            -->
+            <div class="sliderContainer">
+                <input class='slider' type='range' min='0' max='100' value='99' id='massSliderValue'
+                       onchange="updateMass(this.value)">
+            </div>
             <div id="cursorBox0" class="cursorBox">
                 <div id="cursorSafeZone" class="safeZone"></div>
             </div>
-
             <p id="mouseCoords" style="clear: none;">Mouse cursor X/Y: 0, 0</p>
         </div>
     </div>
@@ -63,7 +75,17 @@
     </div>
 </div>
 <script>
+    let massValueText = document.querySelector('#massValue');
+    //mass is the user assigned variable that controls the momentum of camera movement, on a scale of 0-1
+    let mass = document.getElementById('massSliderValue').value; // exists to update the mass value and text for the first time only
+    massValueText.innerText = `The current mass value is at: ${mass}%`; //subsequent updates are handled by updateMass()
+    mass /= 100; // needed so we don't need to call getElementById twice, and keep the mass value on 0-1 scale
+
+    let prevXVelocity = 0;
+    let prevYVelocity = 0;
+
     let mouseInsideBox = false;
+    let mouseInsideSafeZone = false;
     document.getElementById("cursorBox0").addEventListener('mouseenter', function () {
         mouseInsideBox = true;
     });
@@ -71,13 +93,11 @@
         mouseInsideBox = false;
     });
     document.getElementById("cursorSafeZone").addEventListener('mouseenter', function () {
-        mouseInsideBox = false;
+        mouseInsideSafeZone = true;
     });
     document.getElementById("cursorSafeZone").addEventListener('mouseleave', function () {
-        mouseInsideBox = true;
-        cursorCameraControl();
+        mouseInsideSafeZone = false;
     });
-
 
     let mouseX = 0;
     let mouseY = 0;
@@ -85,6 +105,11 @@
     document.getElementById("cursorBox0").addEventListener('mousemove', updateCoords);
     let mouseCoordsText = document.querySelector('#mouseCoords');
     document.getElementById("cursorBox0").addEventListener('mouseenter', cursorCameraControl);
+
+    function updateMass(value) { //update the mass value AND text displayed
+        mass = value / 100;
+        massValueText.innerText = `The current mass value is at: ${value}%`;
+    }
 
     function updateCoords(event) { //update the mouse's coordinates in the global variable
         mouseX = event.clientX;
@@ -95,9 +120,7 @@
     let centerX = document.getElementById('cursorBox0').offsetWidth / 2;
     //let centerX = $('#cursorBox0').offsetWidth; // for some reason, this returns undefined
     let centerY = document.getElementById('cursorBox0').offsetHeight / 2;
-    
-    //console.log('The box center is at '+centerX+', '+centerY);
-    let mass = 0.5; //mass is the user assigned variable that controls the momentum of camera movement, it is 0.5 now for dev purpose
+
     function cursorCameraControl() { //need to change to new appropriate function name to describe all functionality
         //get the mouse cursor's current coordinates
         let x = Math.round(mouseX - offset.left);
@@ -107,9 +130,19 @@
         let cameraMultiplierX = 0.007; //necessary to control the overall camera speed
         let cameraMultiplierY = 0.005;
         let newSettings = player.getSphericalProperties();
-        newSettings['yaw'] += cameraMultiplierX * (centerX - x);
-        newSettings['pitch'] += cameraMultiplierY * (centerY - y);
+        let targetedXVelocity = 0; //the velocity we want to achieve
+        let targetedYVelocity = 0;
+        if (!mouseInsideSafeZone) {
+            targetedXVelocity = centerX - x; //the velocity we want to achieve
+            targetedYVelocity = centerY - y;
+        }
+        let combinedXVelocity = ((1 - mass) * targetedXVelocity + mass * prevXVelocity); // the actual velocity calculated with momentum
+        let combinedYVelocity = ((1 - mass) * targetedYVelocity + mass * prevYVelocity);
+        newSettings['yaw'] += cameraMultiplierX * combinedXVelocity;
+        newSettings['pitch'] += cameraMultiplierY * combinedYVelocity;
         player.setSphericalProperties(newSettings);
+        prevXVelocity = combinedXVelocity; //update the previous velocity with the newly calculated value
+        prevYVelocity = combinedYVelocity;
         if (mouseInsideBox) {
             setTimeout(cursorCameraControl, 16); //timeout at 16ms to ensure around 60 updates/second
         }

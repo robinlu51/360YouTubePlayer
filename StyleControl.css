@@ -1,4 +1,4 @@
-body{
+body {
     background-color: #eee;
 }
 
@@ -6,25 +6,43 @@ body{
     width: 120px;
     text-align: center;
 }
-.holder{
+
+.holder {
     margin-top: 5px;
     margin-bottom: 5px;
     width: 100%; /*900px*/
     height: 700px;
     /*background-color: #aaa;*/
 }
+
 .cursorBox {
     margin-right: 10px;
     width: 100%; /*500px*/
     height: 500px;
     background-color: lightblue;
 }
-.safeZone{
+
+.safeZone {
     position: absolute;
     margin-left: 40%;
     margin-top: 200px;
     width: 20%;
     height: 100px;
     background-color: yellow;
+}
+
+.sliderContainer {
+    width: 100%;
+}
+
+.slider {
+    height: 20px; /* Specified height */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    transition: opacity .3s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
 }
 

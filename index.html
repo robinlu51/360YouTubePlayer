@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="ButtonControl.css">
+    <link rel="stylesheet" href="StyleControl.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -75,7 +75,7 @@
     });
     document.getElementById("cursorSafeZone").addEventListener('mouseleave', function () {
         mouseInsideBox = true;
-        showMouseCoords();
+        cursorCameraControl();
     });
 
 
@@ -84,7 +84,7 @@
     document.getElementById("cursorBox0").addEventListener('mouseenter', updateCoords);
     document.getElementById("cursorBox0").addEventListener('mousemove', updateCoords);
     let mouseCoordsText = document.querySelector('#mouseCoords');
-    document.getElementById("cursorBox0").addEventListener('mouseenter', showMouseCoords);
+    document.getElementById("cursorBox0").addEventListener('mouseenter', cursorCameraControl);
 
     function updateCoords(event) { //update the mouse's coordinates in the global variable
         mouseX = event.clientX;
@@ -95,9 +95,10 @@
     let centerX = document.getElementById('cursorBox0').offsetWidth / 2;
     //let centerX = $('#cursorBox0').offsetWidth; // for some reason, this returns undefined
     let centerY = document.getElementById('cursorBox0').offsetHeight / 2;
-
+    
     //console.log('The box center is at '+centerX+', '+centerY);
-    function showMouseCoords() { //need to change to new appropriate function name to describe all functionality
+    let mass = 0.5; //mass is the user assigned variable that controls the momentum of camera movement, it is 0.5 now for dev purpose
+    function cursorCameraControl() { //need to change to new appropriate function name to describe all functionality
         //get the mouse cursor's current coordinates
         let x = Math.round(mouseX - offset.left);
         let y = Math.round(mouseY - offset.top);
@@ -110,7 +111,7 @@
         newSettings['pitch'] += cameraMultiplierY * (centerY - y);
         player.setSphericalProperties(newSettings);
         if (mouseInsideBox) {
-            setTimeout(showMouseCoords, 16); //timeout at 16ms to ensure around 60 updates/second
+            setTimeout(cursorCameraControl, 16); //timeout at 16ms to ensure around 60 updates/second
         }
     }
 

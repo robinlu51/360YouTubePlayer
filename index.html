@@ -26,9 +26,11 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div id="cursorBox0" class="cursorBox"></div>
-            <div id="cursorSafeZone" class="safeZone"></div>
-            <p id="mouseCoords" style="clear: none; position: absolute;">Mouse cursor X/Y: 0, 0</p>
+            <div id="cursorBox0" class="cursorBox">
+                <div id="cursorSafeZone" class="safeZone"></div>
+            </div>
+
+            <p id="mouseCoords" style="clear: none;">Mouse cursor X/Y: 0, 0</p>
         </div>
     </div>
 
@@ -68,6 +70,14 @@
     document.getElementById("cursorBox0").addEventListener('mouseleave', function () {
         mouseInsideBox = false;
     });
+    document.getElementById("cursorSafeZone").addEventListener('mouseenter', function () {
+        mouseInsideBox = false;
+    });
+    document.getElementById("cursorSafeZone").addEventListener('mouseleave', function () {
+        mouseInsideBox = true;
+        showMouseCoords();
+    });
+
 
     let mouseX = 0;
     let mouseY = 0;
@@ -85,6 +95,7 @@
     let centerX = document.getElementById('cursorBox0').offsetWidth / 2;
     //let centerX = $('#cursorBox0').offsetWidth; // for some reason, this returns undefined
     let centerY = document.getElementById('cursorBox0').offsetHeight / 2;
+
     //console.log('The box center is at '+centerX+', '+centerY);
     function showMouseCoords() { //need to change to new appropriate function name to describe all functionality
         //get the mouse cursor's current coordinates

@@ -26,9 +26,9 @@
             </div>
         </div>
         <div class="col-md-4">
-            <input type="checkbox" id="x_axis">
+            <input type="checkbox" id="x_axis" onclick="inverseX()">
             <label for="x_axis" style="margin-right: 50px">Inverse X-axis control</label>
-            <input type="checkbox" id="y_axis">
+            <input type="checkbox" id="y_axis" onclick="inverseY()">
             <label for="y_axis">Inverse Y-axis control</label>
             <p id="massValue">This should be default mass value, you shouldn't see this!</p>
             <!--
@@ -116,6 +116,17 @@
         mouseY = event.clientY;
     }
 
+    let xModifier = 1; // 1 is the default value, -1 if axis is inversed
+    let yModifier = 1;
+
+    function inverseX() { //used to inverse x-axis control
+        xModifier = -xModifier;
+    }
+
+    function inverseY() { //used to inverse y-axis control
+        yModifier = -yModifier;
+    }
+
     let offset = $('#cursorBox0').offset();//the offset for cursorBox's coordinates
     let centerX = document.getElementById('cursorBox0').offsetWidth / 2;
     //let centerX = $('#cursorBox0').offsetWidth; // for some reason, this returns undefined
@@ -127,8 +138,8 @@
         let y = Math.round(mouseY - offset.top);
         mouseCoordsText.innerText = `Mouse cursor X/Y: ${x}, ${y}`;
 
-        let cameraMultiplierX = 0.007; //necessary to control the overall camera speed
-        let cameraMultiplierY = 0.005;
+        let cameraMultiplierX = 0.003; //necessary to control the overall camera speed
+        let cameraMultiplierY = 0.002;
         let newSettings = player.getSphericalProperties();
         let targetedXVelocity = 0; //the velocity we want to achieve
         let targetedYVelocity = 0;
@@ -138,8 +149,8 @@
         }
         let combinedXVelocity = ((1 - mass) * targetedXVelocity + mass * prevXVelocity); // the actual velocity calculated with momentum
         let combinedYVelocity = ((1 - mass) * targetedYVelocity + mass * prevYVelocity);
-        newSettings['yaw'] += cameraMultiplierX * combinedXVelocity;
-        newSettings['pitch'] += cameraMultiplierY * combinedYVelocity;
+        newSettings['yaw'] += xModifier * cameraMultiplierX * combinedXVelocity;
+        newSettings['pitch'] += yModifier * cameraMultiplierY * combinedYVelocity;
         player.setSphericalProperties(newSettings);
         prevXVelocity = combinedXVelocity; //update the previous velocity with the newly calculated value
         prevYVelocity = combinedYVelocity;

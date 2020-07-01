@@ -172,21 +172,12 @@
     let firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    var PROPERTIES = ['yaw', 'pitch', 'roll', 'fov'];
+    let PROPERTIES = ['yaw', 'pitch', 'roll', 'fov'];
     // 3. This function creates an <iframe> (and YouTube player)
     //    after the API code downloads.
-    var player;
+    let player;
 
     function onYouTubeIframeAPIReady() {
-    }
-
-    // 4. The API will call this function when the video player is ready.
-    function onPlayerReady(event) {
-        console.log(event.target.getDuration());
-        //event.target.playVideo();
-    }
-
-    function onLoadClick() {
         let videoId0 = document.getElementById("textInput").value;
         let adjustedWidth = window.innerWidth * 2 / 3 - 20; //needs to be adjusted if a different bootstrap grid
         if (player == null) {
@@ -198,9 +189,17 @@
                     'onReady': onPlayerReady,
                 }
             });
-        } else {
-            player.loadVideoById(videoId0);
         }
+    }
+
+    // 4. The API will call this function when the video player is ready.
+    function onPlayerReady(event) {
+        //event.target.playVideo();
+    }
+
+    function onLoadClick() {
+        let videoId1 = document.getElementById("textInput").value;
+        player.loadVideoById(videoId1);
     }
 
     function stopVideo() {

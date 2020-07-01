@@ -28,7 +28,17 @@ body {
     margin-top: 200px;
     width: 20%;
     height: 100px;
+    border-radius: 50%;
     background-color: yellow;
+}
+
+.activeCursorBox { /* indicates the cursor box is now active, but is expressed through the color change in safe zone*/
+    position: absolute;
+    margin-left: 40%;
+    margin-top: 200px;
+    width: 20%;
+    height: 100px;
+    background-color: greenyellow;
 }
 
 .sliderContainer {

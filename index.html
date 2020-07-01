@@ -37,7 +37,7 @@
             to make it easier to understand for the user
             -->
             <div class="sliderContainer">
-                <input class='slider' type='range' min='0' max='99' value='99' id='massSliderValue'
+                <input class='slider' type='range' min='0' max='99' value='95' id='massSliderValue'
                        onchange="updateMass(this.value)">
             </div>
             <div id="cursorBox0" class="cursorBox">
@@ -76,13 +76,18 @@
     </div>
 </div>
 <script>
+    let cursorBoxActive = false; //indicates if the cursor box is active
+    $('#cursorSafeZone').click(function () {
+        $('#cursorSafeZone').toggleClass('activeCursorBox');
+        cursorBoxActive = !cursorBoxActive;
+    });
     let massValueText = document.querySelector('#massValue');
     //mass is the user assigned variable that controls the momentum of camera movement, on a scale of 0-1
     let mass = document.getElementById('massSliderValue').value; // exists to update the mass value and text for the first time only
     massValueText.innerText = `The current mass value is at: ${mass}%`; //subsequent updates are handled by updateMass()
     mass /= 100; // needed so we don't need to call getElementById twice, and keep the mass value on 0-1 scale
 
-    let prevXVelocity = 0;
+    let prevXVelocity = 0; //by default, the velocity starts at 0
     let prevYVelocity = 0;
 
     let mouseInsideBox = false;
@@ -144,7 +149,7 @@
         let newSettings = player.getSphericalProperties();
         let targetedXVelocity = 0; //the velocity we want to achieve
         let targetedYVelocity = 0;
-        if (!mouseInsideSafeZone) {
+        if (!mouseInsideSafeZone && cursorBoxActive) {
             targetedXVelocity = centerX - x; //the velocity we want to achieve
             targetedYVelocity = centerY - y;
         }

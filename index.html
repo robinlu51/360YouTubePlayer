@@ -235,7 +235,8 @@
             for (let i = 0; i < controlMethods.length; i++) {
                 controlMethods[i].style.display = "none";
             }
-            $(controlNum).style.display="block";
+            $('#' + controlNum).css('display', 'block');
+            //document.getElementById(controlNum).style.display = "block";
         }
 
         let animationID; // to keep track of the animation requested if we need to stop/cancel it

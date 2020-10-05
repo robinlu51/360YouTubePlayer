@@ -20,8 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="69f41ab2-6a1d-4f47-96ac-5c043c1176f2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/User0.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StyleControl.css" beforeDir="false" afterPath="$PROJECT_DIR$/StyleControl.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,8 +32,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="XSLT Stylesheet" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -99,6 +99,7 @@
       <workItem from="1593563151199" duration="1007000" />
       <workItem from="1593795267929" duration="5753000" />
       <workItem from="1593803935190" duration="198000" />
+      <workItem from="1601909046390" duration="1941000" />
     </task>
     <servers />
   </component>
@@ -118,13 +119,9 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="465" y="192" key="FileChooserDialogImpl" timestamp="1587969384964">
-      <screen x="0" y="0" width="1368" height="872" />
+    <state x="355" y="106" key="SettingsEditor" timestamp="1601909701697">
+      <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="465" y="192" key="FileChooserDialogImpl/0.0.1368.872@0.0.1368.872" timestamp="1587969384964" />
-    <state x="186" y="80" key="SettingsEditor" timestamp="1587969391720">
-      <screen x="0" y="0" width="1368" height="872" />
-    </state>
-    <state x="186" y="80" key="SettingsEditor/0.0.1368.872@0.0.1368.872" timestamp="1587969391720" />
+    <state x="355" y="106" key="SettingsEditor/0.0.1707.920@0.0.1707.920" timestamp="1601909701697" />
   </component>
 </project>

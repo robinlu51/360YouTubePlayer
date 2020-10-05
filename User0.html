@@ -1,24 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="StyleControl.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>User Page</title>
 </head>
 <body>
-<form style="padding: 5px">
-    <input type="text" id="textInput" value="G-XZhKqQAHU">
-    <!--
-    sPyAQQklc1s
-    NLB4Fcxh1iU
-    -->
-    <button type="button" class="button" onclick="onLoadClick()">Load!</button>
-    <button type="button" class="button" onclick="stopVideo()">Stop!</button>
-    <button type="button" class="button" onclick="onPlayClick()">Play!</button>
-</form>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8">
@@ -30,6 +22,8 @@
             <div class="tab">
                 <button class="tablinks" onclick="switchTab('control1')">Control 1</button>
                 <button class="tablinks" onclick="switchTab('control2')">Control 2</button>
+                <button class="tablinks" onclick="switchTab('control3')">Control 3</button>
+                <button class="tablinks" onclick="switchTab('control4')">Control 4</button>
             </div>
             <div id="control1" class="tabContent" style="display:block">
                 <input type="checkbox" id="x_axis" onclick="inverseX()">
@@ -93,6 +87,12 @@
                             onmouseup="stopCamera()">Down Right
                     </button>
                 </div>
+            </div>
+            <div id="control3" class="tabContent">
+                <p>This is the drag and drop control method</p>
+            </div>
+            <div id="control4" class="tabContent">
+                <p>This is the YouTube D-Pad control method</p>
             </div>
         </div>
     </div>
@@ -203,7 +203,8 @@
         let player;
 
         function onYouTubeIframeAPIReady() {
-            let videoId0 = document.getElementById("textInput").value;
+            let videoId0 = 'ilyQMA0tq-U';
+            //let videoId0 = document.getElementById("textInput").value;
             let adjustedWidth = window.innerWidth * 2 / 3 - 20; //needs to be adjusted if a different bootstrap grid
             if (player == null) {
                 player = new YT.Player('player0', {

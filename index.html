@@ -23,7 +23,12 @@
     <div class="row">
         <div class="col-md-8">
             <div class="holder">
-                <div id="player0"></div>
+                <div id="player0">
+                    <div id="cursorBox0" class="cursorBox">
+                        <div id="cursorSafeZone" class="safeZone"></div>
+                    </div>
+                </div>
+
             </div>
         </div>
         <div class="col-md-4">
@@ -45,9 +50,11 @@
                     <input class='slider' type='range' min='0' max='99' value='95' id='massSliderValue'
                            onchange="updateMass(this.value)">
                 </div>
+                <!--
                 <div id="cursorBox0" class="cursorBox">
                     <div id="cursorSafeZone" class="safeZone"></div>
                 </div>
+                -->
                 <p id="mouseCoords" style="clear: none;">Mouse cursor X/Y: 0, 0</p>
             </div>
 

@@ -17,8 +17,8 @@ body {
 
 .cursorBox {
     position:relative;
-    top:-600px;
-    opacity:30%;
+    top:20px;
+    opacity:20%;
     margin-right: 10px;
     width: 100%; /*500px*/
     height: 500px;

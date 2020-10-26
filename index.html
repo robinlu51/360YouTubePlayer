@@ -10,34 +10,41 @@
 </head>
 <body>
 <form style="padding: 5px" id="videoControl0">
-    <input type="text" id="textInput" value="G-XZhKqQAHU">
     <!--
     sPyAQQklc1s
     NLB4Fcxh1iU
     -->
-    <button type="button" class="button" onclick="onLoadClick()">Load!</button>
-    <button type="button" class="button" onclick="pauseVideo()">Pause!</button>
-    <button type="button" class="button" onclick="stopVideo()">Stop!</button>
+    <input type="text" id="textInput" value="G-XZhKqQAHU">
     <button type="button" class="button" onclick="onPlayClick()">Play!</button>
+    <button type="button" class="button" onclick="pauseVideo()">Pause!</button>
+    <button type="button" class="button" onclick="restartVideo()">Restart!</button>
+    <!--
+    <button type="button" class="button" onclick="onLoadClick()">Load!</button>
+    <button type="button" class="button" onclick="stopVideo()">Stop!</button>
+    -->
     <div style="padding: 5px" id="controlOptions0">
         <div class="tab">
             <button class="tablinks" onclick="switchTab('control1')">Control 1</button>
             <button class="tablinks" onclick="switchTab('control2')">Control 2</button>
         </div>
         <div id="control1" class="tabContent" style="display:block">
+            <!--
             <input type="checkbox" id="x_axis" onclick="inverseX()">
             <label for="x_axis" style="margin-right: 50px">Inverse X-axis control</label>
             <input type="checkbox" id="y_axis" onclick="inverseY()">
             <label for="y_axis">Inverse Y-axis control</label>
             <p id="massValue">This should be default mass value, you shouldn't see this!</p>
+            -->
             <!--
             Although conceptually, mass isn't a percentage, we are presenting it to this way,
             to make it easier to understand for the user
             -->
+            <!--
             <div class="sliderContainer">
                 <input class='slider' type='range' min='0' max='99' value='95' id='massSliderValue'
                        onchange="updateMass(this.value)">
             </div>
+            -->
             <!--
             <div id="cursorBox0" class="cursorBox">
                 <div id="cursorSafeZone" class="safeZone"></div>
@@ -94,17 +101,15 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-8">
-            <div class="holder">
-                <div id="player0"></div>
-                <div id="cursorBox0" class="cursorBox">
-                    <div id="cursorSafeZone" class="safeZone"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
+        <!--bootstrap has been taken out, add col-md-8, 4 if need to be restored
+        -->
 
+        <div id="player0" style="margin-left: 100px"></div>
+        <div id="cursorBox0" class="cursorBox">
+            <div id="cursorSafeZone" class="safeZone"></div>
         </div>
+
+
     </div>
     <script>
         let cursorBoxActive = false; //indicates if the cursor box is active
@@ -118,8 +123,9 @@
 
         let massValueText = document.querySelector('#massValue');
         //mass is the user assigned variable that controls the momentum of camera movement, on a scale of 0-1
-        let mass = document.getElementById('massSliderValue').value; // exists to update the mass value and text for the first time only
-        massValueText.innerText = `The current mass value is at: ${mass}%`; //subsequent updates are handled by updateMass()
+        //let mass = document.getElementById('massSliderValue').value; // exists to update the mass value and text for the first time only
+        let mass = 95; //for study version, we give mass a defined value instead of being adjustable.
+        //massValueText.innerText = `The current mass value is at: ${mass}%`; //subsequent updates are handled by updateMass()
         mass /= 100; // needed so we don't need to call getElementById twice, and keep the mass value on 0-1 scale
 
         let prevXVelocity = 0; //by default, the velocity starts at 0
@@ -179,7 +185,7 @@
             let y = Math.round(mouseY - offset.top);
             let videoControlHeight = $('#videoControl0').height();
             let controlOptionHeight = $('#controlOptions0').height();
-            mouseCoordsText.innerText = `Mouse cursor X/Y: ${x}, ${y}, ${height1}, ${height2}`;
+            mouseCoordsText.innerText = `Mouse cursor X/Y: ${x}, ${y}`;
 
             let cameraMultiplierX = 0.003; //necessary to control the overall camera speed
             let cameraMultiplierY = 0.002;
@@ -222,17 +228,19 @@
             let windowHeight = window.innerHeight - videoControlHeight - controlOptionHeight - 20; //these sizes indicate the maximum the video player can be
             let windowWidth = window.innerWidth - 20; //on screen, with consideration of padding and top bar
             //we want to make the video player as large as allowed without needing to scroll, while maintaining a 16:9 ratio
-            if(windowHeight >= 9/16 * windowWidth){
-                windowHeight = 9/16 * windowWidth;
+            if (windowHeight >= 9 / 16 * windowWidth) {
+                windowHeight = 9 / 16 * windowWidth;
+            } else if (windowWidth >= 16 / 9 * windowHeight) {
+                windowWidth = 16 / 9 * windowHeight;
             }
-            else if(windowWidth >= 16/9 * windowHeight){
-                windowWidth = 16/9 * windowHeight;
-            }
-            $('#cursorBox0').css('top', -windowHeight-5 + 'px');
+            let playerLeftGap = (window.innerWidth - windowWidth) / 2; //the distance of the gap between player and left/right end, so we can center video player
+            $('#player0').css('margin-left', playerLeftGap + 'px');
+            $('#cursorBox0').css('top', -windowHeight - 5 + 'px');
             $('#cursorBox0').css('width', windowWidth + 'px');
             $('#cursorBox0').css('height', windowHeight + 'px');
-            $('#cursorSafeZone').css('margin-top', windowHeight/2-50 + 'px');
-            $('#cursorSafeZone').css('margin-left', windowWidth/2-50 + 'px');
+            $('#cursorBox0').css('margin-left', playerLeftGap + 'px');
+            $('#cursorSafeZone').css('margin-top', windowHeight / 2 - 50 + 'px');
+            $('#cursorSafeZone').css('margin-left', windowWidth / 2 - 50 + 'px');
             if (player == null) {
                 player = new YT.Player('player0', {
                     //height: 700,
@@ -268,7 +276,9 @@
         function onPlayClick() {
             player.playVideo();
         }
-
+        function restartVideo(){
+            player.seekTo(0);
+        }
         function switchTab(controlNum) {
             let controlMethods = $('.tabContent');
             for (let i = 0; i < controlMethods.length; i++) {

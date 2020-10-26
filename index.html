@@ -28,23 +28,23 @@
             <button class="tablinks" onclick="switchTab('control2')">Control 2</button>
         </div>
         <div id="control1" class="tabContent" style="display:block">
-            <!--
+
             <input type="checkbox" id="x_axis" onclick="inverseX()">
             <label for="x_axis" style="margin-right: 50px">Inverse X-axis control</label>
             <input type="checkbox" id="y_axis" onclick="inverseY()">
             <label for="y_axis">Inverse Y-axis control</label>
             <p id="massValue">This should be default mass value, you shouldn't see this!</p>
-            -->
+
             <!--
             Although conceptually, mass isn't a percentage, we are presenting it to this way,
             to make it easier to understand for the user
             -->
-            <!--
+
             <div class="sliderContainer">
                 <input class='slider' type='range' min='0' max='99' value='95' id='massSliderValue'
                        onchange="updateMass(this.value)">
             </div>
-            -->
+
             <!--
             <div id="cursorBox0" class="cursorBox">
                 <div id="cursorSafeZone" class="safeZone"></div>
@@ -123,9 +123,9 @@
 
         let massValueText = document.querySelector('#massValue');
         //mass is the user assigned variable that controls the momentum of camera movement, on a scale of 0-1
-        //let mass = document.getElementById('massSliderValue').value; // exists to update the mass value and text for the first time only
-        let mass = 95; //for study version, we give mass a defined value instead of being adjustable.
-        //massValueText.innerText = `The current mass value is at: ${mass}%`; //subsequent updates are handled by updateMass()
+        let mass = document.getElementById('massSliderValue').value; // exists to update the mass value and text for the first time only
+        //let mass = 95; //for study version, we give mass a defined value instead of being adjustable.
+        massValueText.innerText = `The current mass value is at: ${mass}%`; //subsequent updates are handled by updateMass()
         mass /= 100; // needed so we don't need to call getElementById twice, and keep the mass value on 0-1 scale
 
         let prevXVelocity = 0; //by default, the velocity starts at 0

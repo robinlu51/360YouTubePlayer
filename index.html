@@ -19,6 +19,77 @@
     <button type="button" class="button" onclick="pauseVideo()">Pause!</button>
     <button type="button" class="button" onclick="stopVideo()">Stop!</button>
     <button type="button" class="button" onclick="onPlayClick()">Play!</button>
+    <div style="padding: 5px" id="controlOptions0">
+        <div class="tab">
+            <button class="tablinks" onclick="switchTab('control1')">Control 1</button>
+            <button class="tablinks" onclick="switchTab('control2')">Control 2</button>
+        </div>
+        <div id="control1" class="tabContent" style="display:block">
+            <input type="checkbox" id="x_axis" onclick="inverseX()">
+            <label for="x_axis" style="margin-right: 50px">Inverse X-axis control</label>
+            <input type="checkbox" id="y_axis" onclick="inverseY()">
+            <label for="y_axis">Inverse Y-axis control</label>
+            <p id="massValue">This should be default mass value, you shouldn't see this!</p>
+            <!--
+            Although conceptually, mass isn't a percentage, we are presenting it to this way,
+            to make it easier to understand for the user
+            -->
+            <div class="sliderContainer">
+                <input class='slider' type='range' min='0' max='99' value='95' id='massSliderValue'
+                       onchange="updateMass(this.value)">
+            </div>
+            <!--
+            <div id="cursorBox0" class="cursorBox">
+                <div id="cursorSafeZone" class="safeZone"></div>
+            </div>
+            -->
+            <p id="mouseCoords" style="clear: none;">Mouse cursor X/Y: 0, 0</p>
+        </div>
+
+        <div id="control2" class="tabContent">
+            <div>
+                <button id="upLeftButton" type="button" class="button" onmousedown="lookUpLeft()"
+                        onmouseup="stopCamera()">
+                    Up
+                    Left
+                </button>
+                <button id="upButton" type="button" class="button" onmousedown="lookUp()" onmouseup="stopCamera()">
+                    Up
+                </button>
+                <button id="upRightButton" type="button" class="button" onmousedown="lookUpRight()"
+                        onmouseup="stopCamera()">Up
+                    Right
+                </button>
+            </div>
+            <div>
+                <button id="leftButton" type="button" class="button" onmousedown="lookLeft()"
+                        onmouseup="stopCamera()">
+                    Left
+                </button>
+                <button id="midButton" type="button" class="button" onmousedown="lookReset()"
+                        onmouseup="stopCamera()">
+                    Mid
+                </button>
+                <button id="rightButton" type="button" class="button" onmousedown="lookRight()"
+                        onmouseup="stopCamera()">
+                    Right
+                </button>
+            </div>
+            <div>
+                <button id="downLeftButton" type="button" class="button" onmousedown="lookDownLeft()"
+                        onmouseup="stopCamera()">
+                    Down Left
+                </button>
+                <button id="downButton" type="button" class="button" onmousedown="lookDown()"
+                        onmouseup="stopCamera()">
+                    Down
+                </button>
+                <button id="downRightButton" type="button" class="button" onmousedown="lookDownRight()"
+                        onmouseup="stopCamera()">Down Right
+                </button>
+            </div>
+        </div>
+    </div>
 </form>
 
 <div class="container-fluid">
@@ -32,77 +103,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div style="padding: 5px" id="controlOptions0">
-                <div class="tab">
-                    <button class="tablinks" onclick="switchTab('control1')">Control 1</button>
-                    <button class="tablinks" onclick="switchTab('control2')">Control 2</button>
-                </div>
-                <div id="control1" class="tabContent" style="display:block">
-                    <input type="checkbox" id="x_axis" onclick="inverseX()">
-                    <label for="x_axis" style="margin-right: 50px">Inverse X-axis control</label>
-                    <input type="checkbox" id="y_axis" onclick="inverseY()">
-                    <label for="y_axis">Inverse Y-axis control</label>
-                    <p id="massValue">This should be default mass value, you shouldn't see this!</p>
-                    <!--
-                    Although conceptually, mass isn't a percentage, we are presenting it to this way,
-                    to make it easier to understand for the user
-                    -->
-                    <div class="sliderContainer">
-                        <input class='slider' type='range' min='0' max='99' value='95' id='massSliderValue'
-                               onchange="updateMass(this.value)">
-                    </div>
-                    <!--
-                    <div id="cursorBox0" class="cursorBox">
-                        <div id="cursorSafeZone" class="safeZone"></div>
-                    </div>
-                    -->
-                    <p id="mouseCoords" style="clear: none;">Mouse cursor X/Y: 0, 0</p>
-                </div>
 
-                <div id="control2" class="tabContent">
-                    <div>
-                        <button id="upLeftButton" type="button" class="button" onmousedown="lookUpLeft()"
-                                onmouseup="stopCamera()">
-                            Up
-                            Left
-                        </button>
-                        <button id="upButton" type="button" class="button" onmousedown="lookUp()" onmouseup="stopCamera()">
-                            Up
-                        </button>
-                        <button id="upRightButton" type="button" class="button" onmousedown="lookUpRight()"
-                                onmouseup="stopCamera()">Up
-                            Right
-                        </button>
-                    </div>
-                    <div>
-                        <button id="leftButton" type="button" class="button" onmousedown="lookLeft()"
-                                onmouseup="stopCamera()">
-                            Left
-                        </button>
-                        <button id="midButton" type="button" class="button" onmousedown="lookReset()"
-                                onmouseup="stopCamera()">
-                            Mid
-                        </button>
-                        <button id="rightButton" type="button" class="button" onmousedown="lookRight()"
-                                onmouseup="stopCamera()">
-                            Right
-                        </button>
-                    </div>
-                    <div>
-                        <button id="downLeftButton" type="button" class="button" onmousedown="lookDownLeft()"
-                                onmouseup="stopCamera()">
-                            Down Left
-                        </button>
-                        <button id="downButton" type="button" class="button" onmousedown="lookDown()"
-                                onmouseup="stopCamera()">
-                            Down
-                        </button>
-                        <button id="downRightButton" type="button" class="button" onmousedown="lookDownRight()"
-                                onmouseup="stopCamera()">Down Right
-                        </button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
     <script>
@@ -217,8 +218,8 @@
             let videoId0 = document.getElementById("textInput").value;
             //let adjustedWidth = window.innerWidth * 2 / 3 - 20; //needs to be adjusted if a different bootstrap grid
             let videoControlHeight = $('#videoControl0').height();
-            //let controlOptionHeight = $('#controlOptions0').height();
-            let windowHeight = window.innerHeight - videoControlHeight - 20; //these sizes indicate the maximum the video player can be
+            let controlOptionHeight = $('#controlOptions0').height();
+            let windowHeight = window.innerHeight - videoControlHeight - controlOptionHeight - 20; //these sizes indicate the maximum the video player can be
             let windowWidth = window.innerWidth - 20; //on screen, with consideration of padding and top bar
             //we want to make the video player as large as allowed without needing to scroll, while maintaining a 16:9 ratio
             if(windowHeight >= 9/16 * windowWidth){

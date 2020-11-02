@@ -16,7 +16,9 @@
     -->
     <input type="text" id="textInput" value="G-XZhKqQAHU">
     <button type="button" class="button" onclick="onPlayClick()">Play!</button>
+    <!--
     <button type="button" class="button" onclick="pauseVideo()">Pause!</button>
+    -->
     <button type="button" class="button" onclick="restartVideo()">Restart!</button>
     <!--
     <button type="button" class="button" onclick="onLoadClick()">Load!</button>
@@ -274,11 +276,17 @@
         }
 
         function onPlayClick() {
-            player.playVideo();
+            if (player.getPlayerState() == 5 || player.getPlayerState() == 2) {
+                player.playVideo();
+            } else if (player.getPlayerState() == 1) {
+                player.pauseVideo();
+            }
         }
-        function restartVideo(){
+
+        function restartVideo() {
             player.seekTo(0);
         }
+
         function switchTab(controlNum) {
             let controlMethods = $('.tabContent');
             for (let i = 0; i < controlMethods.length; i++) {

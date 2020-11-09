@@ -26,10 +26,11 @@
     -->
     <div style="padding: 5px" id="controlOptions0">
         <div class="tab">
-            <button class="tablinks" onclick="switchTab('control1')">Control 1</button>
-            <button class="tablinks" onclick="switchTab('control2')">Control 2</button>
+            <button id="control1button" class="tablinks" onclick="switchTab('control1')">Control 1</button>
+            <button id="control2button" class="tablinks" onclick="switchTab('control2')">Control 2</button>
+            <button id="control3button" class="tablinks" onclick="switchTab('control3')">Control 3</button>
         </div>
-        <div id="control1" class="tabContent" style="display:block">
+        <div id="control1" class="tabContent">
 
             <input type="checkbox" id="x_axis" onclick="inverseX()">
             <label for="x_axis" style="margin-right: 50px">Inverse X-axis control</label>
@@ -42,7 +43,7 @@
             to make it easier to understand for the user
             -->
 
-            <div class="sliderContainer">
+            <div id="sliderBar" class="sliderContainer">
                 <input class='slider' type='range' min='0' max='99' value='95' id='massSliderValue'
                        onchange="updateMass(this.value)">
             </div>
@@ -53,7 +54,10 @@
             </div>
             -->
             <p id="mouseCoords" style="clear: none;">Mouse cursor X/Y: 0, 0</p>
+
+
         </div>
+
 
         <div id="control2" class="tabContent">
             <div>
@@ -98,6 +102,14 @@
                 </button>
             </div>
         </div>
+
+        <div id="control3" class="tabContent"></div>
+
+        <div id="player0" style="margin-left: 100px"></div>
+        <div id="cursorBox0" class="cursorBox">
+            <div id="cursorSafeZone" class="safeZone"></div>
+        </div>
+
     </div>
 </form>
 
@@ -106,272 +118,281 @@
         <!--bootstrap has been taken out, add col-md-8, 4 if need to be restored
         -->
 
-        <div id="player0" style="margin-left: 100px"></div>
-        <div id="cursorBox0" class="cursorBox">
-            <div id="cursorSafeZone" class="safeZone"></div>
-        </div>
-
-
     </div>
-    <script>
-        let cursorBoxActive = false; //indicates if the cursor box is active
-        $('#cursorSafeZone').click(function () {
-            $('#cursorSafeZone').toggleClass('activeCursorBox');
-            cursorBoxActive = !cursorBoxActive;
-        });
+</div>
+<script>
 
-        let widthHolder = $('#cursorBox0').width();
-        $('#cursorSafeZone').css('margin-left', widthHolder / 2 - 50 + 'px');
+    $(document).ready(function(){
+     //   $('#control1').css('display', 'none');
+        $('#control2').css('display', 'none');
+        $('#control3').css('display', 'none');
+    });
 
-        let massValueText = document.querySelector('#massValue');
-        //mass is the user assigned variable that controls the momentum of camera movement, on a scale of 0-1
-        let mass = document.getElementById('massSliderValue').value; // exists to update the mass value and text for the first time only
-        //let mass = 95; //for study version, we give mass a defined value instead of being adjustable.
-        massValueText.innerText = `The current mass value is at: ${mass}%`; //subsequent updates are handled by updateMass()
-        mass /= 100; // needed so we don't need to call getElementById twice, and keep the mass value on 0-1 scale
+    let cursorBoxActive = false; //indicates if the cursor box is active
+    $('#cursorSafeZone').click(function () {
+        $('#cursorSafeZone').toggleClass('activeCursorBox');
+        cursorBoxActive = !cursorBoxActive;
+    });
 
-        let prevXVelocity = 0; //by default, the velocity starts at 0
-        let prevYVelocity = 0;
+    let widthHolder = $('#cursorBox0').width();
+    $('#cursorSafeZone').css('margin-left', widthHolder / 2 - 50 + 'px');
 
-        let mouseInsideBox = false;
-        let mouseInsideSafeZone = false;
-        document.getElementById("cursorBox0").addEventListener('mouseenter', function () {
-            mouseInsideBox = true;
-        });
-        document.getElementById("cursorBox0").addEventListener('mouseleave', function () {
-            mouseInsideBox = false;
-        });
-        document.getElementById("cursorSafeZone").addEventListener('mouseenter', function () {
-            mouseInsideSafeZone = true;
-        });
-        document.getElementById("cursorSafeZone").addEventListener('mouseleave', function () {
-            mouseInsideSafeZone = false;
-        });
+    let massValueText = document.querySelector('#massValue');
+    //mass is the user assigned variable that controls the momentum of camera movement, on a scale of 0-1
+    let mass = document.getElementById('massSliderValue').value; // exists to update the mass value and text for the first time only
+    //let mass = 95; //for study version, we give mass a defined value instead of being adjustable.
+    massValueText.innerText = `The current mass value is at: ${mass}%`; //subsequent updates are handled by updateMass()
+    mass /= 100; // needed so we don't need to call getElementById twice, and keep the mass value on 0-1 scale
 
-        let mouseX = 0;
-        let mouseY = 0;
-        document.getElementById("cursorBox0").addEventListener('mouseenter', updateCoords);
-        document.getElementById("cursorBox0").addEventListener('mousemove', updateCoords);
-        let mouseCoordsText = document.querySelector('#mouseCoords');
-        document.getElementById("cursorBox0").addEventListener('mouseenter', cursorCameraControl);
+    let prevXVelocity = 0; //by default, the velocity starts at 0
+    let prevYVelocity = 0;
 
-        function updateMass(value) { //update the mass value AND text displayed
-            mass = value / 100;
-            massValueText.innerText = `The current mass value is at: ${value}%`;
+    let mouseInsideBox = false;
+    let mouseInsideSafeZone = false;
+    document.getElementById("cursorBox0").addEventListener('mouseenter', function () {
+        mouseInsideBox = true;
+    });
+    document.getElementById("cursorBox0").addEventListener('mouseleave', function () {
+        mouseInsideBox = false;
+    });
+    document.getElementById("cursorSafeZone").addEventListener('mouseenter', function () {
+        mouseInsideSafeZone = true;
+    });
+    document.getElementById("cursorSafeZone").addEventListener('mouseleave', function () {
+        mouseInsideSafeZone = false;
+    });
+
+    let mouseX = 0;
+    let mouseY = 0;
+    document.getElementById("cursorBox0").addEventListener('mouseenter', updateCoords);
+    document.getElementById("cursorBox0").addEventListener('mousemove', updateCoords);
+    let mouseCoordsText = document.querySelector('#mouseCoords');
+    document.getElementById("cursorBox0").addEventListener('mouseenter', cursorCameraControl);
+
+    function updateMass(value) { //update the mass value AND text displayed
+        mass = value / 100;
+        massValueText.innerText = `The current mass value is at: ${value}%`;
+    }
+
+    function updateCoords(event) { //update the mouse's coordinates in the global variable
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+    }
+
+    let xModifier = 1; // 1 is the default value, -1 if axis is inversed
+    let yModifier = 1;
+
+    function inverseX() { //used to inverse x-axis control
+        xModifier = -xModifier;
+    }
+
+    function inverseY() { //used to inverse y-axis control
+        yModifier = -yModifier;
+    }
+
+    let offset = $('#cursorBox0').offset();//the offset for cursorBox's coordinates
+    let centerX = document.getElementById('cursorBox0').offsetWidth / 2;
+    //let centerX = $('#cursorBox0').offsetWidth; // for some reason, this returns undefined
+    let centerY = document.getElementById('cursorBox0').offsetHeight / 2;
+
+    function cursorCameraControl() { //need to change to new appropriate function name to describe all functionality
+        //get the mouse cursor's current coordinates
+        let x = Math.round(mouseX - offset.left);
+        let y = Math.round(mouseY - offset.top);
+        let videoControlHeight = $('#videoControl0').height();
+        let controlOptionHeight = $('#controlOptions0').height();
+        mouseCoordsText.innerText = `Mouse cursor X/Y: ${x}, ${y}`;
+
+        let cameraMultiplierX = 0.003; //necessary to control the overall camera speed
+        let cameraMultiplierY = 0.002;
+        let newSettings = player.getSphericalProperties();
+        let targetedXVelocity = 0; //the velocity we want to achieve
+        let targetedYVelocity = 0;
+        if (!mouseInsideSafeZone && cursorBoxActive) {
+            targetedXVelocity = centerX - x; //the velocity we want to achieve
+            targetedYVelocity = centerY - y;
         }
-
-        function updateCoords(event) { //update the mouse's coordinates in the global variable
-            mouseX = event.clientX;
-            mouseY = event.clientY;
+        let combinedXVelocity = ((1 - mass) * targetedXVelocity + mass * prevXVelocity); // the actual velocity calculated with momentum
+        let combinedYVelocity = ((1 - mass) * targetedYVelocity + mass * prevYVelocity);
+        newSettings['yaw'] += xModifier * cameraMultiplierX * combinedXVelocity;
+        newSettings['pitch'] += yModifier * cameraMultiplierY * combinedYVelocity;
+        player.setSphericalProperties(newSettings);
+        prevXVelocity = combinedXVelocity; //update the previous velocity with the newly calculated value
+        prevYVelocity = combinedYVelocity;
+        if (mouseInsideBox) {
+            setTimeout(cursorCameraControl, 16); //timeout at 16ms to ensure around 60 updates/second
         }
+    }
 
-        let xModifier = 1; // 1 is the default value, -1 if axis is inversed
-        let yModifier = 1;
+    // 2. This code loads the IFrame Player API code asynchronously.
+    let tag = document.createElement('script');
 
-        function inverseX() { //used to inverse x-axis control
-            xModifier = -xModifier;
+    tag.src = "https://www.youtube.com/iframe_api";
+    let firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    let PROPERTIES = ['yaw', 'pitch', 'roll', 'fov'];
+    // 3. This function creates an <iframe> (and YouTube player)
+    //    after the API code downloads.
+    let player;
+
+    function onYouTubeIframeAPIReady() {
+        let videoRatioWidth = 16;
+        let videoRationHeight = 9;
+        let videoId0 = document.getElementById("textInput").value;
+        //let adjustedWidth = window.innerWidth * 2 / 3 - 20; //needs to be adjusted if a different bootstrap grid
+        let control1Height = $('#textInput').height() + $('#control1button').height() + $('#sliderBar').height() + $('#mouseCoords').height();
+        let windowHeight = window.innerHeight - 20 - control1Height; //these sizes indicate the maximum the video player can be
+        let windowWidth = window.innerWidth - 20; //on screen, with consideration of padding and top bar
+        //we want to make the video player as large as allowed without needing to scroll, while maintaining a 16:9 ratio
+        if (windowHeight >= videoRationHeight / videoRatioWidth * windowWidth) {
+            windowHeight = videoRationHeight / videoRatioWidth * windowWidth;
+        } else if (windowWidth >= videoRatioWidth / videoRationHeight * windowHeight) {
+            windowWidth = videoRatioWidth / videoRationHeight * windowHeight;
         }
-
-        function inverseY() { //used to inverse y-axis control
-            yModifier = -yModifier;
+        let playerLeftGap = (window.innerWidth - windowWidth) / 2; //the distance of the gap between player and left/right end, so we can center video player
+        $('#player0').css('margin-left', playerLeftGap + 'px');
+        $('#cursorBox0').css('top', -windowHeight - 5 + 'px');
+        $('#cursorBox0').css('width', windowWidth + 'px');
+        $('#cursorBox0').css('height', windowHeight + 'px');
+        $('#cursorBox0').css('margin-left', playerLeftGap + 'px');
+        $('#cursorSafeZone').css('margin-top', windowHeight / 2 - 50 + 'px');
+        $('#cursorSafeZone').css('margin-left', windowWidth / 2 - 50 + 'px');
+        if (player == null) {
+            player = new YT.Player('player0', {
+                //height: 700,
+                //width: adjustedWidth,
+                height: windowHeight,
+                width: windowWidth,
+                videoId: videoId0,
+                events: {
+                    'onReady': onPlayerReady,
+                }
+            });
         }
+    }
 
-        let offset = $('#cursorBox0').offset();//the offset for cursorBox's coordinates
-        let centerX = document.getElementById('cursorBox0').offsetWidth / 2;
-        //let centerX = $('#cursorBox0').offsetWidth; // for some reason, this returns undefined
-        let centerY = document.getElementById('cursorBox0').offsetHeight / 2;
+    // 4. The API will call this function when the video player is ready.
+    function onPlayerReady(event) {
+        //event.target.playVideo();
+    }
 
-        function cursorCameraControl() { //need to change to new appropriate function name to describe all functionality
-            //get the mouse cursor's current coordinates
-            let x = Math.round(mouseX - offset.left);
-            let y = Math.round(mouseY - offset.top);
-            let videoControlHeight = $('#videoControl0').height();
-            let controlOptionHeight = $('#controlOptions0').height();
-            mouseCoordsText.innerText = `Mouse cursor X/Y: ${x}, ${y}`;
+    function onLoadClick() {
+        let videoId1 = document.getElementById("textInput").value;
+        player.loadVideoById(videoId1);
+    }
 
-            let cameraMultiplierX = 0.003; //necessary to control the overall camera speed
-            let cameraMultiplierY = 0.002;
-            let newSettings = player.getSphericalProperties();
-            let targetedXVelocity = 0; //the velocity we want to achieve
-            let targetedYVelocity = 0;
-            if (!mouseInsideSafeZone && cursorBoxActive) {
-                targetedXVelocity = centerX - x; //the velocity we want to achieve
-                targetedYVelocity = centerY - y;
-            }
-            let combinedXVelocity = ((1 - mass) * targetedXVelocity + mass * prevXVelocity); // the actual velocity calculated with momentum
-            let combinedYVelocity = ((1 - mass) * targetedYVelocity + mass * prevYVelocity);
-            newSettings['yaw'] += xModifier * cameraMultiplierX * combinedXVelocity;
-            newSettings['pitch'] += yModifier * cameraMultiplierY * combinedYVelocity;
-            player.setSphericalProperties(newSettings);
-            prevXVelocity = combinedXVelocity; //update the previous velocity with the newly calculated value
-            prevYVelocity = combinedYVelocity;
-            if (mouseInsideBox) {
-                setTimeout(cursorCameraControl, 16); //timeout at 16ms to ensure around 60 updates/second
-            }
-        }
+    function pauseVideo() {
+        player.pauseVideo();
+    }
 
-        // 2. This code loads the IFrame Player API code asynchronously.
-        let tag = document.createElement('script');
+    function stopVideo() {
+        player.stopVideo();
+    }
 
-        tag.src = "https://www.youtube.com/iframe_api";
-        let firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        let PROPERTIES = ['yaw', 'pitch', 'roll', 'fov'];
-        // 3. This function creates an <iframe> (and YouTube player)
-        //    after the API code downloads.
-        let player;
-
-        function onYouTubeIframeAPIReady() {
-            let videoId0 = document.getElementById("textInput").value;
-            //let adjustedWidth = window.innerWidth * 2 / 3 - 20; //needs to be adjusted if a different bootstrap grid
-            let videoControlHeight = $('#videoControl0').height();
-            let controlOptionHeight = $('#controlOptions0').height();
-            let windowHeight = window.innerHeight - videoControlHeight - controlOptionHeight - 20; //these sizes indicate the maximum the video player can be
-            let windowWidth = window.innerWidth - 20; //on screen, with consideration of padding and top bar
-            //we want to make the video player as large as allowed without needing to scroll, while maintaining a 16:9 ratio
-            if (windowHeight >= 9 / 16 * windowWidth) {
-                windowHeight = 9 / 16 * windowWidth;
-            } else if (windowWidth >= 16 / 9 * windowHeight) {
-                windowWidth = 16 / 9 * windowHeight;
-            }
-            let playerLeftGap = (window.innerWidth - windowWidth) / 2; //the distance of the gap between player and left/right end, so we can center video player
-            $('#player0').css('margin-left', playerLeftGap + 'px');
-            $('#cursorBox0').css('top', -windowHeight - 5 + 'px');
-            $('#cursorBox0').css('width', windowWidth + 'px');
-            $('#cursorBox0').css('height', windowHeight + 'px');
-            $('#cursorBox0').css('margin-left', playerLeftGap + 'px');
-            $('#cursorSafeZone').css('margin-top', windowHeight / 2 - 50 + 'px');
-            $('#cursorSafeZone').css('margin-left', windowWidth / 2 - 50 + 'px');
-            if (player == null) {
-                player = new YT.Player('player0', {
-                    //height: 700,
-                    //width: adjustedWidth,
-                    height: windowHeight,
-                    width: windowWidth,
-                    videoId: videoId0,
-                    events: {
-                        'onReady': onPlayerReady,
-                    }
-                });
-            }
-        }
-
-        // 4. The API will call this function when the video player is ready.
-        function onPlayerReady(event) {
-            //event.target.playVideo();
-        }
-
-        function onLoadClick() {
-            let videoId1 = document.getElementById("textInput").value;
-            player.loadVideoById(videoId1);
-        }
-
-        function pauseVideo() {
+    function onPlayClick() {
+        if (player.getPlayerState() == 5 || player.getPlayerState() == 2) {
+            player.playVideo();
+        } else if (player.getPlayerState() == 1) {
             player.pauseVideo();
         }
+    }
 
-        function stopVideo() {
-            player.stopVideo();
-        }
+    function restartVideo() {
+        player.seekTo(0);
+    }
 
-        function onPlayClick() {
-            if (player.getPlayerState() == 5 || player.getPlayerState() == 2) {
-                player.playVideo();
-            } else if (player.getPlayerState() == 1) {
-                player.pauseVideo();
-            }
-        }
+    function switchTab(controlNum) {
+        console.log("Tab switched!");
+        let controlMethods = $('.tabContent');
+        $('#control1').css('display', 'none');
+        $('#control2').css('display', 'none');
+        $('#control3').css('display', 'none');
+        /*
+        for (let i = 0; i < controlMethods.length; i++) {
+            controlMethods[i].style.display = "none";
+        }*/
+      //  debugger;
+        $('#' + controlNum).css('display', 'block');
+        //document.getElementById(controlNum).style.display = "block";
+    }
 
-        function restartVideo() {
-            player.seekTo(0);
-        }
+    let animationID; // to keep track of the animation requested if we need to stop/cancel it
+    function lookUpLeft() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['pitch'] += 2.5;
+        newSettings['yaw'] += 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookUpLeft);
+    }
 
-        function switchTab(controlNum) {
-            let controlMethods = $('.tabContent');
-            for (let i = 0; i < controlMethods.length; i++) {
-                controlMethods[i].style.display = "none";
-            }
-            $('#' + controlNum).css('display', 'block');
-            //document.getElementById(controlNum).style.display = "block";
-        }
+    function lookUp() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['pitch'] += 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookUp);
+    }
 
-        let animationID; // to keep track of the animation requested if we need to stop/cancel it
-        function lookUpLeft() {
-            let newSettings = player.getSphericalProperties();
-            newSettings['pitch'] += 2.5;
-            newSettings['yaw'] += 5;
-            player.setSphericalProperties(newSettings);
-            animationID = requestAnimationFrame(lookUpLeft);
-        }
+    function lookUpRight() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['pitch'] += 2.5;
+        newSettings['yaw'] -= 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookUpRight);
+    }
 
-        function lookUp() {
-            let newSettings = player.getSphericalProperties();
-            newSettings['pitch'] += 5;
-            player.setSphericalProperties(newSettings);
-            animationID = requestAnimationFrame(lookUp);
-        }
+    function lookLeft() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['yaw'] += 5;
+        console.log(newSettings['yaw']);
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookLeft);
+    }
 
-        function lookUpRight() {
-            let newSettings = player.getSphericalProperties();
-            newSettings['pitch'] += 2.5;
-            newSettings['yaw'] -= 5;
-            player.setSphericalProperties(newSettings);
-            animationID = requestAnimationFrame(lookUpRight);
-        }
+    //camera reset to default angle
+    function lookReset() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['yaw'] = 0;
+        newSettings['pitch'] = 0;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookReset); //may not need to request animation since it just resets camera
+    }
 
-        function lookLeft() {
-            let newSettings = player.getSphericalProperties();
-            newSettings['yaw'] += 5;
-            console.log(newSettings['yaw']);
-            player.setSphericalProperties(newSettings);
-            animationID = requestAnimationFrame(lookLeft);
-        }
+    function lookRight() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['yaw'] -= 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookRight);
+    }
 
-        //camera reset to default angle
-        function lookReset() {
-            let newSettings = player.getSphericalProperties();
-            newSettings['yaw'] = 0;
-            newSettings['pitch'] = 0;
-            player.setSphericalProperties(newSettings);
-            animationID = requestAnimationFrame(lookReset); //may not need to request animation since it just resets camera
-        }
+    function lookDownLeft() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['pitch'] -= 2.5;
+        newSettings['yaw'] += 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookDownLeft);
+    }
 
-        function lookRight() {
-            let newSettings = player.getSphericalProperties();
-            newSettings['yaw'] -= 5;
-            player.setSphericalProperties(newSettings);
-            animationID = requestAnimationFrame(lookRight);
-        }
+    function lookDown() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['pitch'] -= 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookDown);
+    }
 
-        function lookDownLeft() {
-            let newSettings = player.getSphericalProperties();
-            newSettings['pitch'] -= 2.5;
-            newSettings['yaw'] += 5;
-            player.setSphericalProperties(newSettings);
-            animationID = requestAnimationFrame(lookDownLeft);
-        }
+    function lookDownRight() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['pitch'] -= 2.5;
+        newSettings['yaw'] -= 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookDownRight);
+    }
 
-        function lookDown() {
-            let newSettings = player.getSphericalProperties();
-            newSettings['pitch'] -= 5;
-            player.setSphericalProperties(newSettings);
-            animationID = requestAnimationFrame(lookDown);
-        }
+    function stopCamera() {
+        cancelAnimationFrame(animationID);
+    }
 
-        function lookDownRight() {
-            let newSettings = player.getSphericalProperties();
-            newSettings['pitch'] -= 2.5;
-            newSettings['yaw'] -= 5;
-            player.setSphericalProperties(newSettings);
-            animationID = requestAnimationFrame(lookDownRight);
-        }
+</script>
 
-        function stopCamera() {
-            cancelAnimationFrame(animationID);
-        }
-
-    </script>
-</div>
 </body>
 </html>

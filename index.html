@@ -265,8 +265,8 @@
         $('#cursorBox0').css('width', windowWidth + 'px');
         $('#cursorBox0').css('height', windowHeight + 'px');
         $('#cursorBox0').css('margin-left', playerLeftGap + 'px');
-        $('#cursorSafeZone').css('margin-top', windowHeight / 2 - 50 + 'px');
-        $('#cursorSafeZone').css('margin-left', windowWidth / 2 - 50 + 'px');
+        $('#cursorSafeZone').css('margin-top', windowHeight / 2 - 100 + 'px');//100 is half of the circle's height/width
+        $('#cursorSafeZone').css('margin-left', windowWidth / 2 - 100 + 'px');
         if (player == null) {
             player = new YT.Player('player0', {
                 //height: 700,

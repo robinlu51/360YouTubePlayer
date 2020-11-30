@@ -25,11 +25,14 @@
     <button type="button" class="button" onclick="stopVideo()">Stop!</button>
     -->
     <div style="padding: 5px" id="controlOptions0">
+
+
         <div class="tab">
-            <button id="control1button" class="tablinks" onclick="switchTab('control1')">Control 1</button>
-            <button id="control2button" class="tablinks" onclick="switchTab('control2')">Control 2</button>
-            <button id="control3button" class="tablinks" onclick="switchTab('control3')">Control 3</button>
+            <button type="button" id="control1button" class="tablinks" onclick="switchTab()">Cursor Box</button>
+            <button type="button" id="control2button" class="tablinks" onclick="switchTab()">Direction Buttons</button><!--mouse only-->
+            <button type="button" id="control3button" class="tablinks" onclick="switchTab()">Drag and Drop</button>
         </div>
+
         <div id="control1" class="tabContent">
 
             <input type="checkbox" id="x_axis" onclick="inverseX()">
@@ -303,15 +306,13 @@
     }
 
     function switchTab(controlNum) {
-        console.log("Tab switched!");
+        //console.log("Tab switched!");
         let controlMethods = $('.tabContent');
-        $('#control1').css('display', 'none');
-        $('#control2').css('display', 'none');
-        $('#control3').css('display', 'none');
-        /*
+
+
         for (let i = 0; i < controlMethods.length; i++) {
             controlMethods[i].style.display = "none";
-        }*/
+        }
       //  debugger;
         $('#' + controlNum).css('display', 'block');
         //document.getElementById(controlNum).style.display = "block";

@@ -15,7 +15,7 @@
     NLB4Fcxh1iU
     -->
     <input type="text" id="textInput" value="G-XZhKqQAHU">
-    <button type="button" class="button" onclick="onPlayClick()">Play!</button>
+    <button type="button" class="button" onclick="onPlayClick()">Play/Pause</button>
     <!--
     <button type="button" class="button" onclick="pauseVideo()">Pause!</button>
     -->
@@ -26,16 +26,24 @@
     -->
     <div style="padding: 5px" id="controlOptions0">
 
-        <div class="tab">
-            <button type="button" id="control1button" class="tablinks" onclick="switchTab()">Cursor Box</button>
-            <button type="button" id="control2button" class="tablinks" onclick="switchTab()">Direction Buttons</button>
-            <button type="button" id="control3button" class="tablinks" onclick="switchTab()">Drag and Drop</button>
+        <div class="tab" id="controlMethodTab">
+            <button type="button" id="control1button" class="tablinks" onclick="switchTab('control1')">Cursor Box
+            </button>
+            <button type="button" id="control2button" class="tablinks" onclick="switchTab('control2')">Cursor Box Alt
+            </button>
+            <button type="button" id="control3button" class="tablinks" onclick="switchTab('control3')">Direction
+                Buttons
+            </button>
+            <button type="button" id="control4button" class="tablinks" onclick="switchTab('control4')">Drag and Drop
+            </button>
         </div>
+
+        <div id="player0"></div>
 
         <div id="control1" class="tabContent">
 
             <input type="checkbox" id="x_axis" onclick="inverseX()">
-            <label for="x_axis" style="margin-right: 50px">Inverse X-axis control</label>
+            <label for="x_axis" style="margin-right: 50px" id="x_axis_label">Inverse X-axis control</label>
             <input type="checkbox" id="y_axis" onclick="inverseY()">
             <label for="y_axis">Inverse Y-axis control</label>
             <p id="massValue">This should be default mass value, you shouldn't see this!</p>
@@ -56,12 +64,12 @@
             </div>
             -->
             <p id="mouseCoords" style="clear: none;">Mouse cursor X/Y: 0, 0</p>
-
-
+            <div id="cursorBox0" class="cursorBox">
+                <div id="cursorSafeZone" class="safeZone"></div>
+            </div>
         </div>
-
-
-        <div id="control2" class="tabContent">
+        <div id="control2" class="tabContent"></div>
+        <div id="control3" class="tabContent">
             <div>
                 <button id="upLeftButton" type="button" class="button" onmousedown="lookUpLeft()"
                         onmouseup="stopCamera()">
@@ -105,12 +113,8 @@
             </div>
         </div>
 
-        <div id="control3" class="tabContent"></div>
+        <div id="control4" class="tabContent"></div>
 
-        <div id="player0" style="margin-left: 100px"></div>
-        <div id="cursorBox0" class="cursorBox">
-            <div id="cursorSafeZone" class="safeZone"></div>
-        </div>
 
     </div>
 </form>
@@ -240,21 +244,24 @@
 
     function onYouTubeIframeAPIReady() {
         let videoRatioWidth = 16;
-        let videoRationHeight = 9;
+        let videoRatioHeight = 9;
         let videoId0 = document.getElementById("textInput").value;
         //let adjustedWidth = window.innerWidth * 2 / 3 - 20; //needs to be adjusted if a different bootstrap grid
-        let control1Height = $('#textInput').height() + $('#control1button').height() + $('#sliderBar').height() + $('#mouseCoords').height();
+        let control1Height = $('#textInput').height() + $('#controlMethodTab').height() + $('#x_axis_label').height() + $('#massValue').height() + $('#sliderBar').height() + $('#mouseCoords').height()+35;
         let windowHeight = window.innerHeight - 20 - control1Height; //these sizes indicate the maximum the video player can be
         let windowWidth = window.innerWidth - 20; //on screen, with consideration of padding and top bar
         //we want to make the video player as large as allowed without needing to scroll, while maintaining a 16:9 ratio
-        if (windowHeight >= videoRationHeight / videoRatioWidth * windowWidth) {
-            windowHeight = videoRationHeight / videoRatioWidth * windowWidth;
-        } else if (windowWidth >= videoRatioWidth / videoRationHeight * windowHeight) {
-            windowWidth = videoRatioWidth / videoRationHeight * windowHeight;
+        if (windowHeight >= videoRatioHeight / videoRatioWidth * windowWidth) {
+            windowHeight = videoRatioHeight / videoRatioWidth * windowWidth;
+        } else if (windowWidth >= videoRatioWidth / videoRatioHeight * windowHeight) {
+            windowWidth = videoRatioWidth / videoRatioHeight * windowHeight;
         }
         let playerLeftGap = (window.innerWidth - windowWidth) / 2; //the distance of the gap between player and left/right end, so we can center video player
         $('#player0').css('margin-left', playerLeftGap + 'px');
-        $('#cursorBox0').css('top', -windowHeight - 5 + 'px');
+        $('#player0').css('position', 'absolute');
+        $('#player0').css('top', control1Height + 'px');
+        //$('#cursorBox0').css('top', -windowHeight - 5 + 'px');
+        $('#cursorBox0').css('top', control1Height + 'px');
         $('#cursorBox0').css('width', windowWidth + 'px');
         $('#cursorBox0').css('height', windowHeight + 'px');
         $('#cursorBox0').css('margin-left', playerLeftGap + 'px');
@@ -268,7 +275,8 @@
                 width: windowWidth,
                 videoId: videoId0,
                 playerVars: {
-                    rel: 0
+                    rel: 0,
+                    disablekb: 1
                 },
                 events: {
                     'onReady': onPlayerReady,
@@ -308,16 +316,13 @@
     }
 
     function switchTab(controlNum) {
-        //console.log("Tab switched!");
         let controlMethods = $('.tabContent');
-
 
         for (let i = 0; i < controlMethods.length; i++) {
             controlMethods[i].style.display = "none";
         }
-        //  debugger;
+
         $('#' + controlNum).css('display', 'block');
-        //document.getElementById(controlNum).style.display = "block";
     }
 
     let animationID; // to keep track of the animation requested if we need to stop/cancel it

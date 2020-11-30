@@ -50,7 +50,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RunManager">
     <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/YouTubePlayer1/index.html" useBuiltInWebServerPort="true">
@@ -106,6 +106,7 @@
       <workItem from="1604933170057" duration="7628000" />
       <workItem from="1605545179256" duration="2988000" />
       <workItem from="1605902683220" duration="929000" />
+      <workItem from="1606748935065" duration="1565000" />
     </task>
     <servers />
   </component>
@@ -125,10 +126,10 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="355" y="106" key="SettingsEditor" timestamp="1601909701697">
+    <state x="355" y="106" key="SettingsEditor" timestamp="1606749318329">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="355" y="106" key="SettingsEditor/0.0.1707.920@0.0.1707.920" timestamp="1601909701697" />
+    <state x="355" y="106" key="SettingsEditor/0.0.1707.920@0.0.1707.920" timestamp="1606749318329" />
     <state x="516" y="195" width="672" height="678" key="search.everywhere.popup" timestamp="1604941071531">
       <screen x="0" y="0" width="1707" height="920" />
     </state>

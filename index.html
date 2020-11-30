@@ -26,10 +26,9 @@
     -->
     <div style="padding: 5px" id="controlOptions0">
 
-
         <div class="tab">
             <button type="button" id="control1button" class="tablinks" onclick="switchTab()">Cursor Box</button>
-            <button type="button" id="control2button" class="tablinks" onclick="switchTab()">Direction Buttons</button><!--mouse only-->
+            <button type="button" id="control2button" class="tablinks" onclick="switchTab()">Direction Buttons</button>
             <button type="button" id="control3button" class="tablinks" onclick="switchTab()">Drag and Drop</button>
         </div>
 
@@ -125,8 +124,8 @@
 </div>
 <script>
 
-    $(document).ready(function(){
-     //   $('#control1').css('display', 'none');
+    $(document).ready(function () {
+        //   $('#control1').css('display', 'none');
         $('#control2').css('display', 'none');
         $('#control3').css('display', 'none');
     });
@@ -268,6 +267,9 @@
                 height: windowHeight,
                 width: windowWidth,
                 videoId: videoId0,
+                playerVars: {
+                    rel: 0
+                },
                 events: {
                     'onReady': onPlayerReady,
                 }
@@ -313,7 +315,7 @@
         for (let i = 0; i < controlMethods.length; i++) {
             controlMethods[i].style.display = "none";
         }
-      //  debugger;
+        //  debugger;
         $('#' + controlNum).css('display', 'block');
         //document.getElementById(controlNum).style.display = "block";
     }

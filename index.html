@@ -20,6 +20,8 @@
     <button type="button" class="button" onclick="pauseVideo()">Pause!</button>
     -->
     <button type="button" class="button" onclick="restartVideo()">Restart!</button>
+
+
     <!--
     <button type="button" class="button" onclick="onLoadClick()">Load!</button>
     <button type="button" class="button" onclick="stopVideo()">Stop!</button>
@@ -134,6 +136,9 @@
         $('#control3').css('display', 'none');
     });
 
+    let myURL = new URL(window.location.href);
+    console.log(myURL.searchParams.get("vidID"));
+
     let cursorBoxActive = false; //indicates if the cursor box is active
     $('#cursorSafeZone').click(function () {
         $('#cursorSafeZone').toggleClass('activeCursorBox');
@@ -245,7 +250,8 @@
     function onYouTubeIframeAPIReady() {
         let videoRatioWidth = 16;
         let videoRatioHeight = 9;
-        let videoId0 = document.getElementById("textInput").value;
+        let videoId0 = myURL.searchParams.get("vidID");
+        //let videoId0 = document.getElementById("textInput").value;
         //let adjustedWidth = window.innerWidth * 2 / 3 - 20; //needs to be adjusted if a different bootstrap grid
         let control1Height = $('#textInput').height() + $('#controlMethodTab').height() + $('#x_axis_label').height() + $('#massValue').height() + $('#sliderBar').height() + $('#mouseCoords').height()+35;
         let windowHeight = window.innerHeight - 20 - control1Height; //these sizes indicate the maximum the video player can be

@@ -70,7 +70,9 @@
                 <div id="cursorSafeZone" class="safeZone"></div>
             </div>
         </div>
-        <div id="control2" class="tabContent"></div>
+        <div id="control2" class="tabContent">
+            <p>This</p>
+        </div>
         <div id="control3" class="tabContent">
             <div>
                 <button id="upLeftButton" type="button" class="button" onmousedown="lookUpLeft()"
@@ -113,10 +115,14 @@
                         onmouseup="stopCamera()">Down Right
                 </button>
             </div>
-            <div id="directionBlockBox" class="blockBox">hello</div>
+            <div id="directionBlockBox1" class="blockBox"></div>
+            <div id="directionBlockBox2" class="blockBox"></div>
         </div>
 
-        <div id="control4" class="tabContent"></div>
+        <div id="control4" class="tabContent">
+            <div id="dragAndDropBox1" class="blockBox"></div>
+            <div id="dragAndDropBox2" class="blockBox"></div>
+        </div>
 
 
     </div>
@@ -135,6 +141,7 @@
         //   $('#control1').css('display', 'none');
         $('#control2').css('display', 'none');
         $('#control3').css('display', 'none');
+        $('#control4').css('display', 'none');
     });
 
     let myURL = new URL(window.location.href);
@@ -252,9 +259,11 @@
         let videoRatioWidth = 16;
         let videoRatioHeight = 9;
         let videoId0 = myURL.searchParams.get("vidID");
-        //let videoId0 = document.getElementById("textInput").value;
+        if (!videoId0 > "") { // if there's no URL parameter, default to Alien video
+            videoId0 = "G-XZhKqQAHU";
+        }
         //let adjustedWidth = window.innerWidth * 2 / 3 - 20; //needs to be adjusted if a different bootstrap grid
-        let control1Height = $('#textInput').height() + $('#controlMethodTab').height() + $('#x_axis_label').height() + $('#massValue').height() + $('#sliderBar').height() + $('#mouseCoords').height()+35;
+        let control1Height = $('#textInput').height() + $('#controlMethodTab').height() + $('#x_axis_label').height() + $('#massValue').height() + $('#sliderBar').height() + $('#mouseCoords').height() + 35;
         let windowHeight = window.innerHeight - 20 - control1Height; //these sizes indicate the maximum the video player can be
         let windowWidth = window.innerWidth - 20; //on screen, with consideration of padding and top bar
         //we want to make the video player as large as allowed without needing to scroll, while maintaining a 16:9 ratio
@@ -274,6 +283,27 @@
         $('#cursorBox0').css('margin-left', playerLeftGap + 'px');
         $('#cursorSafeZone').css('margin-top', windowHeight / 2 - 100 + 'px');//100 is half of the circle's height/width
         $('#cursorSafeZone').css('margin-left', windowWidth / 2 - 100 + 'px');
+
+        let directionButtonWidth = 80;
+        let directionButtonHeight = 120;
+        $('#directionBlockBox1').css('margin-left', playerLeftGap + directionButtonWidth + 'px');
+        $('#directionBlockBox1').css('top', control1Height + 'px');
+        $('#directionBlockBox1').css('width', windowWidth - directionButtonWidth + 'px');
+        $('#directionBlockBox1').css('height', directionButtonHeight + 'px');
+        $('#directionBlockBox2').css('margin-left', playerLeftGap + 'px');
+        $('#directionBlockBox2').css('top', control1Height + directionButtonHeight + 'px');
+        $('#directionBlockBox2').css('width', windowWidth + 'px');
+        $('#directionBlockBox2').css('height', windowHeight - directionButtonHeight + 'px');
+
+        $('#dragAndDropBox1').css('margin-left', playerLeftGap + 'px');
+        $('#dragAndDropBox1').css('top', control1Height + windowHeight - 50 + 'px');
+        $('#dragAndDropBox1').css('width', windowWidth + 'px');
+        $('#dragAndDropBox1').css('height', 50 + 'px');
+        $('#dragAndDropBox2').css('margin-left', playerLeftGap + 'px');
+        $('#dragAndDropBox2').css('top', control1Height + 'px');
+        $('#dragAndDropBox2').css('width', directionButtonWidth + 'px');
+        $('#dragAndDropBox2').css('height', directionButtonHeight + 'px');
+
         if (player == null) {
             player = new YT.Player('player0', {
                 //height: 700,

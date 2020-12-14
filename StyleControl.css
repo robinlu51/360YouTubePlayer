@@ -1,10 +1,9 @@
 
 .blockBox{
-    border-color: crimson;
     position:absolute;
-    top:20px;
-    opacity:50%;
-    margin-right: 10px;
+    /*top:20px;*/
+    opacity:30%;
+    /*margin-right: 10px;*/
     width: 500px; /*500px*/
     height: 500px;
     background-color: lightcoral;

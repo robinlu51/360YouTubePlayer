@@ -113,6 +113,7 @@
                         onmouseup="stopCamera()">Down Right
                 </button>
             </div>
+            <div id="directionBlockBox" class="blockBox">hello</div>
         </div>
 
         <div id="control4" class="tabContent"></div>
@@ -137,7 +138,7 @@
     });
 
     let myURL = new URL(window.location.href);
-    console.log(myURL.searchParams.get("vidID"));
+    //console.log(myURL.searchParams.get("vidID"));
 
     let cursorBoxActive = false; //indicates if the cursor box is active
     $('#cursorSafeZone').click(function () {
@@ -329,6 +330,7 @@
         }
 
         $('#' + controlNum).css('display', 'block');
+        $('#' + controlNum + 'button').css('border', '3px solid green');
     }
 
     let animationID; // to keep track of the animation requested if we need to stop/cancel it

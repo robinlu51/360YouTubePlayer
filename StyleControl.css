@@ -1,3 +1,15 @@
+
+.blockBox{
+    border-color: crimson;
+    position:absolute;
+    top:20px;
+    opacity:50%;
+    margin-right: 10px;
+    width: 500px; /*500px*/
+    height: 500px;
+    background-color: lightcoral;
+}
+
 body {
     background-color: #eee;
 }
@@ -14,6 +26,7 @@ body {
     height: 700px;
     /*background-color: #aaa;*/
 }
+
 
 .cursorBox {
     position:absolute;

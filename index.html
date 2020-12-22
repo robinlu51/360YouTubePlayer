@@ -152,7 +152,7 @@
 
     let PROPERTIES = ['yaw', 'pitch', 'roll', 'fov'];
     let player;
-    let showVisualIndicator = false;
+    showVisualIndicator = false;
     let videoControlPadding = 5; //5px of padding for the entire interface
     $('#videoControl0').css('padding', videoControlPadding + 'px');
     let controlOptionsPadding = 5;
@@ -255,6 +255,9 @@
     document.getElementById("cursorBox1").addEventListener('mousemove', updateCoords);
     document.getElementById("cursorBox1").addEventListener('mouseenter', cursorCameraControl1);
     document.getElementById("cursorBox1").addEventListener('click', moveSafeZone);
+    //this line below should add an event listener, to update the playing status, in case that the user pause/unpauses in
+    //Drag&Drop method and the Play/Pause button isn't updated
+    //document.getElementById('cursorBox1').addEventListener('click', checkPauseStatus);
 
     //let mouseCoordsText0 = document.querySelector('#mouseCoords0');
     //let mouseCoordsText1 = document.querySelector('#mouseCoords1');
@@ -451,7 +454,7 @@
             $('#directionBlockBox2').css('background-color', 'transparent');
             $('#dragAndDropBox0').css('background-color', 'transparent');
             $('#dragAndDropBox1').css('background-color', 'transparent');
-            visualIndicatorLabel.html('Show Visual Indicator');
+            visualIndicatorLabel.html('Visual Indicator Shown');
         } else {
             $('#cursorBox0').css('background-color', 'lightblue');
             if (cursorBox0Active) {
@@ -470,7 +473,7 @@
             $('#directionBlockBox2').css('background-color', 'lightblue');
             $('#dragAndDropBox0').css('background-color', 'lightblue');
             $('#dragAndDropBox1').css('background-color', 'lightblue');
-            visualIndicatorLabel.html('Hide Visual Indicator');
+            visualIndicatorLabel.html('Visual Indicator Hidden');
         }
         showVisualIndicator = !showVisualIndicator;
     }
@@ -501,6 +504,16 @@
             player.pauseVideo();
             $('#playButton').html('Play');
         }
+    }
+
+    //somehow it's not working, will need to debug later
+    function checkPauseStatus() { //check if the video is paused, and update the Play/Pause button accordingly
+        if (player.getPlayerState() == 5 || player.getPlayerState() == 2) {
+            $('#playButton').html('Play!');
+        } else if (player.getPlayerState == 1) {
+            $('#playButton').html('Pause!');
+        }
+        console.log('This method is called');
     }
 
     function restartVideo() {

@@ -2,7 +2,7 @@
 .blockBox {
     position: absolute;
     /*top:20px;*/
-    opacity: 30%;
+    opacity: 15%;
     /*margin-right: 10px;*/
     width: 500px; /*500px*/
     height: 500px;
@@ -31,7 +31,7 @@ body {
     position: absolute;
     top: 0px;
     left: 0px;
-    opacity: 20%;
+    opacity: 15%;
     width: 50%;
     height: 500px;
     background-color: transparent;

@@ -9,33 +9,38 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<form style="padding: 5px" id="videoControl0">
+<form id="videoControl0">
     <!--
     sPyAQQklc1s
     NLB4Fcxh1iU
-    -->
     <input type="text" id="textInput" value="G-XZhKqQAHU">
-    <button type="button" class="button" onclick="onPlayClick()">Play/Pause</button>
+    -->
+    <button type="button" id="playButton" class="button" onclick="onPlayClick()">Play</button>
     <!--
     <button type="button" class="button" onclick="pauseVideo()">Pause!</button>
     -->
     <button type="button" class="button" onclick="restartVideo()">Restart!</button>
-
-
+    <button type="button" id="muteButton" class="button" onclick="muteVideo()">Mute</button>
+    <input type="checkbox" id="visualIndicatorCheckBox" onclick="toggleVisualIndicator()">
+    <label for="visualIndicatorCheckBox" id="visualIndicatorLabel">Show Visual Indicator</label>
     <!--
     <button type="button" class="button" onclick="onLoadClick()">Load!</button>
     <button type="button" class="button" onclick="stopVideo()">Stop!</button>
     -->
-    <div style="padding: 5px" id="controlOptions0">
-
+    <div id="controlOptions0">
         <div class="tab" id="controlMethodTab">
-            <button type="button" id="control1button" class="tablinks" onclick="switchTab('control1')">Cursor Box
+            <input type="checkbox" id="control1_checkbox">
+            <button type="button" id="control1button" class="tablinks" onclick="switchTab('control1')"
+                    style="background-color: #8ff2a3">Cursor Box
             </button>
+            <input type="checkbox" id="control2_checkbox">
             <button type="button" id="control2button" class="tablinks" onclick="switchTab('control2')">Cursor Box Alt
             </button>
+            <input type="checkbox" id="control3_checkbox">
             <button type="button" id="control3button" class="tablinks" onclick="switchTab('control3')">Direction
                 Buttons
             </button>
+            <input type="checkbox" id="control4_checkbox">
             <button type="button" id="control4button" class="tablinks" onclick="switchTab('control4')">Drag and Drop
             </button>
         </div>
@@ -43,37 +48,38 @@
         <div id="player0"></div>
 
         <div id="control1" class="tabContent">
-
-            <input type="checkbox" id="x_axis" onclick="inverseX()">
-            <label for="x_axis" style="margin-right: 50px" id="x_axis_label">Inverse X-axis control</label>
-            <input type="checkbox" id="y_axis" onclick="inverseY()">
-            <label for="y_axis">Inverse Y-axis control</label>
+            <input type="checkbox" id="x_axis" onclick="invertX()">
+            <label for="x_axis" style="margin-right: 50px" id="x_axis_label">Invert X-axis control</label>
+            <input type="checkbox" id="y_axis" onclick="invertY()">
+            <label for="y_axis">Invert Y-axis control</label>
             <p id="massValue">This should be default mass value, you shouldn't see this!</p>
-
             <!--
             Although conceptually, mass isn't a percentage, we are presenting it to this way,
             to make it easier to understand for the user
             -->
-
             <div id="sliderBar" class="sliderContainer">
                 <input class='slider' type='range' min='0' max='99' value='95' id='massSliderValue'
                        onchange="updateMass(this.value)">
             </div>
-
             <!--
-            <div id="cursorBox0" class="cursorBox">
-                <div id="cursorSafeZone" class="safeZone"></div>
-            </div>
+            <p id="mouseCoords0" style="clear: none;">Mouse cursor X/Y: 0, 0</p>
             -->
-            <p id="mouseCoords" style="clear: none;">Mouse cursor X/Y: 0, 0</p>
             <div id="cursorBox0" class="cursorBox">
-                <div id="cursorSafeZone" class="safeZone"></div>
+                <div id="cursorSafeZone0" class="safeZone"></div>
             </div>
         </div>
+
         <div id="control2" class="tabContent">
-            <p>This</p>
+            <!--
+            <p id="mouseCoords1" style="clear: none;">Mouse cursor X/Y: 0, 0</p>
+            -->
+            <div id="cursorBox1" class="cursorBox">
+                <div id="cursorSafeZone1" class="safeZone"></div>
+            </div>
         </div>
+
         <div id="control3" class="tabContent">
+            <!--
             <div>
                 <button id="upLeftButton" type="button" class="button" onmousedown="lookUpLeft()"
                         onmouseup="stopCamera()">
@@ -115,13 +121,15 @@
                         onmouseup="stopCamera()">Down Right
                 </button>
             </div>
+            -->
+            <div id="directionBlockBox0" class="blockBox"></div>
             <div id="directionBlockBox1" class="blockBox"></div>
             <div id="directionBlockBox2" class="blockBox"></div>
         </div>
 
         <div id="control4" class="tabContent">
+            <div id="dragAndDropBox0" class="blockBox"></div>
             <div id="dragAndDropBox1" class="blockBox"></div>
-            <div id="dragAndDropBox2" class="blockBox"></div>
         </div>
 
 
@@ -132,61 +140,124 @@
     <div class="row">
         <!--bootstrap has been taken out, add col-md-8, 4 if need to be restored
         -->
-
     </div>
 </div>
 <script>
+    // This code loads the IFrame Player API code asynchronously.
+    let tag = document.createElement('script');
 
+    tag.src = "https://www.youtube.com/iframe_api";
+    let firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    let PROPERTIES = ['yaw', 'pitch', 'roll', 'fov'];
+    let player;
+    let showVisualIndicator = false;
+    let videoControlPadding = 5; //5px of padding for the entire interface
+    $('#videoControl0').css('padding', videoControlPadding + 'px');
+    let controlOptionsPadding = 5;
+    $('#controlOptions0').css('padding', controlOptionsPadding + 'px');
     $(document).ready(function () {
         //   $('#control1').css('display', 'none');
+        //this is done so that on load, only control 1 is displayed
         $('#control2').css('display', 'none');
         $('#control3').css('display', 'none');
         $('#control4').css('display', 'none');
     });
 
+    document.getElementById("control1_checkbox").disabled = true;
+    document.getElementById("control2_checkbox").disabled = true;
+    document.getElementById("control3_checkbox").disabled = true;
+    document.getElementById("control4_checkbox").disabled = true;
+
     let myURL = new URL(window.location.href);
     //console.log(myURL.searchParams.get("vidID"));
 
-    let cursorBoxActive = false; //indicates if the cursor box is active
-    $('#cursorSafeZone').click(function () {
-        $('#cursorSafeZone').toggleClass('activeCursorBox');
-        cursorBoxActive = !cursorBoxActive;
+    let movableSafeZoneCenterX = 0; //with respect to the cursor box, at 0, 0 if at top left
+    let movableSafeZoneCenterY = 0; // THIS WORKS BECAUSE OF CURRENT IMPLEMENTATION, since you have to click on safe zone first to start moving
+    // therefore you will always call moveSafeZone, which updates the center of the safe zone for movement detection purpose
+    // if implementation changes, this will cause camera to behave like the center is at top left corner, until you move safe zone once
+
+    let cursorBox0Active = false; //indicates if the cursor box is active
+    $('#cursorSafeZone0').click(function () {
+        if (showVisualIndicator) {
+            if (cursorBox0Active) {
+                $('#cursorSafeZone0').css('background-color', 'yellow');
+            } else {
+                $('#cursorSafeZone0').css('background-color', 'greenyellow');
+            }
+        }
+        cursorBox0Active = !cursorBox0Active;
     });
 
-    let widthHolder = $('#cursorBox0').width();
-    $('#cursorSafeZone').css('margin-left', widthHolder / 2 - 50 + 'px');
+    let cursorBox1Active = false; //indicates if the cursor box is active
+    $('#cursorSafeZone1').click(function () {
+        if (showVisualIndicator) {
+            if (cursorBox1Active) {
+                $('#cursorSafeZone1').css('background-color', 'yellow');
+            } else {
+                $('#cursorSafeZone1').css('background-color', 'greenyellow');
+            }
+        }
+        cursorBox1Active = !cursorBox1Active;
+    });
+
 
     let massValueText = document.querySelector('#massValue');
     //mass is the user assigned variable that controls the momentum of camera movement, on a scale of 0-1
     let mass = document.getElementById('massSliderValue').value; // exists to update the mass value and text for the first time only
-    //let mass = 95; //for study version, we give mass a defined value instead of being adjustable.
+    //let mass = 95; //for user study version, we might want to give mass a defined value instead of being adjustable.
     massValueText.innerText = `The current mass value is at: ${mass}%`; //subsequent updates are handled by updateMass()
     mass /= 100; // needed so we don't need to call getElementById twice, and keep the mass value on 0-1 scale
 
     let prevXVelocity = 0; //by default, the velocity starts at 0
     let prevYVelocity = 0;
 
-    let mouseInsideBox = false;
-    let mouseInsideSafeZone = false;
+    //adding event listeners for Cursor Box
+    let mouseInsideBox0 = false;
+    let mouseInsideSafeZone0 = false;
     document.getElementById("cursorBox0").addEventListener('mouseenter', function () {
-        mouseInsideBox = true;
+        mouseInsideBox0 = true;
     });
     document.getElementById("cursorBox0").addEventListener('mouseleave', function () {
-        mouseInsideBox = false;
+        mouseInsideBox0 = false;
     });
-    document.getElementById("cursorSafeZone").addEventListener('mouseenter', function () {
-        mouseInsideSafeZone = true;
+    document.getElementById("cursorSafeZone0").addEventListener('mouseenter', function () {
+        mouseInsideSafeZone0 = true;
     });
-    document.getElementById("cursorSafeZone").addEventListener('mouseleave', function () {
-        mouseInsideSafeZone = false;
+    document.getElementById("cursorSafeZone0").addEventListener('mouseleave', function () {
+        mouseInsideSafeZone0 = false;
     });
 
-    let mouseX = 0;
-    let mouseY = 0;
+    //adding event listeners for Cursor Box Alt
+    let mouseInsideBox1 = false;
+    let mouseInsideSafeZone1 = false;
+    document.getElementById("cursorBox1").addEventListener('mouseenter', function () {
+        mouseInsideBox1 = true;
+    });
+    document.getElementById("cursorBox1").addEventListener('mouseleave', function () {
+        mouseInsideBox1 = false;
+    });
+    document.getElementById("cursorSafeZone1").addEventListener('mouseenter', function () {
+        mouseInsideSafeZone1 = true;
+    });
+    document.getElementById("cursorSafeZone1").addEventListener('mouseleave', function () {
+        mouseInsideSafeZone1 = false;
+    });
+
+
+    let mouseX = 0; // the mouse X coordinate WITH RESPECT TO THE VISIBLE SCREEN
+    let mouseY = 0; // the code should show it with respect to
     document.getElementById("cursorBox0").addEventListener('mouseenter', updateCoords);
     document.getElementById("cursorBox0").addEventListener('mousemove', updateCoords);
-    let mouseCoordsText = document.querySelector('#mouseCoords');
-    document.getElementById("cursorBox0").addEventListener('mouseenter', cursorCameraControl);
+    document.getElementById("cursorBox0").addEventListener('mouseenter', cursorCameraControl0);
+    document.getElementById("cursorBox1").addEventListener('mouseenter', updateCoords);
+    document.getElementById("cursorBox1").addEventListener('mousemove', updateCoords);
+    document.getElementById("cursorBox1").addEventListener('mouseenter', cursorCameraControl1);
+    document.getElementById("cursorBox1").addEventListener('click', moveSafeZone);
+
+    //let mouseCoordsText0 = document.querySelector('#mouseCoords0');
+    //let mouseCoordsText1 = document.querySelector('#mouseCoords1');
 
     function updateMass(value) { //update the mass value AND text displayed
         mass = value / 100;
@@ -198,38 +269,38 @@
         mouseY = event.clientY;
     }
 
-    let xModifier = 1; // 1 is the default value, -1 if axis is inversed
+    function moveSafeZone(event) { // moves the safe zone based on mouse click location, center on click location
+        $('#cursorSafeZone1').css('margin-left', mouseX - playerLeftGapPublicHolder - safeZone0Radius + 'px');
+        $('#cursorSafeZone1').css('margin-top', mouseY - control1HeightPublicHolder - safeZone0Radius + 'px');
+        movableSafeZoneCenterX = mouseX - playerLeftGapPublicHolder;
+        movableSafeZoneCenterY = mouseY - control1HeightPublicHolder;
+    }
+
+    let xModifier = 1; // 1 is the default value, -1 if axis is inverted
     let yModifier = 1;
 
-    function inverseX() { //used to inverse x-axis control
+    function invertX() { //used to invert x-axis control
         xModifier = -xModifier;
     }
 
-    function inverseY() { //used to inverse y-axis control
+    function invertY() { //used to invert y-axis control
         yModifier = -yModifier;
     }
 
-    let offset = $('#cursorBox0').offset();//the offset for cursorBox's coordinates
-    let centerX = document.getElementById('cursorBox0').offsetWidth / 2;
-    //let centerX = $('#cursorBox0').offsetWidth; // for some reason, this returns undefined
-    let centerY = document.getElementById('cursorBox0').offsetHeight / 2;
-
-    function cursorCameraControl() { //need to change to new appropriate function name to describe all functionality
-        //get the mouse cursor's current coordinates
-        let x = Math.round(mouseX - offset.left);
-        let y = Math.round(mouseY - offset.top);
-        let videoControlHeight = $('#videoControl0').height();
-        let controlOptionHeight = $('#controlOptions0').height();
-        mouseCoordsText.innerText = `Mouse cursor X/Y: ${x}, ${y}`;
+    function cursorCameraControl0() { //camera control for Cursor Box control method
+        //get the mouse cursor's current coordinates, with top left of cursor box to be 0,0
+        let x = Math.round(mouseX - playerLeftGapPublicHolder);
+        let y = Math.round(mouseY - control1HeightPublicHolder);
+        //mouseCoordsText0.innerText = `Mouse cursor X/Y: ${x}, ${y}, center at ${windowWidthPublicHolder / 2}, ${windowHeightPublicHolder / 2}`;
 
         let cameraMultiplierX = 0.003; //necessary to control the overall camera speed
         let cameraMultiplierY = 0.002;
         let newSettings = player.getSphericalProperties();
         let targetedXVelocity = 0; //the velocity we want to achieve
         let targetedYVelocity = 0;
-        if (!mouseInsideSafeZone && cursorBoxActive) {
-            targetedXVelocity = centerX - x; //the velocity we want to achieve
-            targetedYVelocity = centerY - y;
+        if (!mouseInsideSafeZone0 && cursorBox0Active) {
+            targetedXVelocity = windowWidthPublicHolder / 2 - x; // find the center for cursor box, windowWidth/2 is the num of pixels from edge to center
+            targetedYVelocity = windowHeightPublicHolder / 2 - y;
         }
         let combinedXVelocity = ((1 - mass) * targetedXVelocity + mass * prevXVelocity); // the actual velocity calculated with momentum
         let combinedYVelocity = ((1 - mass) * targetedYVelocity + mass * prevYVelocity);
@@ -238,34 +309,56 @@
         player.setSphericalProperties(newSettings);
         prevXVelocity = combinedXVelocity; //update the previous velocity with the newly calculated value
         prevYVelocity = combinedYVelocity;
-        if (mouseInsideBox) {
-            setTimeout(cursorCameraControl, 16); //timeout at 16ms to ensure around 60 updates/second
+        if (mouseInsideBox0) {
+            setTimeout(cursorCameraControl0, 16); //timeout at 16ms to ensure around 60 updates/second, since there are roughly 60 * 16 ms in a second
         }
     }
 
-    // 2. This code loads the IFrame Player API code asynchronously.
-    let tag = document.createElement('script');
+    function cursorCameraControl1() { //camera control for Cursor Box Alt control method
+        //get the mouse cursor's current coordinates, with top left of cursor box to be 0,0
+        let x = Math.round(mouseX - playerLeftGapPublicHolder);
+        let y = Math.round(mouseY - control1HeightPublicHolder);
+        // mouseCoordsText1.innerText = `Mouse cursor X/Y: ${x - mouseX}, ${y - mouseY}, center at ${windowWidthPublicHolder / 2}, ${windowHeightPublicHolder / 2}`;
 
-    tag.src = "https://www.youtube.com/iframe_api";
-    let firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        let cameraMultiplierX = 0.003; //necessary to control the overall camera speed
+        let cameraMultiplierY = 0.002;
+        let newSettings = player.getSphericalProperties();
+        let targetedXVelocity = 0; //the velocity we want to achieve
+        let targetedYVelocity = 0;
+        if (!mouseInsideSafeZone1 && cursorBox1Active) {
+            targetedXVelocity = movableSafeZoneCenterX - x; // find the center for cursor box, windowWidth/2 is the num of pixels from edge to center
+            targetedYVelocity = movableSafeZoneCenterY - y;
+        }
+        let combinedXVelocity = ((1 - mass) * targetedXVelocity + mass * prevXVelocity); // the actual velocity calculated with momentum
+        let combinedYVelocity = ((1 - mass) * targetedYVelocity + mass * prevYVelocity);
+        newSettings['yaw'] += xModifier * cameraMultiplierX * combinedXVelocity;
+        newSettings['pitch'] += yModifier * cameraMultiplierY * combinedYVelocity;
+        player.setSphericalProperties(newSettings);
+        prevXVelocity = combinedXVelocity; //update the previous velocity with the newly calculated value
+        prevYVelocity = combinedYVelocity;
+        if (mouseInsideBox1) {
+            setTimeout(cursorCameraControl1, 16); //timeout at 16ms to ensure around 60 updates/second, since there are roughly 60 * 16 ms in a second
+        }
+    }
 
-    let PROPERTIES = ['yaw', 'pitch', 'roll', 'fov'];
-    // 3. This function creates an <iframe> (and YouTube player)
-    //    after the API code downloads.
-    let player;
+    let control1HeightPublicHolder;
+    let playerLeftGapPublicHolder;
+    let windowWidthPublicHolder;
+    let windowHeightPublicHolder;
+    let safeZone0Radius = $('#cursorSafeZone0').height() / 2; //the Cursor Box control method's safe zone area's radius
 
-    function onYouTubeIframeAPIReady() {
-        let videoRatioWidth = 16;
+    function onYouTubeIframeAPIReady() { //<=== does as it says
+        let videoRatioWidth = 16; //video player ratio is 16:9 for now
         let videoRatioHeight = 9;
         let videoId0 = myURL.searchParams.get("vidID");
-        if (!videoId0 > "") { // if there's no URL parameter, default to Alien video
-            videoId0 = "G-XZhKqQAHU";
+        let defaultVideoID = 'G-XZhKqQAHU'; //for now, default to the Alien 'HELP' video
+        if (!videoId0 > '') { // if there's no URL parameter, default to designated video
+            videoId0 = defaultVideoID;
         }
-        //let adjustedWidth = window.innerWidth * 2 / 3 - 20; //needs to be adjusted if a different bootstrap grid
-        let control1Height = $('#textInput').height() + $('#controlMethodTab').height() + $('#x_axis_label').height() + $('#massValue').height() + $('#sliderBar').height() + $('#mouseCoords').height() + 35;
-        let windowHeight = window.innerHeight - 20 - control1Height; //these sizes indicate the maximum the video player can be
-        let windowWidth = window.innerWidth - 20; //on screen, with consideration of padding and top bar
+        //let adjustedWidth = window.innerWidth * 2 / 3 - 20; //ratio for the col-8 and 4 bootstrap grid
+        let control1Height = $('#playButton').height() + $('#controlMethodTab').height() + $('#x_axis_label').height() + $('#massValue').height() + $('#sliderBar').height() + 35; //+ $('#mouseCoords').height()
+        let windowHeight = window.innerHeight - 20 - control1Height; //these numbers indicate the maximum size the video player can be
+        let windowWidth = window.innerWidth; //maximum width on screen that can be used for display
         //we want to make the video player as large as allowed without needing to scroll, while maintaining a 16:9 ratio
         if (windowHeight >= videoRatioHeight / videoRatioWidth * windowWidth) {
             windowHeight = videoRatioHeight / videoRatioWidth * windowWidth;
@@ -273,38 +366,62 @@
             windowWidth = videoRatioWidth / videoRatioHeight * windowHeight;
         }
         let playerLeftGap = (window.innerWidth - windowWidth) / 2; //the distance of the gap between player and left/right end, so we can center video player
-        $('#player0').css('margin-left', playerLeftGap + 'px');
-        $('#player0').css('position', 'absolute');
-        $('#player0').css('top', control1Height + 'px');
-        //$('#cursorBox0').css('top', -windowHeight - 5 + 'px');
-        $('#cursorBox0').css('top', control1Height + 'px');
-        $('#cursorBox0').css('width', windowWidth + 'px');
-        $('#cursorBox0').css('height', windowHeight + 'px');
-        $('#cursorBox0').css('margin-left', playerLeftGap + 'px');
-        $('#cursorSafeZone').css('margin-top', windowHeight / 2 - 100 + 'px');//100 is half of the circle's height/width
-        $('#cursorSafeZone').css('margin-left', windowWidth / 2 - 100 + 'px');
+        let player0 = $('#player0');
+        player0.css('position', 'absolute');
+        player0.css('top', control1Height + 'px');
+        player0.css('left', playerLeftGap + 'px');
+        control1HeightPublicHolder = control1Height;
+        playerLeftGapPublicHolder = playerLeftGap;
+        let cursorBox0 = $('#cursorBox0');
+        cursorBox0.css('top', control1Height + 'px');
+        cursorBox0.css('width', windowWidth + 'px');
+        cursorBox0.css('height', windowHeight + 'px');
+        cursorBox0.css('margin-left', playerLeftGap + 'px');
+        windowWidthPublicHolder = windowWidth;
+        windowHeightPublicHolder = windowHeight;
+        $('#cursorSafeZone0').css('margin-top', windowHeight / 2 - safeZone0Radius + 'px');
+        $('#cursorSafeZone0').css('margin-left', windowWidth / 2 - safeZone0Radius + 'px');
 
-        let directionButtonWidth = 80;
-        let directionButtonHeight = 120;
-        $('#directionBlockBox1').css('margin-left', playerLeftGap + directionButtonWidth + 'px');
-        $('#directionBlockBox1').css('top', control1Height + 'px');
-        $('#directionBlockBox1').css('width', windowWidth - directionButtonWidth + 'px');
-        $('#directionBlockBox1').css('height', directionButtonHeight + 'px');
-        $('#directionBlockBox2').css('margin-left', playerLeftGap + 'px');
-        $('#directionBlockBox2').css('top', control1Height + directionButtonHeight + 'px');
-        $('#directionBlockBox2').css('width', windowWidth + 'px');
-        $('#directionBlockBox2').css('height', windowHeight - directionButtonHeight + 'px');
+        let safeZone1Radius = $('#cursorSafeZone1').height() / 2; //the Cursor Box Alt control method's safe zone area's radius
+        let cursorBox1 = $('#cursorBox1');
+        cursorBox1.css('top', control1Height + 'px');
+        cursorBox1.css('width', windowWidth + 'px');
+        cursorBox1.css('height', windowHeight + 'px');
+        cursorBox1.css('margin-left', playerLeftGap + 'px');
+        $('#cursorSafeZone1').css('margin-top', windowHeight / 2 - safeZone0Radius + 'px');
+        $('#cursorSafeZone1').css('margin-left', windowWidth / 2 - safeZone0Radius + 'px');
 
-        $('#dragAndDropBox1').css('margin-left', playerLeftGap + 'px');
-        $('#dragAndDropBox1').css('top', control1Height + windowHeight - 50 + 'px');
-        $('#dragAndDropBox1').css('width', windowWidth + 'px');
-        $('#dragAndDropBox1').css('height', 50 + 'px');
-        $('#dragAndDropBox2').css('margin-left', playerLeftGap + 'px');
-        $('#dragAndDropBox2').css('top', control1Height + 'px');
-        $('#dragAndDropBox2').css('width', directionButtonWidth + 'px');
-        $('#dragAndDropBox2').css('height', directionButtonHeight + 'px');
+        let directionButtonWidth = 65; //the size for the YouTube native navigation button, used in Direction Buttons
+        let directionButtonHeight = 60;
+        let directionButtonTopGap = 57;
+        let directionBlockBox0 = $('#directionBlockBox0');
+        directionBlockBox0.css('left', playerLeftGap + 'px');
+        directionBlockBox0.css('top', control1Height + 'px');
+        directionBlockBox0.css('width', windowWidth + 'px');
+        directionBlockBox0.css('height', directionButtonTopGap + 'px');
+        let directionBlockBox1 = $('#directionBlockBox1');
+        directionBlockBox1.css('left', playerLeftGap + directionButtonWidth + 'px');
+        directionBlockBox1.css('top', control1Height + directionButtonTopGap + 'px');
+        directionBlockBox1.css('width', windowWidth - directionButtonWidth + 'px');
+        directionBlockBox1.css('height', directionButtonHeight + 'px');
+        let directionBlockBox2 = $('#directionBlockBox2');
+        directionBlockBox2.css('left', playerLeftGap + 'px');
+        directionBlockBox2.css('top', control1Height + directionButtonHeight + directionButtonTopGap + 'px');
+        directionBlockBox2.css('width', windowWidth + 'px');
+        directionBlockBox2.css('height', windowHeight - directionButtonHeight - directionButtonTopGap + 'px');
 
-        if (player == null) {
+        let dragAndDropBox0 = $('#dragAndDropBox0');
+        dragAndDropBox0.css('left', playerLeftGap + 'px');
+        dragAndDropBox0.css('top', control1Height + directionButtonTopGap + 'px');
+        dragAndDropBox0.css('width', directionButtonWidth + 'px');
+        dragAndDropBox0.css('height', directionButtonTopGap + 'px');
+        let dragAndDropBox1 = $('#dragAndDropBox1');
+        dragAndDropBox1.css('left', playerLeftGap + 'px');
+        dragAndDropBox1.css('top', control1Height + windowHeight - 50 + 'px');
+        dragAndDropBox1.css('width', windowWidth + 'px');
+        dragAndDropBox1.css('height', 50 + 'px');
+
+        if (player == null) { // if there's no pre-existing video player, we create it here
             player = new YT.Player('player0', {
                 //height: 700,
                 //width: adjustedWidth,
@@ -312,8 +429,8 @@
                 width: windowWidth,
                 videoId: videoId0,
                 playerVars: {
-                    rel: 0,
-                    disablekb: 1
+                    rel: 0, // on pause screen, only display videos from same channel, since we can't disable this following YouTube update
+                    disablekb: 1 //disable keyboard control
                 },
                 events: {
                     'onReady': onPlayerReady,
@@ -322,8 +439,44 @@
         }
     }
 
-    // 4. The API will call this function when the video player is ready.
-    function onPlayerReady(event) {
+    function toggleVisualIndicator() { //toggle colored visual indicator for clickable/unclickable zones
+        let visualIndicatorLabel = $('#visualIndicatorLabel');
+        if (showVisualIndicator) {
+            $('#cursorBox0').css('background-color', 'transparent');
+            $('#cursorSafeZone0').css('background-color', 'transparent');
+            $('#cursorBox1').css('background-color', 'transparent');
+            $('#cursorSafeZone1').css('background-color', 'transparent');
+            $('#directionBlockBox0').css('background-color', 'transparent');
+            $('#directionBlockBox1').css('background-color', 'transparent');
+            $('#directionBlockBox2').css('background-color', 'transparent');
+            $('#dragAndDropBox0').css('background-color', 'transparent');
+            $('#dragAndDropBox1').css('background-color', 'transparent');
+            visualIndicatorLabel.html('Show Visual Indicator');
+        } else {
+            $('#cursorBox0').css('background-color', 'lightblue');
+            if (cursorBox0Active) {
+                $('#cursorSafeZone0').css('background-color', 'greenyellow');
+            } else {
+                $('#cursorSafeZone0').css('background-color', 'yellow');
+            }
+            $('#cursorBox1').css('background-color', 'lightblue');
+            if (cursorBox1Active) {
+                $('#cursorSafeZone1').css('background-color', 'greenyellow');
+            } else {
+                $('#cursorSafeZone1').css('background-color', 'yellow');
+            }
+            $('#directionBlockBox0').css('background-color', 'lightblue');
+            $('#directionBlockBox1').css('background-color', 'lightblue');
+            $('#directionBlockBox2').css('background-color', 'lightblue');
+            $('#dragAndDropBox0').css('background-color', 'lightblue');
+            $('#dragAndDropBox1').css('background-color', 'lightblue');
+            visualIndicatorLabel.html('Hide Visual Indicator');
+        }
+        showVisualIndicator = !showVisualIndicator;
+    }
+
+    // The API will call this function when the video player is ready.
+    function onPlayerReady(event) { //currently unused
         //event.target.playVideo();
     }
 
@@ -343,8 +496,10 @@
     function onPlayClick() {
         if (player.getPlayerState() == 5 || player.getPlayerState() == 2) {
             player.playVideo();
+            $('#playButton').html('Pause');
         } else if (player.getPlayerState() == 1) {
             player.pauseVideo();
+            $('#playButton').html('Play');
         }
     }
 
@@ -352,15 +507,27 @@
         player.seekTo(0);
     }
 
+    function muteVideo() {
+        if (!player.isMuted()) {
+            player.mute();
+            $('#muteButton').html('Unmute');
+        } else {
+            player.unMute();
+            $('#muteButton').html('Mute');
+        }
+    }
+
     function switchTab(controlNum) {
         let controlMethods = $('.tabContent');
 
         for (let i = 0; i < controlMethods.length; i++) {
             controlMethods[i].style.display = "none";
+            let j = i + 1;
+            $('#' + 'control' + j + 'button').css('background-color', 'transparent');
         }
-
         $('#' + controlNum).css('display', 'block');
-        $('#' + controlNum + 'button').css('border', '3px solid green');
+        $('#' + controlNum + '_checkbox').prop('checked', true);
+        $('#' + controlNum + 'button').css('background-color', '#8ff2a3');
     }
 
     let animationID; // to keep track of the animation requested if we need to stop/cancel it

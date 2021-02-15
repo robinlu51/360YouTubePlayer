@@ -46,7 +46,6 @@
         </div>
 
         <div id="player0"></div>
-
         <div id="control1" class="tabContent">
             <input type="checkbox" id="x_axis" onclick="invertX()">
             <label for="x_axis" style="margin-right: 50px" id="x_axis_label">Invert X-axis control</label>
@@ -125,13 +124,14 @@
             <div id="directionBlockBox0" class="blockBox"></div>
             <div id="directionBlockBox1" class="blockBox"></div>
             <div id="directionBlockBox2" class="blockBox"></div>
+            <div id="directionHighlightBox" class="highlightBox">
         </div>
 
         <div id="control4" class="tabContent">
             <div id="dragAndDropBox0" class="blockBox"></div>
             <div id="dragAndDropBox1" class="blockBox"></div>
         </div>
-
+        <div id="timelineBox0" class="blockBox">
 
     </div>
 </form>
@@ -172,6 +172,17 @@
 
     let myURL = new URL(window.location.href);
     //console.log(myURL.searchParams.get("vidID"));
+    let hideControl = myURL.searchParams.get("hideControl");
+    let defaultHideControl = '0';
+    if (!hideControl > '') { // if there's no control number, default to control 1
+        hideControl = defaultHideControl;
+    }
+
+    let controlMethod = myURL.searchParams.get("controlMethod");
+    let defaultControlMethod = '1';
+    if (!controlMethod > '') { // if there's no control number, default to control 1
+        controlMethod = defaultControlMethod;
+    }
 
     let movableSafeZoneCenterX = 0; //with respect to the cursor box, at 0, 0 if at top left
     let movableSafeZoneCenterY = 0; // THIS WORKS BECAUSE OF CURRENT IMPLEMENTATION, since you have to click on safe zone first to start moving
@@ -358,6 +369,7 @@
         if (!videoId0 > '') { // if there's no URL parameter, default to designated video
             videoId0 = defaultVideoID;
         }
+
         //let adjustedWidth = window.innerWidth * 2 / 3 - 20; //ratio for the col-8 and 4 bootstrap grid
         let control1Height = $('#playButton').height() + $('#controlMethodTab').height() + $('#x_axis_label').height() + $('#massValue').height() + $('#sliderBar').height() + 35; //+ $('#mouseCoords').height()
         let windowHeight = window.innerHeight - 20 - control1Height; //these numbers indicate the maximum size the video player can be
@@ -397,6 +409,11 @@
         let directionButtonWidth = 65; //the size for the YouTube native navigation button, used in Direction Buttons
         let directionButtonHeight = 60;
         let directionButtonTopGap = 57;
+        let directionHighlightBox0=$('#directionHighlightBox');
+        directionHighlightBox0.css('left', playerLeftGap + 'px');
+        directionHighlightBox0.css('top', control1Height + directionButtonTopGap + 'px');
+        directionHighlightBox0.css('width', directionButtonWidth + 'px');
+        directionHighlightBox0.css('height', directionButtonHeight + 'px');
         let directionBlockBox0 = $('#directionBlockBox0');
         directionBlockBox0.css('left', playerLeftGap + 'px');
         directionBlockBox0.css('top', control1Height + 'px');
@@ -423,6 +440,17 @@
         dragAndDropBox1.css('top', control1Height + windowHeight - 50 + 'px');
         dragAndDropBox1.css('width', windowWidth + 'px');
         dragAndDropBox1.css('height', 50 + 'px');
+        dragAndDropBox1.css('opacity', 0);
+
+        let timelineBox0 = $('#timelineBox0'); //this blocks out the timeline if the hideControl URL parameter is 1
+        timelineBox0.css('left', playerLeftGap + 'px');
+        timelineBox0.css('top', control1Height + windowHeight - 50 + 'px');
+        timelineBox0.css('width', windowWidth + 'px');
+        timelineBox0.css('height', 51 + 'px');
+        timelineBox0.css('opacity', 10);
+        if(hideControl==1){
+            timelineBox0.css('background-color', 'white');
+        }
 
         if (player == null) { // if there's no pre-existing video player, we create it here
             player = new YT.Player('player0', {
@@ -437,8 +465,12 @@
                 },
                 events: {
                     'onReady': onPlayerReady,
+                    'onStateChange': onStateChange
                 }
             });
+        }
+        if(controlMethod==2){
+            switchTab('control2')
         }
     }
 
@@ -481,6 +513,10 @@
     // The API will call this function when the video player is ready.
     function onPlayerReady(event) { //currently unused
         //event.target.playVideo();
+    }
+
+    function onStateChange(event){ //called when video state changes
+
     }
 
     function onLoadClick() {

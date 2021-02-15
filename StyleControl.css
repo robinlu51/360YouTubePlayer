@@ -40,6 +40,16 @@ body {
     background-color: transparent;
 }
 
+.highlightBox{
+    position:absolute;
+    opacity: 20%;
+    pointer-events: none;
+    /*margin-right: 10px;*/
+    width: 60px; /*500px*/
+    height: 60px;
+    background-color: blue;
+}
+
 .safeZone {
     position: absolute;
     margin-top: 200px;

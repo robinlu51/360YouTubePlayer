@@ -13,6 +13,7 @@
     <!--
     sPyAQQklc1s
     NLB4Fcxh1iU
+    biz9q2L-OvE
     <input type="text" id="textInput" value="G-XZhKqQAHU">
     -->
     <button type="button" id="playButton" class="button" onclick="onPlayClick()">Play</button>
@@ -469,8 +470,17 @@
                 }
             });
         }
-        if(controlMethod==2){
-            switchTab('control2')
+        if(controlMethod==1){
+            switchTab('control1');
+        }
+        else if(controlMethod==2){
+            switchTab('control2');
+        }
+        else if(controlMethod==3){
+            switchTab('control3');
+        }
+        else if(controlMethod==4){
+            switchTab('control4');
         }
     }
 

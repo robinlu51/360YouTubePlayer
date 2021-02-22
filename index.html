@@ -126,14 +126,13 @@
             <div id="directionBlockBox1" class="blockBox"></div>
             <div id="directionBlockBox2" class="blockBox"></div>
             <div id="directionHighlightBox" class="highlightBox">
+            </div>
         </div>
-
         <div id="control4" class="tabContent">
             <div id="dragAndDropBox0" class="blockBox"></div>
             <div id="dragAndDropBox1" class="blockBox"></div>
         </div>
-        <div id="timelineBox0" class="blockBox">
-
+        <div id="timelineBox0" class="blockBox"></div>
     </div>
 </form>
 
@@ -173,15 +172,15 @@
 
     let myURL = new URL(window.location.href);
     //console.log(myURL.searchParams.get("vidID"));
-    let hideControl = myURL.searchParams.get("hideControl");
+    let hideControl = myURL.searchParams.get("hideControl"); //URL parameter for whether timeline control is hidden
     let defaultHideControl = '0';
     if (!hideControl > '') { // if there's no control number, default to control 1
         hideControl = defaultHideControl;
     }
 
-    let controlMethod = myURL.searchParams.get("controlMethod");
-    let defaultControlMethod = '1';
-    if (!controlMethod > '') { // if there's no control number, default to control 1
+    let controlMethod = myURL.searchParams.get("controlMethod"); //URL parameter for the control method on load
+    let defaultControlMethod = '0';
+    if (!controlMethod > '') { // if there's no input for this, default to 0, which shows all control methods
         controlMethod = defaultControlMethod;
     }
 
@@ -410,7 +409,7 @@
         let directionButtonWidth = 65; //the size for the YouTube native navigation button, used in Direction Buttons
         let directionButtonHeight = 60;
         let directionButtonTopGap = 57;
-        let directionHighlightBox0=$('#directionHighlightBox');
+        let directionHighlightBox0 = $('#directionHighlightBox');
         directionHighlightBox0.css('left', playerLeftGap + 'px');
         directionHighlightBox0.css('top', control1Height + directionButtonTopGap + 'px');
         directionHighlightBox0.css('width', directionButtonWidth + 'px');
@@ -449,7 +448,7 @@
         timelineBox0.css('width', windowWidth + 'px');
         timelineBox0.css('height', 51 + 'px');
         timelineBox0.css('opacity', 10);
-        if(hideControl==1){
+        if (hideControl == 1) {
             timelineBox0.css('background-color', 'white');
         }
 
@@ -470,17 +469,8 @@
                 }
             });
         }
-        if(controlMethod==1){
-            switchTab('control1');
-        }
-        else if(controlMethod==2){
-            switchTab('control2');
-        }
-        else if(controlMethod==3){
-            switchTab('control3');
-        }
-        else if(controlMethod==4){
-            switchTab('control4');
+        if (controlMethod != 0) {
+            exclusiveTab('control' + controlMethod);
         }
     }
 
@@ -525,7 +515,7 @@
         //event.target.playVideo();
     }
 
-    function onStateChange(event){ //called when video state changes
+    function onStateChange(event) { //called when video state changes
 
     }
 
@@ -576,7 +566,8 @@
         }
     }
 
-    function switchTab(controlNum) {
+    //this switches tabs-->switches control method
+    function switchTab(controlNum) { //controlNum is currently not actually a number, but a string, it's shown as 'control1' or 'control2' etc.
         let controlMethods = $('.tabContent');
 
         for (let i = 0; i < controlMethods.length; i++) {
@@ -587,6 +578,23 @@
         $('#' + controlNum).css('display', 'block');
         $('#' + controlNum + '_checkbox').prop('checked', true);
         $('#' + controlNum + 'button').css('background-color', '#8ff2a3');
+    }
+
+    //this function will make sure only the given control method is displayed, every other control method will be hidden
+    function exclusiveTab(controlNum){ //controlNum is currently not actually a number, but a string, it's shown as 'control1' or 'control2' etc.
+        let controlMethods = $('.tabContent');
+
+        for (let i = 0; i < controlMethods.length; i++) {
+            controlMethods[i].style.display = "none";
+            let j = i + 1;
+            $('#' + 'control' + j + 'button').css('background-color', 'transparent');
+            $('#' + 'control' + j + 'button').css('display', 'none');
+            $('#' + 'control' + j + '_checkbox').css('display', 'none');
+        }
+        $('#' + controlNum).css('display', 'block');
+        $('#' + controlNum + '_checkbox').prop('checked', true);
+        $('#' + controlNum + 'button').css('background-color', '#8ff2a3');
+        $('#' + controlNum + 'button').css('display', 'inline');
     }
 
     let animationID; // to keep track of the animation requested if we need to stop/cancel it

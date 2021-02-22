@@ -44,10 +44,12 @@ body {
     position:absolute;
     opacity: 20%;
     pointer-events: none;
+    margin-left:4px;
     /*margin-right: 10px;*/
     width: 60px; /*500px*/
     height: 60px;
-    background-color: blue;
+    background-color: transparent;
+    border: 3px double lawngreen;
 }
 
 .safeZone {

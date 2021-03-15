@@ -32,10 +32,11 @@
         <div class="tab" id="controlMethodTab">
             <input type="checkbox" id="control1_checkbox">
             <button type="button" id="control1button" class="tablinks" onclick="switchTab('control1')"
-                    style="background-color: #8ff2a3">Cursor Box
+                    style="background-color: #8ff2a3">Perspective Control with Mouse
             </button>
             <input type="checkbox" id="control2_checkbox">
-            <button type="button" id="control2button" class="tablinks" onclick="switchTab('control2')">Cursor Box Alt
+            <button type="button" id="control2button" class="tablinks" onclick="switchTab('control2')">Adaptive
+                Perspective Control with Mouse
             </button>
             <input type="checkbox" id="control3_checkbox">
             <button type="button" id="control3button" class="tablinks" onclick="switchTab('control3')">Direction
@@ -130,7 +131,7 @@
         </div>
         <div id="control4" class="tabContent">
             <div id="dragAndDropBox0" class="blockBox"></div>
-            <div id="dragAndDropBox1" class="blockBox"></div>
+            <!--<div id="dragAndDropBox1" class="blockBox"></div>-->
         </div>
         <div id="timelineBox0" class="blockBox"></div>
     </div>
@@ -355,6 +356,7 @@
         }
     }
 
+    let timelineBarHeight = 50;//the height is 50 px
     let control1HeightPublicHolder;
     let playerLeftGapPublicHolder;
     let windowWidthPublicHolder;
@@ -388,67 +390,77 @@
         control1HeightPublicHolder = control1Height;
         playerLeftGapPublicHolder = playerLeftGap;
         let cursorBox0 = $('#cursorBox0');
+        cursorBox0.css('pointer-events', 'none');
         cursorBox0.css('top', control1Height + 'px');
         cursorBox0.css('width', windowWidth + 'px');
-        cursorBox0.css('height', windowHeight + 'px');
+        cursorBox0.css('height', windowHeight - timelineBarHeight + 'px');
         cursorBox0.css('margin-left', playerLeftGap + 'px');
         windowWidthPublicHolder = windowWidth;
         windowHeightPublicHolder = windowHeight;
         $('#cursorSafeZone0').css('margin-top', windowHeight / 2 - safeZone0Radius + 'px');
         $('#cursorSafeZone0').css('margin-left', windowWidth / 2 - safeZone0Radius + 'px');
+        $('#cursorSafeZone0').css('pointer-events', 'none');
+
 
         let safeZone1Radius = $('#cursorSafeZone1').height() / 2; //the Cursor Box Alt control method's safe zone area's radius
         let cursorBox1 = $('#cursorBox1');
+        cursorBox1.css('pointer-events', 'none');
         cursorBox1.css('top', control1Height + 'px');
         cursorBox1.css('width', windowWidth + 'px');
-        cursorBox1.css('height', windowHeight + 'px');
+        cursorBox1.css('height', windowHeight - timelineBarHeight + 'px');
         cursorBox1.css('margin-left', playerLeftGap + 'px');
         $('#cursorSafeZone1').css('margin-top', windowHeight / 2 - safeZone0Radius + 'px');
         $('#cursorSafeZone1').css('margin-left', windowWidth / 2 - safeZone0Radius + 'px');
+        $('#cursorSafeZone1').css('pointer-events', 'none');
+
 
         let directionButtonWidth = 65; //the size for the YouTube native navigation button, used in Direction Buttons
         let directionButtonHeight = 60;
         let directionButtonTopGap = 57;
-        let directionHighlightBox0 = $('#directionHighlightBox');
+        let directionHighlightBox0 = $('#directionHighlightBox'); //the border box that highlights the direction wheel
         directionHighlightBox0.css('left', playerLeftGap + 'px');
         directionHighlightBox0.css('top', control1Height + directionButtonTopGap + 'px');
         directionHighlightBox0.css('width', directionButtonWidth + 'px');
         directionHighlightBox0.css('height', directionButtonHeight + 'px');
-        let directionBlockBox0 = $('#directionBlockBox0');
+        let directionBlockBox0 = $('#directionBlockBox0'); //the block box above the horizontal level of direction wheel
         directionBlockBox0.css('left', playerLeftGap + 'px');
         directionBlockBox0.css('top', control1Height + 'px');
         directionBlockBox0.css('width', windowWidth + 'px');
         directionBlockBox0.css('height', directionButtonTopGap + 'px');
-        let directionBlockBox1 = $('#directionBlockBox1');
+        let directionBlockBox1 = $('#directionBlockBox1'); //the block box on the same horizontal level of direction wheel
         directionBlockBox1.css('left', playerLeftGap + directionButtonWidth + 'px');
         directionBlockBox1.css('top', control1Height + directionButtonTopGap + 'px');
         directionBlockBox1.css('width', windowWidth - directionButtonWidth + 'px');
         directionBlockBox1.css('height', directionButtonHeight + 'px');
         let directionBlockBox2 = $('#directionBlockBox2');
-        directionBlockBox2.css('left', playerLeftGap + 'px');
+        directionBlockBox2.css('left', playerLeftGap + 'px');//the block box below the horizontal level of direction wheel
         directionBlockBox2.css('top', control1Height + directionButtonHeight + directionButtonTopGap + 'px');
         directionBlockBox2.css('width', windowWidth + 'px');
-        directionBlockBox2.css('height', windowHeight - directionButtonHeight - directionButtonTopGap + 'px');
+        directionBlockBox2.css('height', windowHeight - directionButtonHeight - directionButtonTopGap - timelineBarHeight + 'px');
 
-        let dragAndDropBox0 = $('#dragAndDropBox0');
+        let dragAndDropBox0 = $('#dragAndDropBox0'); //block out the direction wheel for Drag & Drop
         dragAndDropBox0.css('left', playerLeftGap + 'px');
         dragAndDropBox0.css('top', control1Height + directionButtonTopGap + 'px');
         dragAndDropBox0.css('width', directionButtonWidth + 'px');
         dragAndDropBox0.css('height', directionButtonTopGap + 'px');
-        let dragAndDropBox1 = $('#dragAndDropBox1');
+        /*
+        let dragAndDropBox1 = $('#dragAndDropBox1'); //block out the timeline for Drag & Drop
         dragAndDropBox1.css('left', playerLeftGap + 'px');
         dragAndDropBox1.css('top', control1Height + windowHeight - 50 + 'px');
         dragAndDropBox1.css('width', windowWidth + 'px');
         dragAndDropBox1.css('height', 50 + 'px');
-        dragAndDropBox1.css('opacity', 0);
+        dragAndDropBox1.css('opacity', 15 + '%');
+        */
 
         let timelineBox0 = $('#timelineBox0'); //this blocks out the timeline if the hideControl URL parameter is 1
         timelineBox0.css('left', playerLeftGap + 'px');
-        timelineBox0.css('top', control1Height + windowHeight - 50 + 'px');
+        timelineBox0.css('top', control1Height + windowHeight - timelineBarHeight + 'px');
         timelineBox0.css('width', windowWidth + 'px');
-        timelineBox0.css('height', 51 + 'px');
-        timelineBox0.css('opacity', 10);
+        timelineBox0.css('height', timelineBarHeight + 1 + 'px'); //needed to add 1 px because of a stray pixel
+        timelineBox0.css('display', 'none');
+        timelineBox0.css('opacity', 100 + '%');
         if (hideControl == 1) {
+            timelineBox0.css('display', 'block');
             timelineBox0.css('background-color', 'white');
         }
 
@@ -516,7 +528,10 @@
     }
 
     function onStateChange(event) { //called when video state changes
-
+        $('#cursorBox0').css('pointer-events', 'auto');
+        $('#cursorSafeZone0').css('pointer-events', 'auto');
+        $('#cursorBox1').css('pointer-events', 'auto');
+        $('#cursorSafeZone1').css('pointer-events', 'auto');
     }
 
     function onLoadClick() {
@@ -581,7 +596,7 @@
     }
 
     //this function will make sure only the given control method is displayed, every other control method will be hidden
-    function exclusiveTab(controlNum){ //controlNum is currently not actually a number, but a string, it's shown as 'control1' or 'control2' etc.
+    function exclusiveTab(controlNum) { //controlNum is currently not actually a number, but a string, it's shown as 'control1' or 'control2' etc.
         let controlMethods = $('.tabContent');
 
         for (let i = 0; i < controlMethods.length; i++) {

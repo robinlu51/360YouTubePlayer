@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="StyleControl.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
@@ -20,7 +21,7 @@
     <!--
     <button type="button" class="button" onclick="pauseVideo()">Pause!</button>
     -->
-    <button type="button" class="button" onclick="restartVideo()">Restart!</button>
+    <button type="button" id="restartButton" class="button" onclick="restartVideo()">Restart!</button>
     <button type="button" id="muteButton" class="button" onclick="muteVideo()">Mute</button>
     <input type="checkbox" id="visualIndicatorCheckBox" onclick="toggleVisualIndicator()">
     <label for="visualIndicatorCheckBox" id="visualIndicatorLabel">Show Visual Indicator</label>
@@ -48,11 +49,13 @@
         </div>
 
         <div id="player0"></div>
+
+
         <div id="control1" class="tabContent">
             <input type="checkbox" id="x_axis" onclick="invertX()">
             <label for="x_axis" style="margin-right: 50px" id="x_axis_label">Invert X-axis control</label>
             <input type="checkbox" id="y_axis" onclick="invertY()">
-            <label for="y_axis">Invert Y-axis control</label>
+            <label for="y_axis" id="y_axis_label">Invert Y-axis control</label>
             <p id="massValue">This should be default mass value, you shouldn't see this!</p>
             <!--
             Although conceptually, mass isn't a percentage, we are presenting it to this way,
@@ -134,6 +137,8 @@
             <!--<div id="dragAndDropBox1" class="blockBox"></div>-->
         </div>
         <div id="timelineBox0" class="blockBox"></div>
+        <button type="button" id="bigPlayButton" class="bigButton"
+                onclick="onPlayClick();hideBigPlayButton();"><i class="fa fa-play"></i></button>
     </div>
 </form>
 
@@ -171,8 +176,8 @@
     document.getElementById("control3_checkbox").disabled = true;
     document.getElementById("control4_checkbox").disabled = true;
 
-    let myURL = new URL(window.location.href);
-    //console.log(myURL.searchParams.get("vidID"));
+    let myURL = new URL(window.location.href); //collection for all URL parameters
+
     let hideControl = myURL.searchParams.get("hideControl"); //URL parameter for whether timeline control is hidden
     let defaultHideControl = '0';
     if (!hideControl > '') { // if there's no control number, default to control 1
@@ -185,12 +190,18 @@
         controlMethod = defaultControlMethod;
     }
 
+    let hideControlOption = myURL.searchParams.get("hideControlOption"); //URL parameter for whether the control options are hidden
+    let defaultHideControlOption = '0';
+    if (!hideControlOption > '') { // if there's no input for this, default to 0, which shows all control options
+        hideControlOption = defaultHideControlOption;
+    }
+
     let movableSafeZoneCenterX = 0; //with respect to the cursor box, at 0, 0 if at top left
     let movableSafeZoneCenterY = 0; // THIS WORKS BECAUSE OF CURRENT IMPLEMENTATION, since you have to click on safe zone first to start moving
     // therefore you will always call moveSafeZone, which updates the center of the safe zone for movement detection purpose
     // if implementation changes, this will cause camera to behave like the center is at top left corner, until you move safe zone once
 
-    let cursorBox0Active = false; //indicates if the cursor box is active
+    let cursorBox0Active = true; //indicates if the cursor box is active
     $('#cursorSafeZone0').click(function () {
         if (showVisualIndicator) {
             if (cursorBox0Active) {
@@ -202,7 +213,7 @@
         cursorBox0Active = !cursorBox0Active;
     });
 
-    let cursorBox1Active = false; //indicates if the cursor box is active
+    let cursorBox1Active = true; //indicates if the cursor box is active
     $('#cursorSafeZone1').click(function () {
         if (showVisualIndicator) {
             if (cursorBox1Active) {
@@ -387,6 +398,14 @@
         player0.css('position', 'absolute');
         player0.css('top', control1Height + 'px');
         player0.css('left', playerLeftGap + 'px');
+        let bigPlayButtonHeight = 250;
+        let bigPlayButtonWidth = 250;
+        $('#bigPlayButton').css('font-size', bigPlayButtonHeight / 2 + 'px');
+        $('#bigPlayButton').css('height', bigPlayButtonHeight + 'px');
+        $('#bigPlayButton').css('width', bigPlayButtonWidth + 'px');
+        $('#bigPlayButton').css('top', control1Height + (windowHeight - bigPlayButtonHeight) / 2 + 'px');
+        $('#bigPlayButton').css('left', playerLeftGap + (windowWidth - bigPlayButtonWidth) / 2 + 'px');
+
         control1HeightPublicHolder = control1Height;
         playerLeftGapPublicHolder = playerLeftGap;
         let cursorBox0 = $('#cursorBox0');
@@ -462,6 +481,21 @@
         if (hideControl == 1) {
             timelineBox0.css('display', 'block');
             timelineBox0.css('background-color', 'white');
+        }
+
+        //this hides almost all control options if the hideControlOption URL parameter is 1
+        if (hideControlOption == 1) {
+            $('#playButton').css('display', 'none');
+            $('#restartButton').css('display', 'none');
+            $('#muteButton').css('display', 'none');
+            $('#visualIndicatorCheckBox').css('display', 'none');
+            $('#visualIndicatorLabel').css('display', 'none');
+            $('#x_axis').css('display', 'none');
+            $('#x_axis_label').css('display', 'none');
+            $('#y_axis').css('display', 'none');
+            $('#y_axis_label').css('display', 'none');
+            $('#massValue').css('display', 'none');
+            $('#sliderBar').css('display', 'none');
         }
 
         if (player == null) { // if there's no pre-existing video player, we create it here
@@ -547,6 +581,7 @@
         player.stopVideo();
     }
 
+    //called when clicking on the play button
     function onPlayClick() {
         if (player.getPlayerState() == 5 || player.getPlayerState() == 2) {
             player.playVideo();
@@ -555,6 +590,11 @@
             player.pauseVideo();
             $('#playButton').html('Play');
         }
+    }
+
+    //hides the big play button
+    function hideBigPlayButton() {
+        $('#bigPlayButton').css('display', 'none');
     }
 
     //somehow it's not working, will need to debug later

@@ -17,6 +17,10 @@
     biz9q2L-OvE
     <input type="text" id="textInput" value="G-XZhKqQAHU">
     -->
+    <button type="button" class="popup" onclick="clickTutorial()">Tutorial
+        <span class="popuptext" id="myPopup">Click on the big play button to start!</span>
+    </button>
+
     <button type="button" id="playButton" class="button" onclick="onPlayClick()">Play</button>
     <!--
     <button type="button" class="button" onclick="pauseVideo()">Pause!</button>
@@ -421,8 +425,8 @@
         $('#cursorSafeZone0').css('pointer-events', 'none');
 
 
-        movableSafeZoneCenterX=windowWidth/2;
-        movableSafeZoneCenterY=windowHeight/2;
+        movableSafeZoneCenterX = windowWidth / 2;
+        movableSafeZoneCenterY = windowHeight / 2;
         let safeZone1Radius = $('#cursorSafeZone1').height() / 2; //the Cursor Box Alt control method's safe zone area's radius
         let cursorBox1 = $('#cursorBox1');
         cursorBox1.css('pointer-events', 'none');
@@ -654,6 +658,13 @@
         $('#' + controlNum + 'button').css('display', 'inline');
     }
 
+    //function for when the user first click on the tutorial
+    function clickTutorial() {
+        var popup = document.getElementById("myPopup");
+        popup.classList.toggle("show");
+    }
+
+    //function below for camera control is currently defunct, but could potentially be used for future implementation
     let animationID; // to keep track of the animation requested if we need to stop/cancel it
     function lookUpLeft() {
         let newSettings = player.getSphericalProperties();

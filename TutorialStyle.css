@@ -2,6 +2,7 @@
 .button {
     Height: 100px;
     width: 120px;
+    vertical-align: top;
     text-align: center;
     background-color: antiquewhite;
     border-radius: 8px;

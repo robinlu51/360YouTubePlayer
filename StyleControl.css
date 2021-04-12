@@ -92,9 +92,8 @@ body {
     padding: 8px 0;
     position: absolute;
     z-index: 1;
-    bottom: -70px;
-    left: 90px;
-    margin-left: -80px;
+    top: 150%;
+    left: 10%;
 }
 
 /* Popup arrow */

@@ -18,7 +18,7 @@
     <input type="text" id="textInput" value="G-XZhKqQAHU">
     -->
     <button type="button" class="popup" onclick="clickTutorial()">Tutorial
-        <span class="popuptext" id="myPopup">Click on the big play button to start!</span>
+        <span class="popuptext" id="myPopup">Click on the big play button in the middle to start!</span>
     </button>
 
     <button type="button" id="playButton" class="button" onclick="onPlayClick()">Play</button>
@@ -142,7 +142,7 @@
         </div>
         <div id="timelineBox0" class="blockBox"></div>
         <button type="button" id="bigPlayButton" class="bigButton"
-                onclick="onPlayClick();hideBigPlayButton();"><i class="fa fa-play"></i></button>
+                onclick="onPlayClick();hideBigPlayButton();clickTutorial()"><i class="fa fa-play"></i></button>
     </div>
 </form>
 
@@ -198,6 +198,12 @@
     let defaultHideControlOption = '0';
     if (!hideControlOption > '') { // if there's no input for this, default to 0, which shows all control options
         hideControlOption = defaultHideControlOption;
+    }
+
+    let showTutorial = myURL.searchParams.get("showTutorial"); //URL parameter for whether the tutorial is shown
+    let defaultShowTutorial = '0';
+    if (!showTutorial > '') { // if there's no input for this, default to 0, which shows all control options
+        showTutorial = defaultShowTutorial;
     }
 
     let movableSafeZoneCenterX = 0; //with respect to the cursor box, at 0, 0 if at top left

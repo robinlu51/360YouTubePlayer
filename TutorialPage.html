@@ -3,13 +3,40 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="StyleControl.css">
+    <link rel="stylesheet" href="TutorialStyle.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
+<div>
+    <header>
+        <h1>Welcome to the tutorial for Project Dreamatorium</h1>
+        <p>Please select a control method</p>
+        <button type="button" id="control1Button" class="button">Perspective Control with Mouse</button>
+        <button type="button" id="control2Button" class="button">Adaptive Perspective Control with Mouse</button>
+        <button type="button" id="control3Button" class="button">Direction Buttons</button>
+        <button type="button" id="control4Button" class="button">Drag and Drop</button>
+    </header>
+</div>
+<div style="margin-top: 20px">
+    <ol>
+        <li>Click on the big play button in the middle of the player to start.</li>
+        <li>Once the video starts, move your mouse around the player to direct your camera</li>
+        <li>Your camera will always move towards your mouse cursor</li>
+        <li>To stop the camera, rest your cursor in the center of the screen</li>
+    </ol>
+</div>
 
+<script>
+    let myURL = new URL(window.location.href); //collection for all URL parameters
+
+    let tutorialNum = myURL.searchParams.get("tutorialNum"); //URL parameter for which tutorial is shown
+    let defaultTutorialNum = '1';
+    if (!tutorialNum > '') { // if there's no input for this, default to 0, which shows all control options
+        tutorialNum = defaultTutorialNum;
+    }
+</script>
 </body>
 </html>

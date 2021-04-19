@@ -3,40 +3,720 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="TutorialStyle.css">
+    <link rel="stylesheet" href="StyleControl.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div style="margin-left: 20px">
-    <header>
-        <h1>Welcome to the tutorial for Project Dreamatorium</h1>
-        <p>Please select a control method</p>
-        <button type="button" id="control1Button" class="button">Perspective Control with Mouse</button>
-        <button type="button" id="control2Button" class="button">Adaptive Perspective Control with Mouse</button>
-        <button type="button" id="control3Button" class="button">Direction Buttons</button>
-        <button type="button" id="control4Button" class="button">Drag and Drop</button>
-    </header>
-</div>
-<div style="margin-top: 20px">
-    <ol>
-        <li>Click on the big play button in the middle of the player to start.</li>
-        <li>Once the video starts, move your mouse around the player to direct your camera</li>
-        <li>Your camera will always move towards your mouse cursor</li>
-        <li>To stop the camera, rest your cursor in the center of the screen</li>
-    </ol>
-</div>
+<form id="videoControl0">
+    <!--
+    sPyAQQklc1s
+    NLB4Fcxh1iU
+    biz9q2L-OvE
+    <input type="text" id="textInput" value="G-XZhKqQAHU">
+    -->
 
+
+    <button type="button" id="playButton" class="button" onclick="onPlayClick()">Play</button>
+    <!--
+    <button type="button" class="button" onclick="pauseVideo()">Pause!</button>
+    -->
+    <button type="button" id="restartButton" class="button" onclick="restartVideo()">Restart!</button>
+    <button type="button" id="muteButton" class="button" onclick="muteVideo()">Mute</button>
+    <input type="checkbox" id="visualIndicatorCheckBox" onclick="toggleVisualIndicator()">
+    <label for="visualIndicatorCheckBox" id="visualIndicatorLabel">Show Visual Indicator</label>
+    <!--
+    <button type="button" class="button" onclick="onLoadClick()">Load!</button>
+    <button type="button" class="button" onclick="stopVideo()">Stop!</button>
+    -->
+    <div id="controlOptions0">
+        <div class="tab" id="controlMethodTab">
+            <input type="checkbox" id="control1_checkbox">
+            <button type="button" id="control1button" class="tablinks" onclick="switchTab('control1')"
+                    style="background-color: #8ff2a3">Perspective Control with Mouse
+            </button>
+            <input type="checkbox" id="control2_checkbox">
+            <button type="button" id="control2button" class="tablinks" onclick="switchTab('control2')">Adaptive
+                Perspective Control with Mouse
+            </button>
+            <input type="checkbox" id="control3_checkbox">
+            <button type="button" id="control3button" class="tablinks" onclick="switchTab('control3')">Direction
+                Buttons
+            </button>
+            <input type="checkbox" id="control4_checkbox">
+            <button type="button" id="control4button" class="tablinks" onclick="switchTab('control4')">Drag and Drop
+            </button>
+        </div>
+
+        <div id="player0"></div>
+
+
+        <div id="control1" class="tabContent">
+            <div id="tutorialSection1" style="margin-top: 10px;margin-bottom: 10px">
+                <ol>
+                    <li>To start, first click on the big start button in the middle</li>
+                    <li>Once the video starts, the camera will automatically accelerate towards the direction of your mouse cursor</li>
+                    <li>To stop camera movement, simply move your mouse cursor back to the center of the video player</li>
+                    <li>You can also click on the center of the video player to disable camera movement, click again to enable it again</li>
+                </ol>
+            </div>
+            <!--
+            <p id="mouseCoords0" style="clear: none;">Mouse cursor X/Y: 0, 0</p>
+            -->
+            <div id="cursorBox0" class="cursorBox">
+                <div id="cursorSafeZone0" class="safeZone"></div>
+            </div>
+        </div>
+
+        <div id="control2" class="tabContent">
+            <div id="tutorialSection2" style="margin-top: 10px;margin-bottom: 10px">
+                <ol>
+                    <li>To start, first click on the big start button in the middle</li>
+                    <li>Once the video starts, the camera will automatically accelerate towards the direction of your mouse cursor</li>
+                    <li>To stop camera movement, simply move your mouse cursor back to the center of the video player</li>
+                    <li>You can also click on the center of the video player to disable camera movement, click again to enable it again</li>
+                    <li>In this control method, you can click anywhere else on the screen, and that will become the new center of camera movement</li>
+                    <li>Your camera moves faster, as your mouse cursor moves further away from where you last clicked</li>>
+                </ol>
+            </div>
+            <!--
+            <p id="mouseCoords1" style="clear: none;">Mouse cursor X/Y: 0, 0</p>
+            -->
+            <div id="cursorBox1" class="cursorBox">
+                <div id="cursorSafeZone1" class="safeZone"></div>
+            </div>
+        </div>
+
+        <div id="control3" class="tabContent">
+            <div id="tutorialSection3" style="margin-top: 10px;margin-bottom: 10px">
+                <ol>
+                    <li>To start, first click on the big start button in the middle</li>
+                    <li>Look for the highlighted box with the navigation box inside</li>
+                    <li>Click on either of the four direction buttons to move camera in that direction</li>
+                </ol>
+            </div>
+
+            <div id="directionBlockBox0" class="blockBox"></div>
+            <div id="directionBlockBox1" class="blockBox"></div>
+            <div id="directionBlockBox2" class="blockBox"></div>
+            <div id="directionHighlightBox" class="highlightBox">
+            </div>
+        </div>
+        <div id="control4" class="tabContent">
+            <div id="tutorialSection4" style="margin-top: 10px;margin-bottom: 10px">
+                <ol>
+                    <li>To start, first click on the big start button in the middle</li>
+                    <li>To navigate your camera, simply drag and drop your camera</li>
+                </ol>
+            </div>
+
+            <div id="dragAndDropBox0" class="blockBox"></div>
+            <!--<div id="dragAndDropBox1" class="blockBox"></div>-->
+        </div>
+        <div id="timelineBox0" class="blockBox"></div>
+        <button type="button" id="bigPlayButton" class="bigButton"
+                onclick="onPlayClick();hideBigPlayButton();clickTutorial()"><i class="fa fa-play"></i></button>
+    </div>
+</form>
+
+<div class="container-fluid">
+    <div class="row">
+        <!--bootstrap has been taken out, add col-md-8, 4 if need to be restored
+        -->
+    </div>
+</div>
 <script>
+    // This code loads the IFrame Player API code asynchronously.
+    let tag = document.createElement('script');
+
+    tag.src = "https://www.youtube.com/iframe_api";
+    let firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    let PROPERTIES = ['yaw', 'pitch', 'roll', 'fov'];
+    let player;
+    showVisualIndicator = false;
+    let videoControlPadding = 5; //5px of padding for the entire interface
+    $('#videoControl0').css('padding', videoControlPadding + 'px');
+    let controlOptionsPadding = 5;
+    $('#controlOptions0').css('padding', controlOptionsPadding + 'px');
+    $(document).ready(function () {
+        //   $('#control1').css('display', 'none');
+        //this is done so that on load, only control 1 is displayed
+        $('#control2').css('display', 'none');
+        $('#control3').css('display', 'none');
+        $('#control4').css('display', 'none');
+    });
+
+    document.getElementById("control1_checkbox").disabled = true;
+    document.getElementById("control2_checkbox").disabled = true;
+    document.getElementById("control3_checkbox").disabled = true;
+    document.getElementById("control4_checkbox").disabled = true;
+
     let myURL = new URL(window.location.href); //collection for all URL parameters
 
-    let tutorialNum = myURL.searchParams.get("tutorialNum"); //URL parameter for which tutorial is shown
-    let defaultTutorialNum = '1';
-    if (!tutorialNum > '') { // if there's no input for this, default to 0, which shows all control options
-        tutorialNum = defaultTutorialNum;
+    let hideControl = myURL.searchParams.get("hideControl"); //URL parameter for whether timeline control is hidden
+    let defaultHideControl = '0';
+    if (!hideControl > '') { // if there's no control number, default to control 1
+        hideControl = defaultHideControl;
     }
+
+    let controlMethod = myURL.searchParams.get("controlMethod"); //URL parameter for the control method on load
+    let defaultControlMethod = '0';
+    if (!controlMethod > '') { // if there's no input for this, default to 0, which shows all control methods
+        controlMethod = defaultControlMethod;
+    }
+
+    let hideControlOption = myURL.searchParams.get("hideControlOption"); //URL parameter for whether the control options are hidden
+    let defaultHideControlOption = '0';
+    if (!hideControlOption > '') { // if there's no input for this, default to 0, which shows all control options
+        hideControlOption = defaultHideControlOption;
+    }
+
+    let showTutorial = myURL.searchParams.get("showTutorial"); //URL parameter for whether the tutorial is shown
+    let defaultShowTutorial = '0';
+    if (!showTutorial > '') { // if there's no input for this, default to 0, which shows all control options
+        showTutorial = defaultShowTutorial;
+    }
+
+    let movableSafeZoneCenterX = 0; //with respect to the cursor box, at 0, 0 if at top left
+    let movableSafeZoneCenterY = 0; // THIS WORKS BECAUSE OF CURRENT IMPLEMENTATION, since you have to click on safe zone first to start moving
+    // therefore you will always call moveSafeZone, which updates the center of the safe zone for movement detection purpose
+    // if implementation changes, this will cause camera to behave like the center is at top left corner, until you move safe zone once
+
+    let cursorBox0Active = true; //indicates if the cursor box is active
+    $('#cursorSafeZone0').click(function () {
+        if (showVisualIndicator) {
+            if (cursorBox0Active) {
+                $('#cursorSafeZone0').css('background-color', 'yellow');
+            } else {
+                $('#cursorSafeZone0').css('background-color', 'greenyellow');
+            }
+        }
+        cursorBox0Active = !cursorBox0Active;
+    });
+
+    let cursorBox1Active = true; //indicates if the cursor box is active
+    $('#cursorSafeZone1').click(function () {
+        if (showVisualIndicator) {
+            if (cursorBox1Active) {
+                $('#cursorSafeZone1').css('background-color', 'yellow');
+            } else {
+                $('#cursorSafeZone1').css('background-color', 'greenyellow');
+            }
+        }
+        cursorBox1Active = !cursorBox1Active;
+    });
+
+
+    let mass = 95; //for user study version, we might want to give mass a defined value instead of being adjustable.
+    mass /= 100; // needed so we don't need to call getElementById twice, and keep the mass value on 0-1 scale
+
+    let prevXVelocity = 0; //by default, the velocity starts at 0
+    let prevYVelocity = 0;
+
+    //adding event listeners for Cursor Box
+    let mouseInsideBox0 = false;
+    let mouseInsideSafeZone0 = false;
+    document.getElementById("cursorBox0").addEventListener('mouseenter', function () {
+        mouseInsideBox0 = true;
+    });
+    document.getElementById("cursorBox0").addEventListener('mouseleave', function () {
+        mouseInsideBox0 = false;
+    });
+    document.getElementById("cursorSafeZone0").addEventListener('mouseenter', function () {
+        mouseInsideSafeZone0 = true;
+    });
+    document.getElementById("cursorSafeZone0").addEventListener('mouseleave', function () {
+        mouseInsideSafeZone0 = false;
+    });
+
+    //adding event listeners for Cursor Box Alt
+    let mouseInsideBox1 = false;
+    let mouseInsideSafeZone1 = false;
+    document.getElementById("cursorBox1").addEventListener('mouseenter', function () {
+        mouseInsideBox1 = true;
+    });
+    document.getElementById("cursorBox1").addEventListener('mouseleave', function () {
+        mouseInsideBox1 = false;
+    });
+    document.getElementById("cursorSafeZone1").addEventListener('mouseenter', function () {
+        mouseInsideSafeZone1 = true;
+    });
+    document.getElementById("cursorSafeZone1").addEventListener('mouseleave', function () {
+        mouseInsideSafeZone1 = false;
+    });
+
+
+    let mouseX = 0; // the mouse X coordinate WITH RESPECT TO THE VISIBLE SCREEN
+    let mouseY = 0; // the code should show it with respect to
+    document.getElementById("cursorBox0").addEventListener('mouseenter', updateCoords);
+    document.getElementById("cursorBox0").addEventListener('mousemove', updateCoords);
+    document.getElementById("cursorBox0").addEventListener('mouseenter', cursorCameraControl0);
+    document.getElementById("cursorBox1").addEventListener('mouseenter', updateCoords);
+    document.getElementById("cursorBox1").addEventListener('mousemove', updateCoords);
+    document.getElementById("cursorBox1").addEventListener('mouseenter', cursorCameraControl1);
+    document.getElementById("cursorBox1").addEventListener('click', moveSafeZone);
+    //this line below should add an event listener, to update the playing status, in case that the user pause/unpauses in
+    //Drag&Drop method and the Play/Pause button isn't updated
+    //document.getElementById('cursorBox1').addEventListener('click', checkPauseStatus);
+
+    //let mouseCoordsText0 = document.querySelector('#mouseCoords0');
+    //let mouseCoordsText1 = document.querySelector('#mouseCoords1');
+
+    function updateMass(value) { //update the mass value AND text displayed
+        mass = value / 100;
+    }
+
+    function updateCoords(event) { //update the mouse's coordinates in the global variable
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+    }
+
+    function moveSafeZone(event) { // moves the safe zone based on mouse click location, center on click location
+        $('#cursorSafeZone1').css('margin-left', mouseX - playerLeftGapPublicHolder - safeZone0Radius + 'px');
+        $('#cursorSafeZone1').css('margin-top', mouseY - control1HeightPublicHolder - safeZone0Radius + 'px');
+        movableSafeZoneCenterX = mouseX - playerLeftGapPublicHolder;
+        movableSafeZoneCenterY = mouseY - control1HeightPublicHolder;
+    }
+
+    let xModifier = 1; // 1 is the default value, -1 if axis is inverted
+    let yModifier = 1;
+
+    function invertX() { //used to invert x-axis control
+        xModifier = -xModifier;
+    }
+
+    function invertY() { //used to invert y-axis control
+        yModifier = -yModifier;
+    }
+
+    function cursorCameraControl0() { //camera control for Cursor Box control method
+        //get the mouse cursor's current coordinates, with top left of cursor box to be 0,0
+        let x = Math.round(mouseX - playerLeftGapPublicHolder);
+        let y = Math.round(mouseY - control1HeightPublicHolder);
+        //mouseCoordsText0.innerText = `Mouse cursor X/Y: ${x}, ${y}, center at ${windowWidthPublicHolder / 2}, ${windowHeightPublicHolder / 2}`;
+
+        let cameraMultiplierX = 0.003; //necessary to control the overall camera speed
+        let cameraMultiplierY = 0.002;
+        let newSettings = player.getSphericalProperties();
+        let targetedXVelocity = 0; //the velocity we want to achieve
+        let targetedYVelocity = 0;
+        if (!mouseInsideSafeZone0 && cursorBox0Active) {
+            targetedXVelocity = windowWidthPublicHolder / 2 - x; // find the center for cursor box, windowWidth/2 is the num of pixels from edge to center
+            targetedYVelocity = windowHeightPublicHolder / 2 - y;
+        }
+        let combinedXVelocity = ((1 - mass) * targetedXVelocity + mass * prevXVelocity); // the actual velocity calculated with momentum
+        let combinedYVelocity = ((1 - mass) * targetedYVelocity + mass * prevYVelocity);
+        newSettings['yaw'] += xModifier * cameraMultiplierX * combinedXVelocity;
+        newSettings['pitch'] += yModifier * cameraMultiplierY * combinedYVelocity;
+        player.setSphericalProperties(newSettings);
+        prevXVelocity = combinedXVelocity; //update the previous velocity with the newly calculated value
+        prevYVelocity = combinedYVelocity;
+        if (mouseInsideBox0) {
+            setTimeout(cursorCameraControl0, 16); //timeout at 16ms to ensure around 60 updates/second, since there are roughly 60 * 16 ms in a second
+        }
+    }
+
+    function cursorCameraControl1() { //camera control for Cursor Box Alt control method
+        //get the mouse cursor's current coordinates, with top left of cursor box to be 0,0
+        let x = Math.round(mouseX - playerLeftGapPublicHolder);
+        let y = Math.round(mouseY - control1HeightPublicHolder);
+        // mouseCoordsText1.innerText = `Mouse cursor X/Y: ${x - mouseX}, ${y - mouseY}, center at ${windowWidthPublicHolder / 2}, ${windowHeightPublicHolder / 2}`;
+
+        let cameraMultiplierX = 0.003; //necessary to control the overall camera speed
+        let cameraMultiplierY = 0.002;
+        let newSettings = player.getSphericalProperties();
+        let targetedXVelocity = 0; //the velocity we want to achieve
+        let targetedYVelocity = 0;
+        if (!mouseInsideSafeZone1 && cursorBox1Active) {
+            targetedXVelocity = movableSafeZoneCenterX - x; // find the center for cursor box, windowWidth/2 is the num of pixels from edge to center
+            targetedYVelocity = movableSafeZoneCenterY - y;
+        }
+        let combinedXVelocity = ((1 - mass) * targetedXVelocity + mass * prevXVelocity); // the actual velocity calculated with momentum
+        let combinedYVelocity = ((1 - mass) * targetedYVelocity + mass * prevYVelocity);
+        newSettings['yaw'] += xModifier * cameraMultiplierX * combinedXVelocity;
+        newSettings['pitch'] += yModifier * cameraMultiplierY * combinedYVelocity;
+        player.setSphericalProperties(newSettings);
+        prevXVelocity = combinedXVelocity; //update the previous velocity with the newly calculated value
+        prevYVelocity = combinedYVelocity;
+        if (mouseInsideBox1) {
+            setTimeout(cursorCameraControl1, 16); //timeout at 16ms to ensure around 60 updates/second, since there are roughly 60 * 16 ms in a second
+        }
+    }
+
+    let timelineBarHeight = 50;//the height is 50 px
+    let control1HeightPublicHolder;
+    let playerLeftGapPublicHolder;
+    let windowWidthPublicHolder;
+    let windowHeightPublicHolder;
+    let safeZone0Radius = $('#cursorSafeZone0').height() / 2; //the Cursor Box control method's safe zone area's radius
+
+    function onYouTubeIframeAPIReady() { //<=== does as it says
+        let videoRatioWidth = 16; //video player ratio is 16:9 for now
+        let videoRatioHeight = 9;
+        let videoId0 = myURL.searchParams.get("vidID");
+        let defaultVideoID = 'G-XZhKqQAHU'; //for now, default to the Alien 'HELP' video
+        if (!videoId0 > '') { // if there's no URL parameter, default to designated video
+            videoId0 = defaultVideoID;
+        }
+
+        //let adjustedWidth = window.innerWidth * 2 / 3 - 20; //ratio for the col-8 and 4 bootstrap grid
+        let control1Height = $('#playButton').height() + $('#controlMethodTab').height() + $('#tutorialSection1').height() + 80; //+ $('#mouseCoords').height()
+        let windowHeight = window.innerHeight - 20 - control1Height; //these numbers indicate the maximum size the video player can be
+        let windowWidth = window.innerWidth; //maximum width on screen that can be used for display
+        //we want to make the video player as large as allowed without needing to scroll, while maintaining a 16:9 ratio
+        if (windowHeight >= videoRatioHeight / videoRatioWidth * windowWidth) {
+            windowHeight = videoRatioHeight / videoRatioWidth * windowWidth;
+        } else if (windowWidth >= videoRatioWidth / videoRatioHeight * windowHeight) {
+            windowWidth = videoRatioWidth / videoRatioHeight * windowHeight;
+        }
+        let playerLeftGap = (window.innerWidth - windowWidth) / 2; //the distance of the gap between player and left/right end, so we can center video player
+        let player0 = $('#player0');
+        player0.css('position', 'absolute');
+        player0.css('top', control1Height + 'px');
+        player0.css('left', playerLeftGap + 'px');
+        let bigPlayButtonHeight = 250;
+        let bigPlayButtonWidth = 250;
+        $('#bigPlayButton').css('font-size', bigPlayButtonHeight / 2 + 'px');
+        $('#bigPlayButton').css('height', bigPlayButtonHeight + 'px');
+        $('#bigPlayButton').css('width', bigPlayButtonWidth + 'px');
+        $('#bigPlayButton').css('top', control1Height + (windowHeight - bigPlayButtonHeight) / 2 + 'px');
+        $('#bigPlayButton').css('left', playerLeftGap + (windowWidth - bigPlayButtonWidth) / 2 + 'px');
+
+        control1HeightPublicHolder = control1Height;
+        playerLeftGapPublicHolder = playerLeftGap;
+        let cursorBox0 = $('#cursorBox0');
+        cursorBox0.css('pointer-events', 'none');
+        cursorBox0.css('top', control1Height + 'px');
+        cursorBox0.css('width', windowWidth + 'px');
+        cursorBox0.css('height', windowHeight - timelineBarHeight + 'px');
+        cursorBox0.css('margin-left', playerLeftGap + 'px');
+        windowWidthPublicHolder = windowWidth;
+        windowHeightPublicHolder = windowHeight;
+        $('#cursorSafeZone0').css('margin-top', windowHeight / 2 - safeZone0Radius + 'px');
+        $('#cursorSafeZone0').css('margin-left', windowWidth / 2 - safeZone0Radius + 'px');
+        $('#cursorSafeZone0').css('pointer-events', 'none');
+
+
+        movableSafeZoneCenterX = windowWidth / 2;
+        movableSafeZoneCenterY = windowHeight / 2;
+        let safeZone1Radius = $('#cursorSafeZone1').height() / 2; //the Cursor Box Alt control method's safe zone area's radius
+        let cursorBox1 = $('#cursorBox1');
+        cursorBox1.css('pointer-events', 'none');
+        cursorBox1.css('top', control1Height + 'px');
+        cursorBox1.css('width', windowWidth + 'px');
+        cursorBox1.css('height', windowHeight - timelineBarHeight + 'px');
+        cursorBox1.css('margin-left', playerLeftGap + 'px');
+        $('#cursorSafeZone1').css('margin-top', windowHeight / 2 - safeZone0Radius + 'px');
+        $('#cursorSafeZone1').css('margin-left', windowWidth / 2 - safeZone0Radius + 'px');
+        $('#cursorSafeZone1').css('pointer-events', 'none');
+
+
+        let directionButtonWidth = 65; //the size for the YouTube native navigation button, used in Direction Buttons
+        let directionButtonHeight = 60;
+        let directionButtonTopGap = 57;
+        let directionHighlightBox0 = $('#directionHighlightBox'); //the border box that highlights the direction wheel
+        directionHighlightBox0.css('left', playerLeftGap + 'px');
+        directionHighlightBox0.css('top', control1Height + directionButtonTopGap + 'px');
+        directionHighlightBox0.css('width', directionButtonWidth + 'px');
+        directionHighlightBox0.css('height', directionButtonHeight + 'px');
+        let directionBlockBox0 = $('#directionBlockBox0'); //the block box above the horizontal level of direction wheel
+        directionBlockBox0.css('left', playerLeftGap + 'px');
+        directionBlockBox0.css('top', control1Height + 'px');
+        directionBlockBox0.css('width', windowWidth + 'px');
+        directionBlockBox0.css('height', directionButtonTopGap + 'px');
+        let directionBlockBox1 = $('#directionBlockBox1'); //the block box on the same horizontal level of direction wheel
+        directionBlockBox1.css('left', playerLeftGap + directionButtonWidth + 'px');
+        directionBlockBox1.css('top', control1Height + directionButtonTopGap + 'px');
+        directionBlockBox1.css('width', windowWidth - directionButtonWidth + 'px');
+        directionBlockBox1.css('height', directionButtonHeight + 'px');
+        let directionBlockBox2 = $('#directionBlockBox2');
+        directionBlockBox2.css('left', playerLeftGap + 'px');//the block box below the horizontal level of direction wheel
+        directionBlockBox2.css('top', control1Height + directionButtonHeight + directionButtonTopGap + 'px');
+        directionBlockBox2.css('width', windowWidth + 'px');
+        directionBlockBox2.css('height', windowHeight - directionButtonHeight - directionButtonTopGap - timelineBarHeight + 'px');
+
+        let dragAndDropBox0 = $('#dragAndDropBox0'); //block out the direction wheel for Drag & Drop
+        dragAndDropBox0.css('left', playerLeftGap + 'px');
+        dragAndDropBox0.css('top', control1Height + directionButtonTopGap + 'px');
+        dragAndDropBox0.css('width', directionButtonWidth + 'px');
+        dragAndDropBox0.css('height', directionButtonTopGap + 'px');
+        /*
+        let dragAndDropBox1 = $('#dragAndDropBox1'); //block out the timeline for Drag & Drop
+        dragAndDropBox1.css('left', playerLeftGap + 'px');
+        dragAndDropBox1.css('top', control1Height + windowHeight - 50 + 'px');
+        dragAndDropBox1.css('width', windowWidth + 'px');
+        dragAndDropBox1.css('height', 50 + 'px');
+        dragAndDropBox1.css('opacity', 15 + '%');
+        */
+
+        let timelineBox0 = $('#timelineBox0'); //this blocks out the timeline if the hideControl URL parameter is 1
+        timelineBox0.css('left', playerLeftGap + 'px');
+        timelineBox0.css('top', control1Height + windowHeight - timelineBarHeight + 'px');
+        timelineBox0.css('width', windowWidth + 'px');
+        timelineBox0.css('height', timelineBarHeight + 1 + 'px'); //needed to add 1 px because of a stray pixel
+        timelineBox0.css('display', 'none');
+        timelineBox0.css('opacity', 100 + '%');
+        if (hideControl == 1) {
+            timelineBox0.css('display', 'block');
+            timelineBox0.css('background-color', 'white');
+        }
+
+        //this hides almost all control options if the hideControlOption URL parameter is 1
+        if (hideControlOption == 1) {
+            $('#playButton').css('display', 'none');
+            $('#restartButton').css('display', 'none');
+            $('#muteButton').css('display', 'none');
+            $('#visualIndicatorCheckBox').css('display', 'none');
+            $('#visualIndicatorLabel').css('display', 'none');
+            $('#x_axis').css('display', 'none');
+            $('#x_axis_label').css('display', 'none');
+            $('#y_axis').css('display', 'none');
+            $('#y_axis_label').css('display', 'none');
+            $('#massValue').css('display', 'none');
+            $('#sliderBar').css('display', 'none');
+        }
+
+        if (player == null) { // if there's no pre-existing video player, we create it here
+            player = new YT.Player('player0', {
+                //height: 700,
+                //width: adjustedWidth,
+                height: windowHeight,
+                width: windowWidth,
+                videoId: videoId0,
+                playerVars: {
+                    rel: 0, // on pause screen, only display videos from same channel, since we can't disable this following YouTube update
+                    disablekb: 1 //disable keyboard control
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onStateChange
+                }
+            });
+        }
+        if (controlMethod != 0) {
+            exclusiveTab('control' + controlMethod);
+        }
+    }
+
+    function toggleVisualIndicator() { //toggle colored visual indicator for clickable/unclickable zones
+        let visualIndicatorLabel = $('#visualIndicatorLabel');
+        if (showVisualIndicator) {
+            $('#cursorBox0').css('background-color', 'transparent');
+            $('#cursorSafeZone0').css('background-color', 'transparent');
+            $('#cursorBox1').css('background-color', 'transparent');
+            $('#cursorSafeZone1').css('background-color', 'transparent');
+            $('#directionBlockBox0').css('background-color', 'transparent');
+            $('#directionBlockBox1').css('background-color', 'transparent');
+            $('#directionBlockBox2').css('background-color', 'transparent');
+            $('#dragAndDropBox0').css('background-color', 'transparent');
+            $('#dragAndDropBox1').css('background-color', 'transparent');
+            visualIndicatorLabel.html('Visual Indicator Shown');
+        } else {
+            $('#cursorBox0').css('background-color', 'lightblue');
+            if (cursorBox0Active) {
+                $('#cursorSafeZone0').css('background-color', 'greenyellow');
+            } else {
+                $('#cursorSafeZone0').css('background-color', 'yellow');
+            }
+            $('#cursorBox1').css('background-color', 'lightblue');
+            if (cursorBox1Active) {
+                $('#cursorSafeZone1').css('background-color', 'greenyellow');
+            } else {
+                $('#cursorSafeZone1').css('background-color', 'yellow');
+            }
+            $('#directionBlockBox0').css('background-color', 'lightblue');
+            $('#directionBlockBox1').css('background-color', 'lightblue');
+            $('#directionBlockBox2').css('background-color', 'lightblue');
+            $('#dragAndDropBox0').css('background-color', 'lightblue');
+            $('#dragAndDropBox1').css('background-color', 'lightblue');
+            visualIndicatorLabel.html('Visual Indicator Hidden');
+        }
+        showVisualIndicator = !showVisualIndicator;
+    }
+
+    // The API will call this function when the video player is ready.
+    function onPlayerReady(event) { //currently unused
+        //event.target.playVideo();
+    }
+
+    function onStateChange(event) { //called when video state changes
+        $('#cursorBox0').css('pointer-events', 'auto');
+        $('#cursorSafeZone0').css('pointer-events', 'auto');
+        $('#cursorBox1').css('pointer-events', 'auto');
+        $('#cursorSafeZone1').css('pointer-events', 'auto');
+    }
+
+    function onLoadClick() {
+        let videoId1 = document.getElementById("textInput").value;
+        player.loadVideoById(videoId1);
+    }
+
+    function pauseVideo() {
+        player.pauseVideo();
+    }
+
+    function stopVideo() {
+        player.stopVideo();
+    }
+
+    //called when clicking on the play button
+    function onPlayClick() {
+        if (player.getPlayerState() == 5 || player.getPlayerState() == 2) {
+            player.playVideo();
+            $('#playButton').html('Pause');
+        } else if (player.getPlayerState() == 1) {
+            player.pauseVideo();
+            $('#playButton').html('Play');
+        }
+    }
+
+    //hides the big play button
+    function hideBigPlayButton() {
+        $('#bigPlayButton').css('display', 'none');
+    }
+
+    //somehow it's not working, will need to debug later
+    function checkPauseStatus() { //check if the video is paused, and update the Play/Pause button accordingly
+        if (player.getPlayerState() == 5 || player.getPlayerState() == 2) {
+            $('#playButton').html('Play!');
+        } else if (player.getPlayerState == 1) {
+            $('#playButton').html('Pause!');
+        }
+        console.log('This method is called');
+    }
+
+    function restartVideo() {
+        player.seekTo(0);
+    }
+
+    function muteVideo() {
+        if (!player.isMuted()) {
+            player.mute();
+            $('#muteButton').html('Unmute');
+        } else {
+            player.unMute();
+            $('#muteButton').html('Mute');
+        }
+    }
+
+    //this switches tabs-->switches control method
+    function switchTab(controlNum) { //controlNum is currently not actually a number, but a string, it's shown as 'control1' or 'control2' etc.
+        let controlMethods = $('.tabContent');
+
+        for (let i = 0; i < controlMethods.length; i++) {
+            controlMethods[i].style.display = "none";
+            let j = i + 1;
+            $('#' + 'control' + j + 'button').css('background-color', 'transparent');
+        }
+        $('#' + controlNum).css('display', 'block');
+        $('#' + controlNum + '_checkbox').prop('checked', true);
+        $('#' + controlNum + 'button').css('background-color', '#8ff2a3');
+    }
+
+    //this function will make sure only the given control method is displayed, every other control method will be hidden
+    function exclusiveTab(controlNum) { //controlNum is currently not actually a number, but a string, it's shown as 'control1' or 'control2' etc.
+        let controlMethods = $('.tabContent');
+
+        for (let i = 0; i < controlMethods.length; i++) {
+            controlMethods[i].style.display = "none";
+            let j = i + 1;
+            $('#' + 'control' + j + 'button').css('background-color', 'transparent');
+            $('#' + 'control' + j + 'button').css('display', 'none');
+            $('#' + 'control' + j + '_checkbox').css('display', 'none');
+        }
+        $('#' + controlNum).css('display', 'block');
+        $('#' + controlNum + '_checkbox').prop('checked', true);
+        $('#' + controlNum + 'button').css('background-color', '#8ff2a3');
+        $('#' + controlNum + 'button').css('display', 'inline');
+    }
+
+    //function for when the user first click on the tutorial
+    function clickTutorial() {
+        var popup = document.getElementById("myPopup");
+        popup.classList.toggle("show");
+    }
+
+    //function below for camera control is currently defunct, but could potentially be used for future implementation
+    let animationID; // to keep track of the animation requested if we need to stop/cancel it
+    function lookUpLeft() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['pitch'] += 2.5;
+        newSettings['yaw'] += 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookUpLeft);
+    }
+
+    function lookUp() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['pitch'] += 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookUp);
+    }
+
+    function lookUpRight() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['pitch'] += 2.5;
+        newSettings['yaw'] -= 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookUpRight);
+    }
+
+    function lookLeft() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['yaw'] += 5;
+        console.log(newSettings['yaw']);
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookLeft);
+    }
+
+    //camera reset to default angle
+    function lookReset() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['yaw'] = 0;
+        newSettings['pitch'] = 0;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookReset); //may not need to request animation since it just resets camera
+    }
+
+    function lookRight() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['yaw'] -= 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookRight);
+    }
+
+    function lookDownLeft() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['pitch'] -= 2.5;
+        newSettings['yaw'] += 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookDownLeft);
+    }
+
+    function lookDown() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['pitch'] -= 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookDown);
+    }
+
+    function lookDownRight() {
+        let newSettings = player.getSphericalProperties();
+        newSettings['pitch'] -= 2.5;
+        newSettings['yaw'] -= 5;
+        player.setSphericalProperties(newSettings);
+        animationID = requestAnimationFrame(lookDownRight);
+    }
+
+    function stopCamera() {
+        cancelAnimationFrame(animationID);
+    }
+
 </script>
+
 </body>
 </html>

@@ -56,10 +56,18 @@
         <div id="control1" class="tabContent">
             <div id="tutorialSection1" style="margin-top: 10px;margin-bottom: 10px">
                 <ol>
-                    <li>To start, first click on the big start button in the middle</li>
-                    <li>Once the video starts, the camera will automatically accelerate towards the direction of your mouse cursor</li>
-                    <li>To stop camera movement, simply move your mouse cursor back to the center of the video player</li>
-                    <li>You can also click on the center of the video player to disable camera movement, click again to enable it again</li>
+                    <li><input type="checkbox"
+                               id="tutorial1Checkbox1"> To start, first click on the big start button in the middle
+                    </li>
+
+                    <li>Once the video starts, the camera will automatically accelerate towards the direction of your
+                        mouse cursor <input type="checkbox" id="tutorial1Checkbox2"></li>
+
+                    <li>To stop camera movement, simply move your mouse cursor back to the center of the video player
+                        <input type="checkbox" id="tutorial1Checkbox3"></li>
+
+                    <li>You can also click on the center of the video player to disable camera movement, click again to
+                        enable it again <input type="checkbox" id="tutorial1Checkbox4"></li>
                 </ol>
             </div>
             <!--
@@ -73,12 +81,28 @@
         <div id="control2" class="tabContent">
             <div id="tutorialSection2" style="margin-top: 10px;margin-bottom: 10px">
                 <ol>
-                    <li>To start, first click on the big start button in the middle</li>
-                    <li>Once the video starts, the camera will automatically accelerate towards the direction of your mouse cursor</li>
-                    <li>To stop camera movement, simply move your mouse cursor back to the center of the video player</li>
-                    <li>You can also click on the center of the video player to disable camera movement, click again to enable it again</li>
-                    <li>In this control method, you can click anywhere else on the screen, and that will become the new center of camera movement</li>
-                    <li>Your camera moves faster, as your mouse cursor moves further away from where you last clicked</li>>
+                    <li>To start, first click on the big start button in the middle <input type="checkbox"
+                                                                                           id="tutorial2Checkbox1"></li>
+                    <li>Once the video starts, the camera will automatically accelerate towards the direction of your
+                        mouse cursor<input type="checkbox"
+                                           id="tutorial2Checkbox2">
+                    </li>
+                    <li>To stop camera movement, simply move your mouse cursor back to the center of the video
+                        player<input type="checkbox"
+                                     id="tutorial2Checkbox3">
+                    </li>
+                    <li>You can also click on the center of the video player to disable camera movement, click again to
+                        enable it again<input type="checkbox"
+                                              id="tutorial2Checkbox4">
+                    </li>
+                    <li>In this control method, you can click anywhere else on the screen, and that will become the new
+                        center of camera movement <input type="checkbox"
+                                                         id="tutorial2Checkbox5">
+                    </li>
+                    <li>Your camera moves faster, as your mouse cursor moves further away from where you last
+                        clicked<input type="checkbox"
+                                      id="tutorial2Checkbox6">
+                    </li>
                 </ol>
             </div>
             <!--
@@ -92,9 +116,13 @@
         <div id="control3" class="tabContent">
             <div id="tutorialSection3" style="margin-top: 10px;margin-bottom: 10px">
                 <ol>
-                    <li>To start, first click on the big start button in the middle</li>
-                    <li>Look for the highlighted box with the navigation box inside</li>
-                    <li>Click on either of the four direction buttons to move camera in that direction</li>
+                    <li>To start, first click on the big start button in the middle <input type="checkbox"
+                                                                                           id="tutorial3Checkbox1"></li>
+                    <li>Look for the highlighted box with the navigation box inside <input type="checkbox"
+                                                                                           id="tutorial3Checkbox2"></li>
+                    <li>Click on either of the four direction buttons to move camera in that direction <input
+                            type="checkbox"
+                            id="tutorial3Checkbox3"></li>
                 </ol>
             </div>
 
@@ -107,8 +135,10 @@
         <div id="control4" class="tabContent">
             <div id="tutorialSection4" style="margin-top: 10px;margin-bottom: 10px">
                 <ol>
-                    <li>To start, first click on the big start button in the middle</li>
-                    <li>To navigate your camera, simply drag and drop your camera</li>
+                    <li>To start, first click on the big start button in the middle <input type="checkbox"
+                                                                                           id="tutorial4Checkbox1"></li>
+                    <li>To navigate your camera, simply drag and drop your camera <input type="checkbox"
+                                                                                         id="tutorial4Checkbox2"></li>
                 </ol>
             </div>
 
@@ -150,10 +180,32 @@
         $('#control4').css('display', 'none');
     });
 
+    let activeControlMethod = 'control1';
+
     document.getElementById("control1_checkbox").disabled = true;
     document.getElementById("control2_checkbox").disabled = true;
     document.getElementById("control3_checkbox").disabled = true;
     document.getElementById("control4_checkbox").disabled = true;
+
+    document.getElementById("tutorial1Checkbox1").disabled = true;
+    document.getElementById("tutorial1Checkbox2").disabled = true;
+    document.getElementById("tutorial1Checkbox3").disabled = true;
+    document.getElementById("tutorial1Checkbox4").disabled = true;
+
+    document.getElementById("tutorial2Checkbox1").disabled = true;
+    document.getElementById("tutorial2Checkbox2").disabled = true;
+    document.getElementById("tutorial2Checkbox3").disabled = true;
+    document.getElementById("tutorial2Checkbox4").disabled = true;
+    document.getElementById("tutorial2Checkbox5").disabled = true;
+    document.getElementById("tutorial2Checkbox6").disabled = true;
+
+    document.getElementById("tutorial3Checkbox1").disabled = true;
+    document.getElementById("tutorial3Checkbox2").disabled = true;
+    document.getElementById("tutorial3Checkbox3").disabled = true;
+
+    document.getElementById("tutorial4Checkbox1").disabled = true;
+    document.getElementById("tutorial4Checkbox2").disabled = true;
+
 
     let myURL = new URL(window.location.href); //collection for all URL parameters
 
@@ -255,6 +307,7 @@
     document.getElementById("cursorBox0").addEventListener('mouseenter', updateCoords);
     document.getElementById("cursorBox0").addEventListener('mousemove', updateCoords);
     document.getElementById("cursorBox0").addEventListener('mouseenter', cursorCameraControl0);
+
     document.getElementById("cursorBox1").addEventListener('mouseenter', updateCoords);
     document.getElementById("cursorBox1").addEventListener('mousemove', updateCoords);
     document.getElementById("cursorBox1").addEventListener('mouseenter', cursorCameraControl1);
@@ -263,8 +316,6 @@
     //Drag&Drop method and the Play/Pause button isn't updated
     //document.getElementById('cursorBox1').addEventListener('click', checkPauseStatus);
 
-    //let mouseCoordsText0 = document.querySelector('#mouseCoords0');
-    //let mouseCoordsText1 = document.querySelector('#mouseCoords1');
 
     function updateMass(value) { //update the mass value AND text displayed
         mass = value / 100;
@@ -273,6 +324,11 @@
     function updateCoords(event) { //update the mouse's coordinates in the global variable
         mouseX = event.clientX;
         mouseY = event.clientY;
+        if (activeControlMethod = 'control1') {
+            if (!mouseInsideSafeZone0) {
+                $('#tutorial1Checkbox2').prop('checked', true);
+            }
+        }
     }
 
     function moveSafeZone(event) { // moves the safe zone based on mouse click location, center on click location
@@ -399,7 +455,6 @@
         $('#cursorSafeZone0').css('margin-top', windowHeight / 2 - safeZone0Radius + 'px');
         $('#cursorSafeZone0').css('margin-left', windowWidth / 2 - safeZone0Radius + 'px');
         $('#cursorSafeZone0').css('pointer-events', 'none');
-
 
         movableSafeZoneCenterX = windowWidth / 2;
         movableSafeZoneCenterY = windowHeight / 2;
@@ -548,6 +603,10 @@
         $('#cursorSafeZone0').css('pointer-events', 'auto');
         $('#cursorBox1').css('pointer-events', 'auto');
         $('#cursorSafeZone1').css('pointer-events', 'auto');
+        $('#tutorial1Checkbox1').prop('checked', true);
+        $('#tutorial2Checkbox1').prop('checked', true);
+        $('#tutorial3Checkbox1').prop('checked', true);
+        $('#tutorial4Checkbox1').prop('checked', true);
     }
 
     function onLoadClick() {
@@ -615,6 +674,8 @@
         $('#' + controlNum).css('display', 'block');
         $('#' + controlNum + '_checkbox').prop('checked', true);
         $('#' + controlNum + 'button').css('background-color', '#8ff2a3');
+
+        activeControlMethod = controlNum;
     }
 
     //this function will make sure only the given control method is displayed, every other control method will be hidden
@@ -632,6 +693,8 @@
         $('#' + controlNum + '_checkbox').prop('checked', true);
         $('#' + controlNum + 'button').css('background-color', '#8ff2a3');
         $('#' + controlNum + 'button').css('display', 'inline');
+
+        activeControlMethod = controlNum;
     }
 
     //function for when the user first click on the tutorial

@@ -17,7 +17,8 @@
     biz9q2L-OvE
     <input type="text" id="textInput" value="G-XZhKqQAHU">
     -->
-    <button type="button" class="popup" onclick="window.open('https://robinlu51.github.io/360YouTubePlayer/TutorialPage.html');">Tutorial
+    <button type="button" class="popup"
+            onclick="window.open('https://robinlu51.github.io/360YouTubePlayer/TutorialPage.html');">Tutorial
         <span class="popuptext" id="myPopup">Click on the big play button in the middle to start!</span>
     </button>
 
@@ -137,13 +138,14 @@
             </div>
         </div>
         <div id="control4" class="tabContent">
-            <div id="dragAndDropBox0" class="blockBox"></div>
-            <!--<div id="dragAndDropBox1" class="blockBox"></div>-->
+            <div id="cursorBox4" class="cursorBox">
+                <div id="dragAndDropBox0" class="blockBox"></div>
+                <!--<div id="dragAndDropBox1" class="blockBox"></div>-->
+            </div>
+            <div id="timelineBox0" class="blockBox"></div>
+            <button type="button" id="bigPlayButton" class="bigButton"
+                    onclick="onPlayClick();hideBigPlayButton();clickTutorial()"><i class="fa fa-play"></i></button>
         </div>
-        <div id="timelineBox0" class="blockBox"></div>
-        <button type="button" id="bigPlayButton" class="bigButton"
-                onclick="onPlayClick();hideBigPlayButton();clickTutorial()"><i class="fa fa-play"></i></button>
-    </div>
 </form>
 
 <div class="container-fluid">
@@ -469,6 +471,8 @@
         directionBlockBox2.css('width', windowWidth + 'px');
         directionBlockBox2.css('height', windowHeight - directionButtonHeight - directionButtonTopGap - timelineBarHeight + 'px');
 
+        let cursorBox4 = $('#cursorBox4');
+        //cursorBox4.css('pointer-events', 'none');
         let dragAndDropBox0 = $('#dragAndDropBox0'); //block out the direction wheel for Drag & Drop
         dragAndDropBox0.css('left', playerLeftGap + 'px');
         dragAndDropBox0.css('top', control1Height + directionButtonTopGap + 'px');
@@ -544,6 +548,7 @@
             $('#directionBlockBox2').css('background-color', 'transparent');
             $('#dragAndDropBox0').css('background-color', 'transparent');
             $('#dragAndDropBox1').css('background-color', 'transparent');
+            $('#cursorBox4').css('background-color', 'transparent');
             visualIndicatorLabel.html('Visual Indicator Shown');
         } else {
             $('#cursorBox0').css('background-color', 'lightblue');
@@ -563,6 +568,7 @@
             $('#directionBlockBox2').css('background-color', 'lightblue');
             $('#dragAndDropBox0').css('background-color', 'lightblue');
             $('#dragAndDropBox1').css('background-color', 'lightblue');
+            $('#cursorBox4').css('background-color', 'lightblue');
             visualIndicatorLabel.html('Visual Indicator Hidden');
         }
         showVisualIndicator = !showVisualIndicator;

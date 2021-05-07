@@ -60,14 +60,19 @@
                                id="tutorial1Checkbox1"> To start, first click on the big start button in the middle
                     </li>
 
-                    <li>Once the video starts, the camera will automatically accelerate towards the direction of your
-                        mouse cursor <input type="checkbox" id="tutorial1Checkbox2"></li>
+                    <li><input type="checkbox" id="tutorial1Checkbox2">Once the video starts, the camera will
+                        automatically accelerate towards the direction of your
+                        mouse cursor
+                    </li>
 
-                    <li>To stop camera movement, simply move your mouse cursor back to the center of the video player
-                        <input type="checkbox" id="tutorial1Checkbox3"></li>
+                    <li><input type="checkbox" id="tutorial1Checkbox3">To stop camera movement, simply move your mouse
+                        cursor back to the center of the video player
+                    </li>
 
-                    <li>You can also click on the center of the video player to disable camera movement, click again to
-                        enable it again <input type="checkbox" id="tutorial1Checkbox4"></li>
+                    <li><input type="checkbox" id="tutorial1Checkbox4">You can also click on the center of the video
+                        player to disable camera movement, click again to
+                        enable it again
+                    </li>
                 </ol>
             </div>
             <!--
@@ -147,7 +152,7 @@
         </div>
         <div id="timelineBox0" class="blockBox"></div>
         <button type="button" id="bigPlayButton" class="bigButton"
-                onclick="onPlayClick();hideBigPlayButton();clickTutorial()"><i class="fa fa-play"></i></button>
+                onclick="onPlayClick();hideBigPlayButton()"><i class="fa fa-play"></i></button>
     </div>
 </form>
 
@@ -179,6 +184,11 @@
         $('#control3').css('display', 'none');
         $('#control4').css('display', 'none');
     });
+
+    let netYawChange = 0; //keeps track of how much the horizontal FOV has changed
+    let netPitchChange = 0; //keeps track of how much the vertical FOV has changed
+    let firstYawAlert = false; //keeps track of whether the first yaw change alert has been sent out
+    let firstPitchAlert = false; //keeps track of whether the first pitch change alert has been sent out
 
     let activeControlMethod = 'control1';
 
@@ -322,12 +332,24 @@
     }
 
     function updateCoords(event) { //update the mouse's coordinates in the global variable
-        mouseX = event.clientX;
-        mouseY = event.clientY;
+        let tempMouseX = event.clientX;
+        let tempMouseY = event.clientY;
+        netYawChange += Math.abs(tempMouseX - mouseX);
+        netPitchChange += Math.abs(tempMouseY - mouseY);
+        mouseX = tempMouseX;
+        mouseY = tempMouseY;
         if (activeControlMethod = 'control1') {
-            if (!mouseInsideSafeZone0) {
+            if (firstYawAlert && firstPitchAlert) {
                 $('#tutorial1Checkbox2').prop('checked', true);
             }
+        }
+        if (netYawChange > 2500 && firstYawAlert == false) {
+            firstYawAlert = true;
+            console.log('Yaw moved 2500');
+        }
+        if (netPitchChange > 1500 && firstPitchAlert == false) {
+            firstPitchAlert = true;
+            console.log('Pitch moved 1500');
         }
     }
 
@@ -697,11 +719,6 @@
         activeControlMethod = controlNum;
     }
 
-    //function for when the user first click on the tutorial
-    function clickTutorial() {
-        var popup = document.getElementById("myPopup");
-        popup.classList.toggle("show");
-    }
 
     //function below for camera control is currently defunct, but could potentially be used for future implementation
     let animationID; // to keep track of the animation requested if we need to stop/cancel it

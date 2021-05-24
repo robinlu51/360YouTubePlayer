@@ -143,9 +143,10 @@
                 <!--<div id="dragAndDropBox1" class="blockBox"></div>-->
             </div>
             <div id="timelineBox0" class="blockBox"></div>
-            <button type="button" id="bigPlayButton" class="bigButton"
-                    onclick="onPlayClick();hideBigPlayButton();clickTutorial()"><i class="fa fa-play"></i></button>
         </div>
+        <button type="button" id="bigPlayButton" class="bigButton"
+                onclick="onPlayClick();hideBigPlayButton();clickTutorial()"><i class="fa fa-play"></i></button>
+    </div>
 </form>
 
 <div class="container-fluid">
@@ -280,6 +281,14 @@
         mouseInsideSafeZone1 = false;
     });
 
+    //adding event listeners for Drag & Drop Alt
+    let mouseInsideBox4 = false;
+    document.getElementById("cursorBox4").addEventListener('mouseenter', function () {
+        mouseInsideBox4 = true;
+    });
+    document.getElementById("cursorBox4").addEventListener('mouseleave', function () {
+        mouseInsideBox4 = false;
+    });
 
     let mouseX = 0; // the mouse X coordinate WITH RESPECT TO THE VISIBLE SCREEN
     let mouseY = 0; // the code should show it with respect to
@@ -293,6 +302,19 @@
     //this line below should add an event listener, to update the playing status, in case that the user pause/unpauses in
     //Drag&Drop method and the Play/Pause button isn't updated
     //document.getElementById('cursorBox1').addEventListener('click', checkPauseStatus);
+    let cameraControl4Active = false;
+    document.getElementById('cursorBox4').addEventListener('mouseenter', updateCoords);
+    document.getElementById('cursorBox4').addEventListener('mousemove', updateCoords);
+    document.getElementById('cursorBox4').addEventListener('mousemove', cursorCameraControl4)
+    document.getElementById('cursorBox4').addEventListener('mousedown', function () {
+        $(this).css('pointer-events', 'none');
+        cameraControl4Active = true;
+    });
+    document.getElementById('cursorBox4').addEventListener('mouseup', function () {
+        $(this).css('pointer-events', 'auto');
+        cameraControl4Active = false;
+    });
+
 
     //let mouseCoordsText0 = document.querySelector('#mouseCoords0');
     //let mouseCoordsText1 = document.querySelector('#mouseCoords1');
@@ -376,6 +398,22 @@
         prevYVelocity = combinedYVelocity;
         if (mouseInsideBox1) {
             setTimeout(cursorCameraControl1, 16); //timeout at 16ms to ensure around 60 updates/second, since there are roughly 60 * 16 ms in a second
+        }
+    }
+
+    function cursorCameraControl4() { //camera control for alternative Drag & Drop method
+        //get the mouse cursor's current coordinates, with top left of cursor box to be 0,0
+        if (cameraControl4Active) {
+            return;
+        }
+        let x = Math.round(mouseX - playerLeftGapPublicHolder);
+        let y = Math.round(mouseY - control1HeightPublicHolder);
+        let newSettings = player.getSphericalProperties();
+        newSettings['yaw'] += 100;
+        newSettings['pitch'] += 100;
+        player.setSphericalProperties(newSettings);
+        if (mouseInsideBox4) {
+            setTimeout(cursorCameraControl4, 16); //timeout at 16ms to ensure around 60 updates/second, since there are roughly 60 * 16 ms in a second
         }
     }
 
@@ -473,6 +511,11 @@
 
         let cursorBox4 = $('#cursorBox4');
         //cursorBox4.css('pointer-events', 'none');
+        cursorBox4.css('top', control1Height + 'px');
+        cursorBox4.css('width', windowWidth + 'px');
+        cursorBox4.css('height', windowHeight - timelineBarHeight + 'px');
+        cursorBox4.css('margin-left', playerLeftGap + 'px');
+
         let dragAndDropBox0 = $('#dragAndDropBox0'); //block out the direction wheel for Drag & Drop
         dragAndDropBox0.css('left', playerLeftGap + 'px');
         dragAndDropBox0.css('top', control1Height + directionButtonTopGap + 'px');

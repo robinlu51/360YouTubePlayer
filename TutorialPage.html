@@ -62,11 +62,14 @@
 
                     <li><input type="checkbox" id="tutorial1Checkbox2">Once the video starts, the camera will
                         automatically accelerate towards the direction of your
-                        mouse cursor
+                        mouse cursor<p id="tutorial1li2" style="display:inline-block;margin-left: 10px">(Horizontal:
+                            0/2500, Vertical: 0/1500)</p>
                     </li>
 
                     <li><input type="checkbox" id="tutorial1Checkbox3">To stop camera movement, simply move your mouse
-                        cursor back to the center of the video player
+                        cursor back to the center of the video player<p id="tutorial1li3"
+                                                                        style="display:inline-block;margin-left: 10px">
+                            Stop counter: 0/3</p>
                     </li>
 
                     <li><input type="checkbox" id="tutorial1Checkbox4">You can also click on the center of the video
@@ -258,6 +261,7 @@
             }
         }
         cursorBox0Active = !cursorBox0Active;
+        $('#tutorial1Checkbox4').prop('checked', true);
     });
 
     let cursorBox1Active = true; //indicates if the cursor box is active
@@ -279,9 +283,10 @@
     let prevXVelocity = 0; //by default, the velocity starts at 0
     let prevYVelocity = 0;
 
-    //adding event listeners for Cursor Box
+    //adding event listeners for Cursor Box (control 1)
     let mouseInsideBox0 = false;
     let mouseInsideSafeZone0 = false;
+    let control1StopCounter = 0;
     document.getElementById("cursorBox0").addEventListener('mouseenter', function () {
         mouseInsideBox0 = true;
     });
@@ -290,12 +295,19 @@
     });
     document.getElementById("cursorSafeZone0").addEventListener('mouseenter', function () {
         mouseInsideSafeZone0 = true;
+        if (control1StopCounter < 3) {
+            control1StopCounter++;
+        }
+        document.querySelector('#tutorial1li3').innerHTML = `Stop counter: ${control1StopCounter}/3`;
+        if (control1StopCounter >= 3) {
+            $('#tutorial1Checkbox3').prop('checked', true);
+        }
     });
     document.getElementById("cursorSafeZone0").addEventListener('mouseleave', function () {
         mouseInsideSafeZone0 = false;
     });
 
-    //adding event listeners for Cursor Box Alt
+    //adding event listeners for Cursor Box Alt (control 2)
     let mouseInsideBox1 = false;
     let mouseInsideSafeZone1 = false;
     document.getElementById("cursorBox1").addEventListener('mouseenter', function () {
@@ -331,26 +343,44 @@
         mass = value / 100;
     }
 
+    let firstUpdateCoordsCalled = false; //keep track of whether the function updateCoords(event) has been called
+
     function updateCoords(event) { //update the mouse's coordinates in the global variable
         let tempMouseX = event.clientX;
         let tempMouseY = event.clientY;
-        netYawChange += Math.abs(tempMouseX - mouseX);
+        let netYawChangeThreshold = 2500;
+        let netPitchChangeThreshold = 1500;
+        if (!firstUpdateCoordsCalled) {
+            mouseX = tempMouseX;
+            mouseY = tempMouseY;
+        }
+        netYawChange += Math.abs(tempMouseX - mouseX);//@todo this currently tracks how much the mouse has moved, not how much the camera has moved, which isn't what we want
         netPitchChange += Math.abs(tempMouseY - mouseY);
         mouseX = tempMouseX;
         mouseY = tempMouseY;
+        if (netYawChange < netYawChangeThreshold && netPitchChange < netPitchChangeThreshold) {
+            document.querySelector('#tutorial1li2').innerHTML = `(Horizontal: ${netYawChange}/2500, Vertical: ${netPitchChange}/1500)`;
+        } else if (netYawChange >= netYawChangeThreshold && netPitchChange < netPitchChangeThreshold) {
+            document.querySelector('#tutorial1li2').innerHTML = `(Horizontal: 2500/2500, Vertical: ${netPitchChange}/1500)`;
+        } else if (netYawChange < netYawChangeThreshold && netPitchChange >= netPitchChangeThreshold) {
+            document.querySelector('#tutorial1li2').innerHTML = `(Horizontal: ${netYawChange}/2500, Vertical: 1500/1500)`;
+        } else {
+            document.querySelector('#tutorial1li2').innerHTML = `(Horizontal: 2500/2500, Vertical: 1500/1500)`;
+        }
         if (activeControlMethod = 'control1') {
             if (firstYawAlert && firstPitchAlert) {
                 $('#tutorial1Checkbox2').prop('checked', true);
             }
         }
-        if (netYawChange > 2500 && firstYawAlert == false) {
+        if (netYawChange > netYawChangeThreshold && firstYawAlert == false) {
             firstYawAlert = true;
             console.log('Yaw moved 2500');
         }
-        if (netPitchChange > 1500 && firstPitchAlert == false) {
+        if (netPitchChange > netPitchChangeThreshold && firstPitchAlert == false) {
             firstPitchAlert = true;
             console.log('Pitch moved 1500');
         }
+        firstUpdateCoordsCalled = true;
     }
 
     function moveSafeZone(event) { // moves the safe zone based on mouse click location, center on click location

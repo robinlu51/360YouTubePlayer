@@ -19,7 +19,6 @@
     -->
     <button type="button" class="popup"
             onclick="window.open('https://robinlu51.github.io/360YouTubePlayer/TutorialPage.html');">Tutorial
-        <span class="popuptext" id="myPopup">Click on the big play button in the middle to start!</span>
     </button>
 
     <button type="button" id="playButton" class="button" onclick="onPlayClick()">Play</button>
@@ -145,7 +144,7 @@
             <div id="timelineBox0" class="blockBox"></div>
         </div>
         <button type="button" id="bigPlayButton" class="bigButton"
-                onclick="onPlayClick();hideBigPlayButton();clickTutorial()"><i class="fa fa-play"></i></button>
+                onclick="onPlayClick();hideBigPlayButton()"><i class="fa fa-play"></i></button>
     </div>
 </form>
 
@@ -713,11 +712,6 @@
         $('#' + controlNum + 'button').css('display', 'inline');
     }
 
-    //function for when the user first click on the tutorial
-    function clickTutorial() {
-        var popup = document.getElementById("myPopup");
-        popup.classList.toggle("show");
-    }
 
     //function below for camera control is currently defunct, but could potentially be used for future implementation
     let animationID; // to keep track of the animation requested if we need to stop/cancel it

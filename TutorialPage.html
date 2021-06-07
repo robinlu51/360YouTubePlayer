@@ -57,24 +57,39 @@
             <div id="tutorialSection1" style="margin-top: 10px;margin-bottom: 10px">
                 <ol>
                     <li><input type="checkbox"
-                               id="tutorial1Checkbox1"> To start, first click on the big start button in the middle
+                               id="tutorial1Checkbox1" style="outline: 2px solid coral"> To start, first click on the
+                        big
+                        start button
+                        in the middle
                     </li>
 
-                    <li><input type="checkbox" id="tutorial1Checkbox2">Once the video starts, the camera will
-                        automatically accelerate towards the direction of your
+                    <li id="tutorial1Step2" style="visibility: hidden"><input type="checkbox" id="tutorial1Checkbox2"
+                                                                              style="outline: 2px solid coral"> Once the
+                        video
+                        starts, the camera will automatically accelerate towards the direction of your
                         mouse cursor<p id="tutorial1li2" style="display:inline-block;margin-left: 10px">(Horizontal:
                             0/2500, Vertical: 0/1500)</p>
                     </li>
 
-                    <li><input type="checkbox" id="tutorial1Checkbox3">To stop camera movement, simply move your mouse
-                        cursor back to the center of the video player<p id="tutorial1li3"
-                                                                        style="display:inline-block;margin-left: 10px">
+                    <li id="tutorial1Step3" style="visibility: hidden"><input type="checkbox" id="tutorial1Checkbox3"
+                                                                              style="outline: 2px solid coral"> To stop
+                        camera
+                        movement, simply move your mouse cursor back to the center of the video player<p
+                                id="tutorial1li3"
+                                style="display:inline-block;margin-left: 10px">
                             Stop counter: 0/3</p>
                     </li>
 
-                    <li><input type="checkbox" id="tutorial1Checkbox4">You can also click on the center of the video
-                        player to disable camera movement, click again to
-                        enable it again
+                    <li id="tutorial1Step4" style="visibility: hidden"><input type="checkbox" id="tutorial1Checkbox4"
+                                                                              style="outline: 2px solid coral"> You can
+                        also
+                        click on the center of the video player to disable camera movement
+                    </li>
+
+                    <li id="tutorial1Step5" style="visibility: hidden"><input type="checkbox" id="tutorial1Checkbox5"
+                                                                              style="outline: 2px solid coral"> Click on
+                        the
+                        center of the video player again to enable it again
                     </li>
                 </ol>
             </div>
@@ -204,6 +219,7 @@
     document.getElementById("tutorial1Checkbox2").disabled = true;
     document.getElementById("tutorial1Checkbox3").disabled = true;
     document.getElementById("tutorial1Checkbox4").disabled = true;
+    document.getElementById("tutorial1Checkbox5").disabled = true;
 
     document.getElementById("tutorial2Checkbox1").disabled = true;
     document.getElementById("tutorial2Checkbox2").disabled = true;
@@ -261,7 +277,13 @@
             }
         }
         cursorBox0Active = !cursorBox0Active;
-        $('#tutorial1Checkbox4').prop('checked', true);
+        if ($('#tutorial1Checkbox4').prop("checked")) {
+            $('#tutorial1Checkbox5').prop("checked", true);
+        }
+        if ($('#tutorial1Checkbox3').prop("checked")) {
+            $('#tutorial1Checkbox4').prop("checked", true);
+            $('#tutorial1Step5').css('visibility', 'visible');
+        }
     });
 
     let cursorBox1Active = true; //indicates if the cursor box is active
@@ -295,12 +317,13 @@
     });
     document.getElementById("cursorSafeZone0").addEventListener('mouseenter', function () {
         mouseInsideSafeZone0 = true;
-        if (control1StopCounter < 3) {
+        if (control1StopCounter < 3 && $('#tutorial1Checkbox2').prop("checked")) { //only start tracking step 3 after step 2 has been completed
             control1StopCounter++;
         }
         document.querySelector('#tutorial1li3').innerHTML = `Stop counter: ${control1StopCounter}/3`;
         if (control1StopCounter >= 3) {
             $('#tutorial1Checkbox3').prop('checked', true);
+            $('#tutorial1Step4').css('visibility', 'visible');
         }
     });
     document.getElementById("cursorSafeZone0").addEventListener('mouseleave', function () {
@@ -354,8 +377,10 @@
             mouseX = tempMouseX;
             mouseY = tempMouseY;
         }
-        netYawChange += Math.abs(tempMouseX - mouseX);//@todo this currently tracks how much the mouse has moved, not how much the camera has moved, which isn't what we want
-        netPitchChange += Math.abs(tempMouseY - mouseY);
+        if ($('#tutorial1Checkbox1').prop("checked") == true) { //step 2 only starts tracking after step 1 is completed
+            netYawChange += Math.abs(tempMouseX - mouseX);//@todo this currently tracks how much the mouse has moved, not how much the camera has moved, which isn't what we want
+            netPitchChange += Math.abs(tempMouseY - mouseY);
+        }
         mouseX = tempMouseX;
         mouseY = tempMouseY;
         if (netYawChange < netYawChangeThreshold && netPitchChange < netPitchChangeThreshold) {
@@ -370,6 +395,7 @@
         if (activeControlMethod = 'control1') {
             if (firstYawAlert && firstPitchAlert) {
                 $('#tutorial1Checkbox2').prop('checked', true);
+                $('#tutorial1Step3').css('visibility', 'visible');
             }
         }
         if (netYawChange > netYawChangeThreshold && firstYawAlert == false) {
@@ -656,6 +682,7 @@
         $('#cursorBox1').css('pointer-events', 'auto');
         $('#cursorSafeZone1').css('pointer-events', 'auto');
         $('#tutorial1Checkbox1').prop('checked', true);
+        $('#tutorial1Step2').css('visibility', 'visible');
         $('#tutorial2Checkbox1').prop('checked', true);
         $('#tutorial3Checkbox1').prop('checked', true);
         $('#tutorial4Checkbox1').prop('checked', true);

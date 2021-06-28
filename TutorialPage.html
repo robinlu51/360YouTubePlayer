@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="StyleControl.css">
+    <link rel="stylesheet" href="TutorialStyle.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -55,43 +55,74 @@
 
         <div id="control1" class="tabContent">
             <div id="tutorialSection1" style="margin-top: 10px;margin-bottom: 10px">
-                <ol>
-                    <li><input type="checkbox"
-                               id="tutorial1Checkbox1" style="outline: 2px solid coral"> To start, first click on the
-                        big
-                        start button
-                        in the middle
-                    </li>
+                <div style="text-align: center">
+                    <div id="tutorial1Step1" class="tutorialStep"><input type="checkbox"
+                                                                         id="tutorial1Checkbox1"
+                                                                         style="outline: 2px solid coral"> To start,
+                        first click on the
+                        big start button in the middle
+                    </div>
+                    <div id="tutorial1CompleteMessage1" class="tutorialStep" style="display: none">Well done! Click this
+                        button to go to the
+                        next step.
+                        <br>
+                        <button type="button"
+                                onclick="$('#tutorial1Checkbox1').prop('checked', true);$('#tutorial1Step2').css('display', 'inline');$('#tutorial1CompleteMessage1').css('display','none')">
+                            Next
+                        </button>
+                    </div>
 
-                    <li id="tutorial1Step2" style="visibility: hidden"><input type="checkbox" id="tutorial1Checkbox2"
-                                                                              style="outline: 2px solid coral"> Once the
-                        video
-                        starts, the camera will automatically accelerate towards the direction of your
+                    <div id="tutorial1Step2" class="tutorialStep" style="display: none"><input type="checkbox"
+                                                                                               id="tutorial1Checkbox2"
+                                                                                               style="outline: 2px solid coral">
+                        Once
+                        the video starts, the camera will automatically accelerate towards the direction of your
                         mouse cursor<p id="tutorial1li2" style="display:inline-block;margin-left: 10px">(Horizontal:
                             0/2500, Vertical: 0/1500)</p>
-                    </li>
+                    </div>
+                    <div id="tutorial1CompleteMessage2" class="tutorialStep" style="display: none">Well done! Click this
+                        button to go to the
+                        next step.
+                        <br>
+                        <button type="button"
+                                onclick="$('#tutorial1Step3').css('display', 'inline');$('#tutorial1CompleteMessage2').css('display','none')">
+                            Next
+                        </button>
+                    </div>
 
-                    <li id="tutorial1Step3" style="visibility: hidden"><input type="checkbox" id="tutorial1Checkbox3"
-                                                                              style="outline: 2px solid coral"> To stop
+                    <div id="tutorial1Step3" class="tutorialStep" style="display: none"><input type="checkbox"
+                                                                                               id="tutorial1Checkbox3"
+                                                                                               style="outline: 2px solid coral">
+                        To stop
                         camera
                         movement, simply move your mouse cursor back to the center of the video player<p
                                 id="tutorial1li3"
                                 style="display:inline-block;margin-left: 10px">
                             Stop counter: 0/3</p>
-                    </li>
+                    </div>
 
-                    <li id="tutorial1Step4" style="visibility: hidden"><input type="checkbox" id="tutorial1Checkbox4"
-                                                                              style="outline: 2px solid coral"> You can
+                    <div id="tutorial1Step4" class="tutorialStep" style="display: none"><input type="checkbox"
+                                                                                               id="tutorial1Checkbox4"
+                                                                                               style="outline: 2px solid coral">
+                        You can
                         also
                         click on the center of the video player to disable camera movement
-                    </li>
+                    </div>
 
-                    <li id="tutorial1Step5" style="visibility: hidden"><input type="checkbox" id="tutorial1Checkbox5"
-                                                                              style="outline: 2px solid coral"> Click on
+                    <div id="tutorial1Step5" class="tutorialStep" style="display: none"><input type="checkbox"
+                                                                                               id="tutorial1Checkbox5"
+                                                                                               style="outline: 2px solid coral">
+                        Click
+                        on
                         the
                         center of the video player again to enable it again
-                    </li>
-                </ol>
+                    </div>
+
+                    <div id="tutorial1Step6" class="tutorialStep" style="display: none"> Congratulations! You've
+                        completed this
+                        tutorial. Here is the code: 1234
+                    </div>
+                </div>
             </div>
             <!--
             <p id="mouseCoords0" style="clear: none;">Mouse cursor X/Y: 0, 0</p>
@@ -170,7 +201,7 @@
         </div>
         <div id="timelineBox0" class="blockBox"></div>
         <button type="button" id="bigPlayButton" class="bigButton"
-                onclick="onPlayClick();hideBigPlayButton()"><i class="fa fa-play"></i></button>
+                onclick="onPlayClick();hideBigPlayButton();muteVideo()"><i class="fa fa-play"></i></button>
     </div>
 </form>
 
@@ -279,10 +310,12 @@
         cursorBox0Active = !cursorBox0Active;
         if ($('#tutorial1Checkbox4').prop("checked")) {
             $('#tutorial1Checkbox5').prop("checked", true);
+            $('#tutorial1Step6').css('display', 'inline');
         }
         if ($('#tutorial1Checkbox3').prop("checked")) {
             $('#tutorial1Checkbox4').prop("checked", true);
-            $('#tutorial1Step5').css('visibility', 'visible');
+            $('#tutorial1Step5').css('display', 'inline');
+            $('#tutorial1Step4').css('display', 'none'); //hide the previous step
         }
     });
 
@@ -323,7 +356,8 @@
         document.querySelector('#tutorial1li3').innerHTML = `Stop counter: ${control1StopCounter}/3`;
         if (control1StopCounter >= 3) {
             $('#tutorial1Checkbox3').prop('checked', true);
-            $('#tutorial1Step4').css('visibility', 'visible');
+            $('#tutorial1Step3').css('display', 'none');
+            $('#tutorial1Step4').css('display', 'inline');
         }
     });
     document.getElementById("cursorSafeZone0").addEventListener('mouseleave', function () {
@@ -395,7 +429,9 @@
         if (activeControlMethod = 'control1') {
             if (firstYawAlert && firstPitchAlert) {
                 $('#tutorial1Checkbox2').prop('checked', true);
-                $('#tutorial1Step3').css('visibility', 'visible');
+                $('#tutorial1Step2').css('display', 'none');
+                $('#tutorial1Step3').css('display', 'inline');
+                //$('#tutorial1CompleteMessage2').css('display', 'inline');
             }
         }
         if (netYawChange > netYawChangeThreshold && firstYawAlert == false) {
@@ -512,6 +548,8 @@
         player0.css('position', 'absolute');
         player0.css('top', control1Height + 'px');
         player0.css('left', playerLeftGap + 'px');
+        $('#tutorialSection1').css('margin-left', playerLeftGap + 'px');
+        $('#tutorialSection1').css('margin-right', playerLeftGap + 'px');
         let bigPlayButtonHeight = 250;
         let bigPlayButtonWidth = 250;
         $('#bigPlayButton').css('font-size', bigPlayButtonHeight / 2 + 'px');
@@ -681,8 +719,9 @@
         $('#cursorSafeZone0').css('pointer-events', 'auto');
         $('#cursorBox1').css('pointer-events', 'auto');
         $('#cursorSafeZone1').css('pointer-events', 'auto');
-        $('#tutorial1Checkbox1').prop('checked', true);
-        $('#tutorial1Step2').css('visibility', 'visible');
+        $('#tutorial1Step1').css('display', 'none');
+        $('#tutorial1CompleteMessage1').css('display', 'inline');
+        //$('#tutorial1Checkbox1').prop('checked', true);
         $('#tutorial2Checkbox1').prop('checked', true);
         $('#tutorial3Checkbox1').prop('checked', true);
         $('#tutorial4Checkbox1').prop('checked', true);

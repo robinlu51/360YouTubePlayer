@@ -118,7 +118,7 @@
                         center of the video player again to enable it again
                     </div>
 
-                    <div id="tutorial1Step6" class="tutorialStep" style="display: none"> Congratulations! You've
+                    <div id="tutorial1Step6" class="tutorialStep" style="display: none"><br> Congratulations! You've
                         completed this
                         tutorial. Here is the code: 1234
                     </div>
@@ -314,8 +314,8 @@
         }
         if ($('#tutorial1Checkbox3').prop("checked")) {
             $('#tutorial1Checkbox4').prop("checked", true);
-            $('#tutorial1Step5').css('display', 'inline');
             $('#tutorial1Step4').css('display', 'none'); //hide the previous step
+            $('#tutorial1Step5').css('display', 'inline');
         }
     });
 
@@ -354,7 +354,7 @@
             control1StopCounter++;
         }
         document.querySelector('#tutorial1li3').innerHTML = `Stop counter: ${control1StopCounter}/3`;
-        if (control1StopCounter >= 3) {
+        if ((control1StopCounter >= 3) && !$('#tutorial1Checkbox3').prop("checked")) {
             $('#tutorial1Checkbox3').prop('checked', true);
             $('#tutorial1Step3').css('display', 'none');
             $('#tutorial1Step4').css('display', 'inline');
@@ -427,7 +427,7 @@
             document.querySelector('#tutorial1li2').innerHTML = `(Horizontal: 2500/2500, Vertical: 1500/1500)`;
         }
         if (activeControlMethod = 'control1') {
-            if (firstYawAlert && firstPitchAlert) {
+            if ((firstYawAlert && firstPitchAlert) && !$('#tutorial1Checkbox2').prop("checked")) {
                 $('#tutorial1Checkbox2').prop('checked', true);
                 $('#tutorial1Step2').css('display', 'none');
                 $('#tutorial1Step3').css('display', 'inline');

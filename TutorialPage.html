@@ -24,7 +24,7 @@
     <button type="button" class="button" onclick="pauseVideo()">Pause!</button>
     -->
     <button type="button" id="restartButton" class="button" onclick="restartVideo()">Restart!</button>
-    <button type="button" id="muteButton" class="button" onclick="muteVideo()">Mute</button>
+    <button type="button" id="muteButton" class="button" onclick="toggleMute()">Mute</button>
     <input type="checkbox" id="visualIndicatorCheckBox" onclick="toggleVisualIndicator()">
     <label for="visualIndicatorCheckBox" id="visualIndicatorLabel">Show Visual Indicator</label>
     <!--
@@ -67,7 +67,7 @@
                         next step.
                         <br>
                         <button type="button"
-                                onclick="$('#tutorial1Checkbox1').prop('checked', true);$('#tutorial1Step2').css('display', 'inline');$('#tutorial1CompleteMessage1').css('display','none')">
+                                onclick="$('#tutorial1Checkbox1').prop('checked', true);$('#tutorial1Step2').css('display', 'inline');$('#tutorial1CompleteMessage1').css('display','none');currentTutorialStep=2">
                             Next
                         </button>
                     </div>
@@ -77,7 +77,7 @@
                                                                                                style="outline: 2px solid coral">
                         Once
                         the video starts, the camera will automatically accelerate towards the direction of your
-                        mouse cursor<p id="tutorial1li2" style="display:inline-block;margin-left: 10px">(Horizontal:
+                        mouse cursor <p id="tutorial1li2" style="display:inline-block;margin-left: 10px">(Horizontal:
                             0/2500, Vertical: 0/1500)</p>
                     </div>
                     <div id="tutorial1CompleteMessage2" class="tutorialStep" style="display: none">Well done! Click this
@@ -85,7 +85,7 @@
                         next step.
                         <br>
                         <button type="button"
-                                onclick="$('#tutorial1Step3').css('display', 'inline');$('#tutorial1CompleteMessage2').css('display','none')">
+                                onclick="$('#tutorial1Checkbox2').prop('checked', true);$('#tutorial1Step3').css('display', 'inline');$('#tutorial1CompleteMessage2').css('display','none');currentTutorialStep=3">
                             Next
                         </button>
                     </div>
@@ -100,6 +100,15 @@
                                 style="display:inline-block;margin-left: 10px">
                             Stop counter: 0/3</p>
                     </div>
+                    <div id="tutorial1CompleteMessage3" class="tutorialStep" style="display: none">Well done! Click this
+                        button to go to the
+                        next step.
+                        <br>
+                        <button type="button"
+                                onclick="$('#tutorial1Checkbox3').prop('checked', true);$('#tutorial1Step4').css('display', 'inline');$('#tutorial1CompleteMessage3').css('display','none');currentTutorialStep=4;toggleVisualIndicator()">
+                            Next
+                        </button>
+                    </div>
 
                     <div id="tutorial1Step4" class="tutorialStep" style="display: none"><input type="checkbox"
                                                                                                id="tutorial1Checkbox4"
@@ -107,6 +116,15 @@
                         You can
                         also
                         click on the center of the video player to disable camera movement
+                    </div>
+                    <div id="tutorial1CompleteMessage4" class="tutorialStep" style="display: none">Well done! Click this
+                        button to go to the
+                        next step.
+                        <br>
+                        <button type="button"
+                                onclick="$('#tutorial1Checkbox4').prop('checked', true);$('#tutorial1Step5').css('display', 'inline');$('#tutorial1CompleteMessage4').css('display','none');currentTutorialStep=5">
+                            Next
+                        </button>
                     </div>
 
                     <div id="tutorial1Step5" class="tutorialStep" style="display: none"><input type="checkbox"
@@ -116,6 +134,15 @@
                         on
                         the
                         center of the video player again to enable it again
+                    </div>
+                    <div id="tutorial1CompleteMessage5" class="tutorialStep" style="display: none">Well done! Click this
+                        button to go to the
+                        next step.
+                        <br>
+                        <button type="button"
+                                onclick="$('#tutorial1Checkbox5').prop('checked', true);$('#tutorial1Step6').css('display', 'inline');$('#tutorial1CompleteMessage5').css('display','none')">
+                            Next
+                        </button>
                     </div>
 
                     <div id="tutorial1Step6" class="tutorialStep" style="display: none"><br> Congratulations! You've
@@ -201,7 +228,8 @@
         </div>
         <div id="timelineBox0" class="blockBox"></div>
         <button type="button" id="bigPlayButton" class="bigButton"
-                onclick="onPlayClick();hideBigPlayButton();muteVideo()"><i class="fa fa-play"></i></button>
+                onclick="onPlayClick();hideBigPlayButton();switchTutorialStepTracker();muteVideo()"><i
+                class="fa fa-play"></i></button>
     </div>
 </form>
 
@@ -246,6 +274,8 @@
     document.getElementById("control3_checkbox").disabled = true;
     document.getElementById("control4_checkbox").disabled = true;
 
+    let currentTutorialMethodNum = 0; //keeps track of which control method is active in the tutorial, 1 indicates control method 1, 2 indicates control method 2, etc.
+    let currentTutorialStep = 0; //keeps track of which tutorial step the user is currently on, for now, 1 indicates step 1, 2 indicates step 2, etc.
     document.getElementById("tutorial1Checkbox1").disabled = true;
     document.getElementById("tutorial1Checkbox2").disabled = true;
     document.getElementById("tutorial1Checkbox3").disabled = true;
@@ -308,14 +338,17 @@
             }
         }
         cursorBox0Active = !cursorBox0Active;
-        if ($('#tutorial1Checkbox4').prop("checked")) {
-            $('#tutorial1Checkbox5').prop("checked", true);
-            $('#tutorial1Step6').css('display', 'inline');
-        }
-        if ($('#tutorial1Checkbox3').prop("checked")) {
+        if ((currentTutorialMethodNum == 1) && (currentTutorialStep == 4)) {
             $('#tutorial1Checkbox4').prop("checked", true);
-            $('#tutorial1Step4').css('display', 'none'); //hide the previous step
-            $('#tutorial1Step5').css('display', 'inline');
+            nextStep(currentTutorialMethodNum, currentTutorialStep);
+            //$('#tutorial1Step5').css('display', 'inline');
+        }
+        //if ($('#tutorial1Checkbox4').prop("checked")) {
+        if ((currentTutorialMethodNum == 1) && (currentTutorialStep == 5)) {
+            $('#tutorial1Checkbox5').prop("checked", true);
+            nextStep(currentTutorialMethodNum, currentTutorialStep);
+            toggleVisualIndicator();
+            //$('#tutorial1Step6').css('display', 'inline');
         }
     });
 
@@ -350,14 +383,14 @@
     });
     document.getElementById("cursorSafeZone0").addEventListener('mouseenter', function () {
         mouseInsideSafeZone0 = true;
-        if (control1StopCounter < 3 && $('#tutorial1Checkbox2').prop("checked")) { //only start tracking step 3 after step 2 has been completed
+        if (control1StopCounter < 3 && ((currentTutorialMethodNum == 1) && (currentTutorialStep == 3))) { //only start tracking step 3 after step 2 has been completed
             control1StopCounter++;
         }
         document.querySelector('#tutorial1li3').innerHTML = `Stop counter: ${control1StopCounter}/3`;
-        if ((control1StopCounter >= 3) && !$('#tutorial1Checkbox3').prop("checked")) {
+        if ((control1StopCounter >= 3) && ((currentTutorialMethodNum == 1) && (currentTutorialStep == 3))) {
             $('#tutorial1Checkbox3').prop('checked', true);
-            $('#tutorial1Step3').css('display', 'none');
-            $('#tutorial1Step4').css('display', 'inline');
+            nextStep(currentTutorialMethodNum, currentTutorialStep);
+            //$('#tutorial1Step4').css('display', 'inline');
         }
     });
     document.getElementById("cursorSafeZone0").addEventListener('mouseleave', function () {
@@ -426,14 +459,13 @@
         } else {
             document.querySelector('#tutorial1li2').innerHTML = `(Horizontal: 2500/2500, Vertical: 1500/1500)`;
         }
-        if (activeControlMethod = 'control1') {
-            if ((firstYawAlert && firstPitchAlert) && !$('#tutorial1Checkbox2').prop("checked")) {
-                $('#tutorial1Checkbox2').prop('checked', true);
-                $('#tutorial1Step2').css('display', 'none');
-                $('#tutorial1Step3').css('display', 'inline');
-                //$('#tutorial1CompleteMessage2').css('display', 'inline');
-            }
+
+        if ((firstYawAlert && firstPitchAlert) && ((currentTutorialMethodNum == 1) && (currentTutorialStep == 2))) {
+            $('#tutorial1Checkbox2').prop('checked', true);
+            nextStep(currentTutorialMethodNum, currentTutorialStep);
+            //$('#tutorial1Step3').css('display', 'inline');
         }
+
         if (netYawChange > netYawChangeThreshold && firstYawAlert == false) {
             firstYawAlert = true;
             console.log('Yaw moved 2500');
@@ -719,8 +751,7 @@
         $('#cursorSafeZone0').css('pointer-events', 'auto');
         $('#cursorBox1').css('pointer-events', 'auto');
         $('#cursorSafeZone1').css('pointer-events', 'auto');
-        $('#tutorial1Step1').css('display', 'none');
-        $('#tutorial1CompleteMessage1').css('display', 'inline');
+        nextStep(currentTutorialMethodNum, currentTutorialStep);
         //$('#tutorial1Checkbox1').prop('checked', true);
         $('#tutorial2Checkbox1').prop('checked', true);
         $('#tutorial3Checkbox1').prop('checked', true);
@@ -756,6 +787,31 @@
         $('#bigPlayButton').css('display', 'none');
     }
 
+    //switches to the first step of the tutorial for the given control method
+    function switchTutorialStepTracker() {
+        if (activeControlMethod == 'control1') {
+            currentTutorialMethodNum = 1;
+            currentTutorialStep = 1;
+        } else if (activeControlMethod == 'control2') {
+            currentTutorialMethodNum = 2;
+            currentTutorialStep = 1;
+        } else if (activeControlMethod == 'control3') {
+            currentTutorialMethodNum = 3;
+            currentTutorialStep = 1;
+        } else if (activeControlMethod == 'control4') {
+            currentTutorialMethodNum = 4;
+            currentTutorialStep = 1;
+        }
+    }
+
+    //helper function that goes to the next step in the tutorial. Hides the current step that has been finished and display the current step's complete message
+    function nextStep(currentTutorialMethodNum, currentTutorialStep) {
+        let stepName = 'tutorial' + currentTutorialMethodNum + 'Step' + currentTutorialStep;
+        let completeMessage = 'tutorial' + currentTutorialMethodNum + 'CompleteMessage' + currentTutorialStep;
+        $('#' + stepName).css('display', 'none');
+        $('#' + completeMessage).css('display', 'inline');
+    }
+
     //somehow it's not working, will need to debug later
     function checkPauseStatus() { //check if the video is paused, and update the Play/Pause button accordingly
         if (player.getPlayerState() == 5 || player.getPlayerState() == 2) {
@@ -771,6 +827,11 @@
     }
 
     function muteVideo() {
+        player.mute();
+        $('#muteButton').html('Unmute');
+    }
+
+    function toggleMute() {
         if (!player.isMuted()) {
             player.mute();
             $('#muteButton').html('Unmute');

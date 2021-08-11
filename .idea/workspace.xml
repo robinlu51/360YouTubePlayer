@@ -139,6 +139,13 @@
       <workItem from="1624866810214" duration="7060000" />
       <workItem from="1626102985427" duration="3562000" />
       <workItem from="1626703818100" duration="7839000" />
+      <workItem from="1627935965792" duration="598000" />
+      <workItem from="1628035023428" duration="360000" />
+      <workItem from="1628036397703" duration="1242000" />
+      <workItem from="1628651728568" duration="2066000" />
+      <workItem from="1628653905483" duration="3252000" />
+      <workItem from="1628657298583" duration="151000" />
+      <workItem from="1628657742727" duration="4230000" />
     </task>
     <servers />
   </component>
@@ -158,13 +165,13 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="355" y="106" key="SettingsEditor" timestamp="1606749318329">
+    <state x="534" y="197" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1628653801285">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="355" y="106" key="SettingsEditor/0.0.1707.920@0.0.1707.920" timestamp="1606749318329" />
-    <state x="516" y="195" width="672" height="678" key="search.everywhere.popup" timestamp="1604941071531">
+    <state x="534" y="197" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1707.920@0.0.1707.920" timestamp="1628653801285" />
+    <state x="737" y="0" width="974" height="925" maximized="true" key="dock-window-1" timestamp="1628660996612">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="516" y="195" width="672" height="678" key="search.everywhere.popup/0.0.1707.920@0.0.1707.920" timestamp="1604941071531" />
+    <state x="737" y="0" width="974" height="925" maximized="true" key="dock-window-1/0.0.1707.920@0.0.1707.920" timestamp="1628660996612" />
   </component>
 </project>

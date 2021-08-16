@@ -145,7 +145,8 @@
       <workItem from="1628651728568" duration="2066000" />
       <workItem from="1628653905483" duration="3252000" />
       <workItem from="1628657298583" duration="151000" />
-      <workItem from="1628657742727" duration="4230000" />
+      <workItem from="1628657742727" duration="5718000" />
+      <workItem from="1629116436633" duration="2323000" />
     </task>
     <servers />
   </component>
@@ -169,9 +170,13 @@
       <screen x="0" y="0" width="1707" height="920" />
     </state>
     <state x="534" y="197" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1707.920@0.0.1707.920" timestamp="1628653801285" />
-    <state x="737" y="0" width="974" height="925" maximized="true" key="dock-window-1" timestamp="1628660996612">
+    <state x="847" y="0" width="867" height="927" key="dock-window-1" timestamp="1629127507946">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="737" y="0" width="974" height="925" maximized="true" key="dock-window-1/0.0.1707.920@0.0.1707.920" timestamp="1628660996612" />
+    <state x="847" y="0" width="867" height="927" key="dock-window-1/0.0.1707.920@0.0.1707.920" timestamp="1629127507946" />
+    <state x="847" y="0" width="867" height="927" key="dock-window-2" timestamp="1629127743040">
+      <screen x="0" y="0" width="1707" height="920" />
+    </state>
+    <state x="847" y="0" width="867" height="927" key="dock-window-2/0.0.1707.920@0.0.1707.920" timestamp="1629127743040" />
   </component>
 </project>

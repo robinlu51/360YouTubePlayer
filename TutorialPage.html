@@ -18,7 +18,6 @@
     <input type="text" id="textInput" value="G-XZhKqQAHU">
     -->
 
-
     <button type="button" id="playButton" class="button" onclick="onPlayClick()">Play</button>
     <!--
     <button type="button" class="button" onclick="pauseVideo()">Pause!</button>
@@ -293,67 +292,116 @@
             //if we add more types, remember to update logic in renderHTML()
             sectionID: 1, //indicate which tutorial this is for, with Perspective Control w/ Mouse being 1, Drag & Drop being 4, etc.
             stepNum: 1, // step number that this message belongs to, start at 1 corresponding to the step number. Completion messages have the same step number as the step it belongs to
-            message: " To start, first click on the big start button in the middle" // Leave a space at the beginning of instructions because of the existence of checkboxes
+            message: "To start, first click on the big start button in the middle", // Leave a space at the beginning of instructions because of the existence of checkboxes
+            verifyFunc: function(){
+                console.log('Alert 0');
+            }
         },
         {
             type: 1,
             sectionID: 1,
             stepNum: 1,
-            message: "Well done! Click this button to go to the next step."
+            message: "Well done! Click this button to go to the next step.",
+            verifyFunc: function(){
+                console.log('Alert 1');
+            }
         },
         {
             type: 0,
             sectionID: 1,
             stepNum: 2,
-            message: " Once the video starts, the camera will automatically accelerate towards the direction of your mouse cursor <p id=\"tutorial1li2\" style=\"display:inline-block;margin-left: 10px\">(Horizontal: 0/2500, Vertical: 0/1500)</p>"
+            message: "Once the video starts, the camera will automatically accelerate towards the direction of your mouse cursor <p id=\"tutorial1li2\" style=\"display:inline-block;margin-left: 10px\">(Horizontal: 0/2500, Vertical: 0/1500)</p>",
+            verifyFunc: function(){
+                console.log('Alert 2');
+            }
         },
         {
             type: 1,
             sectionID: 1,
             stepNum: 2,
-            message: "Well done! Click this button to go to the next step."
+            message: "Well done! Click this button to go to the next step.",
+            verifyFunc: function(){
+                console.log('Alert 3');
+            }
         },
         {
             type: 0,
             sectionID: 1,
             stepNum: 3,
-            message: " To stop camera movement, simply move your mouse cursor back to the center of the video player<p id=\"tutorial1li3\" style=\"display:inline-block;margin-left: 10px\">Stop counter: 0/3</p>"
+            message: "To stop camera movement, simply move your mouse cursor back to the center of the video player<p id=\"tutorial1li3\" style=\"display:inline-block;margin-left: 10px\">Stop counter: 0/3</p>",
+            verifyFunc: function () {
+                //
+                control1StopCounter = 0;
+                let eventLF = function () {
+                    mouseInsideSafeZone0 = true;
+                    if (control1StopCounter < 3 && ((currentTutorialMethodNum == 1) && (currentTutorialStep == 3))) { //only start tracking step 3 after step 2 has been completed
+                        control1StopCounter++;
+                    }
+                    document.querySelector('#tutorial1li3').innerHTML = `Stop counter: ${control1StopCounter}/3`;
+                    if ((control1StopCounter >= 3) && ((currentTutorialMethodNum == 1) && (currentTutorialStep == 3))) {
+                        //$('#tutorial1Checkbox3').prop('checked', true);
+                        nextStep(currentTutorialMethodNum, currentTutorialStep);
+                        //$('#tutorial1Step4').css('display', 'inline');
+                        // get rid of event handler because it is not necessary anymore
+                        document.getElementById("cursorSafeZone0").removeEventListener('mouseenter', eventLF);
+                    }
+                }
+                document.getElementById("cursorSafeZone0").addEventListener('mouseenter', eventLF);
+            }
         },
         {
             type: 1,
             sectionID: 1,
             stepNum: 3,
-            message: "Well done! Click this button to go to the next step."
+            message: "Well done! Click this button to go to the next step.",
+            verifyFunc: function(){
+                console.log('Alert 5');
+            }
         },
         {
             type: 0,
             sectionID: 1,
             stepNum: 4,
-            message: " You can also click on the center of the video player to disable camera movement"
+            message: "You can also click on the center of the video player to disable camera movement",
+            verifyFunc: function(){
+                console.log('Alert 6');
+            }
         },
         {
             type: 1,
             sectionID: 1,
             stepNum: 4,
-            message: "Well done! Click this button to go to the next step."
+            message: "Well done! Click this button to go to the next step.",
+            verifyFunc: function(){
+                console.log('Alert 7');
+            }
         },
         {
             type: 0,
             sectionID: 1,
             stepNum: 5,
-            message: " Click on the center of the video player again to enable it again"
+            message: "Click on the center of the video player again to enable it again",
+            verifyFunc: function(){
+                console.log('Alert 8');
+            }
         },
         {
             type: 1,
             sectionID: 1,
             stepNum: 5,
-            message: "Well done! Click this button to go to the next step."
+            message: "Well done! Click this button to go to the next step.",
+            verifyFunc: function(){
+                console.log('Alert 9');
+            }
         },
         {
             type: 0,
             sectionID: 1,
             stepNum: 6,
-            message: "Congratulations! You've completed this tutorial. Here is the code: 1234"
+            message: "Congratulations! You've completed this tutorial. Here is the code: 1234",
+            verifyFunc: function(){
+                console.log('Alert 10');
+            }
         }
     ];
 
@@ -367,7 +415,7 @@
             }
         } else { // if it's a completion message, render it this way
             //for now, we can use else, considering we only have type 0 and type 1, if we add more types in the future, will need to update this
-            renderedHTML = '<div id="tutorial' + message.sectionID + 'CompleteMessage' + message.stepNum + '" class="tutorialStep" style="display: none">' + message.message + '<br><button type="button" onclick="$(\'#tutorial' + message.sectionID + 'Step' + (message.stepNum + 1) + '\').css(\'display\', \'inline\');$(\'#tutorial' + message.sectionID + 'CompleteMessage' + message.stepNum + '\').css(\'display\',\'none\');currentTutorialStep=' + (message.stepNum + 1) + '">Next</button></div>'
+            renderedHTML = '<div id="tutorial' + message.sectionID + 'CompleteMessage' + message.stepNum + '" class="tutorialStep" style="display: none">' + message.message + '<br><button type="button" onclick="$(\'#tutorial' + message.sectionID + 'Step' + (message.stepNum + 1) + '\').css(\'display\', \'inline\');$(\'#tutorial' + message.sectionID + 'CompleteMessage' + message.stepNum + '\').css(\'display\',\'none\');currentTutorialStep=' + (message.stepNum + 1) +';tutorialMessage['+(message.stepNum*2)+'].verifyFunc()'+ '">Next</button></div>'
             //here, we set currentTutorialStep to current step number + 1 because we're moving onto the next step
         }
         return renderedHTML;
@@ -469,18 +517,7 @@
     document.getElementById("cursorBox0").addEventListener('mouseleave', function () {
         mouseInsideBox0 = false;
     });
-    document.getElementById("cursorSafeZone0").addEventListener('mouseenter', function () {
-        mouseInsideSafeZone0 = true;
-        if (control1StopCounter < 3 && ((currentTutorialMethodNum == 1) && (currentTutorialStep == 3))) { //only start tracking step 3 after step 2 has been completed
-            control1StopCounter++;
-        }
-        document.querySelector('#tutorial1li3').innerHTML = `Stop counter: ${control1StopCounter}/3`;
-        if ((control1StopCounter >= 3) && ((currentTutorialMethodNum == 1) && (currentTutorialStep == 3))) {
-            //$('#tutorial1Checkbox3').prop('checked', true);
-            nextStep(currentTutorialMethodNum, currentTutorialStep);
-            //$('#tutorial1Step4').css('display', 'inline');
-        }
-    });
+
     document.getElementById("cursorSafeZone0").addEventListener('mouseleave', function () {
         mouseInsideSafeZone0 = false;
     });

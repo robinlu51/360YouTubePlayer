@@ -21,7 +21,7 @@
   <component name="ChangeListManager">
     <list default="true" id="69f41ab2-6a1d-4f47-96ac-5c043c1176f2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TutorialStyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/TutorialStyle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TutorialPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/TutorialPage.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +39,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="1Zg27SFins2LRdLAPWIO1jZJzdQ" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -176,19 +184,5 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="534" y="197" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1629208040282">
-      <screen x="0" y="0" width="1707" height="920" />
-    </state>
-    <state x="534" y="197" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1707.920@0.0.1707.920" timestamp="1629208040282" />
-    <state x="847" y="0" width="867" height="927" key="dock-window-1" timestamp="1629127507946">
-      <screen x="0" y="0" width="1707" height="920" />
-    </state>
-    <state x="847" y="0" width="867" height="927" key="dock-window-1/0.0.1707.920@0.0.1707.920" timestamp="1629127507946" />
-    <state x="847" y="0" width="867" height="927" key="dock-window-2" timestamp="1629128092201">
-      <screen x="0" y="0" width="1707" height="920" />
-    </state>
-    <state x="847" y="0" width="867" height="927" key="dock-window-2/0.0.1707.920@0.0.1707.920" timestamp="1629128092201" />
   </component>
 </project>

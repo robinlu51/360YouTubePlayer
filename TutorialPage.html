@@ -293,16 +293,19 @@
             sectionID: 1, //indicate which tutorial this is for, with Perspective Control w/ Mouse being 1, Drag & Drop being 4, etc.
             stepNum: 1, // step number that this message belongs to, start at 1 corresponding to the step number. Completion messages have the same step number as the step it belongs to
             message: "To start, first click on the big start button in the middle", // Leave a space at the beginning of instructions because of the existence of checkboxes
-            verifyFunc: function(){ // verifyFunc is used to set up event listeners and other functions that will be used to check tutorial progress within each step
+            verifyFunc: function () { // verifyFunc is used to set up event listeners and other functions that will be used to check tutorial progress within each step
+                //let eventLF = function () { //this currently doesn't do anything since nothing calls verifyFunc() for this element yet
                 console.log('Alert 0'); // this alert is currently only for debugging purposes, remove when finished implementing
+                //}
+                //document.getElementById("bigPlayButton").addEventListener('click', eventLF);
             }
         },
         {
             type: 1,
             sectionID: 1,
             stepNum: 1,
-            message: "Well done! Click this button to go to the next step.",
-            verifyFunc: function(){
+            message: "Well done! Click this button to go to the next step.1",
+            verifyFunc: function () {
                 console.log('Alert 1');
             }
         },
@@ -310,17 +313,64 @@
             type: 0,
             sectionID: 1,
             stepNum: 2,
-            message: "Once the video starts, the camera will automatically accelerate towards the direction of your mouse cursor <p id=\"tutorial1li2\" style=\"display:inline-block;margin-left: 10px\">(Horizontal: 0/2500, Vertical: 0/1500)</p>",
-            verifyFunc: function(){
-                console.log('Alert 2');
+            message: "Once the video starts, the camera will automatically accelerate towards the direction of your mouse cursor <p id=\"tutorial1li2\" style=\"display:inline-block;margin-left: 10px\">(Horizontal: <span id='horizontalCameraTrack1'>0</span>/2500, Vertical: <span id='verticalCameraTrack1'>0</span>/150)</p>",
+            verifyFunc: function () {
+                let previousYaw = player.getSphericalProperties()['yaw'];
+                let previousPitch = player.getSphericalProperties()['pitch'];
+                let eventLF = function (event) {
+                    let newYaw = player.getSphericalProperties()['yaw'];
+                    let newPitch = player.getSphericalProperties()['pitch'];
+                    let netYawChangeThreshold = 2500;
+                    let netPitchChangeThreshold = 150;
+                    netYawChange += Math.abs(previousYaw - newYaw);//@todo this currently updates once per mouse move, not camera move, which isn't what we want
+                    netPitchChange += Math.abs(previousPitch - newPitch);
+                    previousYaw = newYaw;
+                    previousPitch = newPitch;
+                    if (netYawChange < netYawChangeThreshold) {
+                        document.querySelector('#horizontalCameraTrack1').innerHTML = `${netYawChange}`;
+                    } else {
+                        document.querySelector('#horizontalCameraTrack1').innerHTML = `2500`;
+                    }
+                    if (netPitchChange < netPitchChangeThreshold) {
+                        document.querySelector('#verticalCameraTrack1').innerHTML = `${netPitchChange}`;
+                    } else {
+                        document.querySelector('#verticalCameraTrack1').innerHTML = `150`;
+                    }
+                    /*
+                    if (netYawChange < netYawChangeThreshold && netPitchChange < netPitchChangeThreshold) {
+                        document.querySelector('#tutorial1li2').innerHTML = `(Horizontal: ${netYawChange}/2500, Vertical: ${netPitchChange}/150)`;
+                    } else if (netYawChange >= netYawChangeThreshold && netPitchChange < netPitchChangeThreshold) {
+                        document.querySelector('#tutorial1li2').innerHTML = `(Horizontal: 2500/2500, Vertical: ${netPitchChange}/150)`;
+                    } else if (netYawChange < netYawChangeThreshold && netPitchChange >= netPitchChangeThreshold) {
+                        document.querySelector('#tutorial1li2').innerHTML = `(Horizontal: ${netYawChange}/2500, Vertical: 150/150)`;
+                    } else {
+                        document.querySelector('#tutorial1li2').innerHTML = `(Horizontal: 2500/2500, Vertical: 150/150)`;
+                    }*/
+
+                    if ((firstYawAlert && firstPitchAlert) && ((currentTutorialMethodNum == 1) && (currentTutorialStep == 2))) {
+                        //$('#tutorial1Checkbox2').prop('checked', true);
+                        nextStep(currentTutorialMethodNum, currentTutorialStep);
+                        //$('#tutorial1Step3').css('display', 'inline');
+                    }
+
+                    if (netYawChange > netYawChangeThreshold && firstYawAlert == false) {
+                        firstYawAlert = true;
+                        console.log('Yaw moved 2500');
+                    }
+                    if (netPitchChange > netPitchChangeThreshold && firstPitchAlert == false) {
+                        firstPitchAlert = true;
+                        console.log('Pitch moved 1500');
+                    }
+                }
+                document.getElementById("cursorBox0").addEventListener('mousemove', eventLF);
             }
         },
         {
             type: 1,
             sectionID: 1,
             stepNum: 2,
-            message: "Well done! Click this button to go to the next step.",
-            verifyFunc: function(){
+            message: "Well done! Click this button to go to the next step.3",
+            verifyFunc: function () {
                 console.log('Alert 3');
             }
         },
@@ -353,8 +403,8 @@
             type: 1,
             sectionID: 1,
             stepNum: 3,
-            message: "Well done! Click this button to go to the next step.",
-            verifyFunc: function(){
+            message: "Well done! Click this button to go to the next step.5",
+            verifyFunc: function () {
                 console.log('Alert 5');
             }
         },
@@ -363,7 +413,7 @@
             sectionID: 1,
             stepNum: 4,
             message: "You can also click on the center of the video player to disable camera movement",
-            verifyFunc: function(){
+            verifyFunc: function () {
                 console.log('Alert 6');
             }
         },
@@ -372,7 +422,7 @@
             sectionID: 1,
             stepNum: 4,
             message: "Well done! Click this button to go to the next step.",
-            verifyFunc: function(){
+            verifyFunc: function () {
                 console.log('Alert 7');
             }
         },
@@ -381,7 +431,7 @@
             sectionID: 1,
             stepNum: 5,
             message: "Click on the center of the video player again to enable it again",
-            verifyFunc: function(){
+            verifyFunc: function () {
                 console.log('Alert 8');
             }
         },
@@ -390,7 +440,7 @@
             sectionID: 1,
             stepNum: 5,
             message: "Well done! Click this button to go to the next step.",
-            verifyFunc: function(){
+            verifyFunc: function () {
                 console.log('Alert 9');
             }
         },
@@ -399,7 +449,7 @@
             sectionID: 1,
             stepNum: 6,
             message: "Congratulations! You've completed this tutorial. Here is the code: 1234",
-            verifyFunc: function(){
+            verifyFunc: function () {
                 console.log('Alert 10');
             }
         }
@@ -415,7 +465,7 @@
             }
         } else { // if it's a completion message, render it this way
             //for now, we can use else, considering we only have type 0 and type 1, if we add more types in the future, will need to update this
-            renderedHTML = '<div id="tutorial' + message.sectionID + 'CompleteMessage' + message.stepNum + '" class="tutorialStep" style="display: none">' + message.message + '<br><button type="button" onclick="$(\'#tutorial' + message.sectionID + 'Step' + (message.stepNum + 1) + '\').css(\'display\', \'inline\');$(\'#tutorial' + message.sectionID + 'CompleteMessage' + message.stepNum + '\').css(\'display\',\'none\');currentTutorialStep=' + (message.stepNum + 1) +';tutorialMessage['+(message.stepNum*2)+'].verifyFunc()'+ '">Next</button></div>'
+            renderedHTML = '<div id="tutorial' + message.sectionID + 'CompleteMessage' + message.stepNum + '" class="tutorialStep" style="display: none">' + message.message + '<br><button type="button" onclick="$(\'#tutorial' + message.sectionID + 'Step' + (message.stepNum + 1) + '\').css(\'display\', \'inline\');$(\'#tutorial' + message.sectionID + 'CompleteMessage' + message.stepNum + '\').css(\'display\',\'none\');currentTutorialStep=' + (message.stepNum + 1) + ';tutorialMessage[' + (message.stepNum * 2) + '].verifyFunc()' + '">Next</button></div>'
             //here, we set currentTutorialStep to current step number + 1 because we're moving onto the next step
         }
         return renderedHTML;
@@ -540,7 +590,7 @@
 
     let mouseX = 0; // the mouse X coordinate WITH RESPECT TO THE VISIBLE SCREEN
     let mouseY = 0; // the code should show it with respect to
-    document.getElementById("cursorBox0").addEventListener('mouseenter', updateCoords);
+    document.getElementById("cursorBox0").addEventListener('mouseenter', updateCoords);//TODO do I need both mouseenter and mousemove?
     document.getElementById("cursorBox0").addEventListener('mousemove', updateCoords);
     document.getElementById("cursorBox0").addEventListener('mouseenter', cursorCameraControl0);
 
@@ -562,18 +612,24 @@
     function updateCoords(event) { //update the mouse's coordinates in the global variable
         let tempMouseX = event.clientX;
         let tempMouseY = event.clientY;
-        let netYawChangeThreshold = 2500;
-        let netPitchChangeThreshold = 1500;
+        /*let netYawChangeThreshold = 2500;
+        let netPitchChangeThreshold = 1500;*/
+
+
         /*if (!firstUpdateCoordsCalled) {
             mouseX = tempMouseX;
             mouseY = tempMouseY;
         }*/
+
+        /*
         if (currentTutorialMethodNum == 1 && currentTutorialStep == 2) { //step 2 only starts tracking after step 1 is completed
             netYawChange += Math.abs(tempMouseX - mouseX);//@todo this currently tracks how much the mouse has moved, not how much the camera has moved, which isn't what we want
             netPitchChange += Math.abs(tempMouseY - mouseY);
-        }
+        }*/
         mouseX = tempMouseX;
         mouseY = tempMouseY;
+
+        /*
         if (netYawChange < netYawChangeThreshold && netPitchChange < netPitchChangeThreshold) {
             document.querySelector('#tutorial1li2').innerHTML = `(Horizontal: ${netYawChange}/2500, Vertical: ${netPitchChange}/1500)`;
         } else if (netYawChange >= netYawChangeThreshold && netPitchChange < netPitchChangeThreshold) {
@@ -598,7 +654,7 @@
             firstPitchAlert = true;
             console.log('Pitch moved 1500');
         }
-        firstUpdateCoordsCalled = true;
+        firstUpdateCoordsCalled = true;*/
     }
 
     function moveSafeZone(event) { // moves the safe zone based on mouse click location, center on click location
@@ -875,7 +931,9 @@
         $('#cursorSafeZone0').css('pointer-events', 'auto');
         $('#cursorBox1').css('pointer-events', 'auto');
         $('#cursorSafeZone1').css('pointer-events', 'auto');
-        nextStep(currentTutorialMethodNum, currentTutorialStep);
+        if (currentTutorialMethodNum == 1 && currentTutorialStep == 1) {
+            nextStep(currentTutorialMethodNum, currentTutorialStep);
+        }
         /*$('#tutorial1Checkbox1').prop('checked', true);
         $('#tutorial2Checkbox1').prop('checked', true);
         $('#tutorial3Checkbox1').prop('checked', true);

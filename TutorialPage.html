@@ -293,8 +293,8 @@
             sectionID: 1, //indicate which tutorial this is for, with Perspective Control w/ Mouse being 1, Drag & Drop being 4, etc.
             stepNum: 1, // step number that this message belongs to, start at 1 corresponding to the step number. Completion messages have the same step number as the step it belongs to
             message: "To start, first click on the big start button in the middle", // Leave a space at the beginning of instructions because of the existence of checkboxes
-            verifyFunc: function(){
-                console.log('Alert 0');
+            verifyFunc: function(){ // verifyFunc is used to set up event listeners and other functions that will be used to check tutorial progress within each step
+                console.log('Alert 0'); // this alert is currently only for debugging purposes, remove when finished implementing
             }
         },
         {
@@ -331,7 +331,7 @@
             message: "To stop camera movement, simply move your mouse cursor back to the center of the video player<p id=\"tutorial1li3\" style=\"display:inline-block;margin-left: 10px\">Stop counter: 0/3</p>",
             verifyFunc: function () {
                 //
-                control1StopCounter = 0;
+                let control1StopCounter = 0;
                 let eventLF = function () {
                     mouseInsideSafeZone0 = true;
                     if (control1StopCounter < 3 && ((currentTutorialMethodNum == 1) && (currentTutorialStep == 3))) { //only start tracking step 3 after step 2 has been completed
@@ -510,7 +510,6 @@
     //adding event listeners for Cursor Box (control 1)
     let mouseInsideBox0 = false;
     let mouseInsideSafeZone0 = false;
-    let control1StopCounter = 0;
     document.getElementById("cursorBox0").addEventListener('mouseenter', function () {
         mouseInsideBox0 = true;
     });
@@ -565,10 +564,10 @@
         let tempMouseY = event.clientY;
         let netYawChangeThreshold = 2500;
         let netPitchChangeThreshold = 1500;
-        if (!firstUpdateCoordsCalled) {
+        /*if (!firstUpdateCoordsCalled) {
             mouseX = tempMouseX;
             mouseY = tempMouseY;
-        }
+        }*/
         if (currentTutorialMethodNum == 1 && currentTutorialStep == 2) { //step 2 only starts tracking after step 1 is completed
             netYawChange += Math.abs(tempMouseX - mouseX);//@todo this currently tracks how much the mouse has moved, not how much the camera has moved, which isn't what we want
             netPitchChange += Math.abs(tempMouseY - mouseY);

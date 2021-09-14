@@ -19,9 +19,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="69f41ab2-6a1d-4f47-96ac-5c043c1176f2" name="Default Changelist" comment="">
+    <list default="true" id="69f41ab2-6a1d-4f47-96ac-5c043c1176f2" name="Default Changelist" comment="Moved camera movement logging into its own data structure.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TutorialPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/TutorialPage.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,7 +166,16 @@
       <workItem from="1629831053360" duration="3121000" />
       <workItem from="1631031688767" duration="75000" />
       <workItem from="1631031778657" duration="748000" />
+      <workItem from="1631645045390" duration="65000" />
     </task>
+    <task id="LOCAL-00001" summary="Moved camera movement logging into its own data structure.">
+      <created>1631044767407</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1631044767408</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -184,5 +192,9 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Moved camera movement logging into its own data structure." />
+    <option name="LAST_COMMIT_MESSAGE" value="Moved camera movement logging into its own data structure." />
   </component>
 </project>

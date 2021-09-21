@@ -256,6 +256,8 @@
     let netPitchChange = 0; //keeps track of how much the vertical FOV has changed
     let firstYawAlert = false; //keeps track of whether the first yaw change alert has been sent out
     let firstPitchAlert = false; //keeps track of whether the first pitch change alert has been sent out
+    let netYawChangeThreshold = 2500;
+    let netPitchChangeThreshold = 1500;
 
     let activeControlMethod = 'control1';
 
@@ -313,29 +315,27 @@
             type: 0,
             sectionID: 1,
             stepNum: 2,
-            message: "Once the video starts, the camera will automatically accelerate towards the direction of your mouse cursor <p id=\"tutorial1li2\" style=\"display:inline-block;margin-left: 10px\">(Horizontal: <span id='horizontalCameraTrack1'>0</span>/800, Vertical: <span id='verticalCameraTrack1'>0</span>/150)</p>",
+            message: "Once the video starts, the camera will automatically accelerate towards the direction of your mouse cursor <p id=\"tutorial1li2\" style=\"display:inline-block;margin-left: 10px\">(Horizontal: <span id='horizontalCameraTrack1'>0</span>/" + netYawChangeThreshold + ", Vertical: <span id='verticalCameraTrack1'>0</span>/" + netPitchChangeThreshold + ")</p>",
             verifyFunc: function () {
-                let previousYaw = player.getSphericalProperties()['yaw'];
-                let previousPitch = player.getSphericalProperties()['pitch'];
-                let eventLF = function (event) {
-                    let newYaw = player.getSphericalProperties()['yaw'];
-                    let newPitch = player.getSphericalProperties()['pitch'];
-                    let netYawChangeThreshold = 800;
-                    let netPitchChangeThreshold = 150;
+                //let previousYaw = player.getSphericalProperties()['yaw'];
+                //let previousPitch = player.getSphericalProperties()['pitch'];
 
-                    //TODO This calculation is currently bugged, since Yaw only goes from [0, 360), Pitch only goes from [-90, 90], there's a problem with overflow
+                let prevMouseX = mouseX;
+                let prevMouseY = mouseY;
+                let eventLF = function (event) {
+                    //let newYaw = player.getSphericalProperties()['yaw'];
+                    //let newPitch = player.getSphericalProperties()['pitch'];
+                    // //This calculation is currently bugged, since Yaw only goes from [0, 360), Pitch only goes from [-90, 90], there's a problem with overflow
                     //netYawChange += Math.abs(previousYaw - newYaw);
                     //netPitchChange += Math.abs(previousPitch - newPitch);
-
                     let tempMouseX = event.clientX;
                     let tempMouseY = event.clientY;
-                    netYawChange += Math.abs(tempMouseX - mouseX);
-                    netPitchChange += Math.abs(tempMouseY - mouseY);
-                    mouseX = tempMouseX;
-                    mouseY = tempMouseY;
-
-                    previousYaw = newYaw;
-                    previousPitch = newPitch;
+                    netYawChange += Math.abs(tempMouseX - prevMouseX);
+                    netPitchChange += Math.abs(tempMouseY - prevMouseY);
+                    prevMouseX = tempMouseX;
+                    prevMouseY = tempMouseY;
+                    //previousYaw = newYaw;
+                    //previousPitch = newPitch;
                     if (netYawChange < netYawChangeThreshold) {
                         document.querySelector('#horizontalCameraTrack1').innerHTML = `${Math.round(netYawChange)}`;
                     } else {
@@ -369,7 +369,7 @@
                     }
                     if (netPitchChange > netPitchChangeThreshold && firstPitchAlert == false) {
                         firstPitchAlert = true;
-                        console.log('Pitch moved 150');
+                        console.log('Pitch moved 1500');
                     }
                     //TODO remember to remove event listener
                 }
@@ -448,7 +448,7 @@
             stepNum: 5,
             message: "Click on the center of the video player again to enable it again",
             verifyFunc: function () {
-                let eventLF = function(){
+                let eventLF = function () {
                     nextStep(currentTutorialMethodNum, currentTutorialStep);
                     //TODO remember to remove event listener
                 }

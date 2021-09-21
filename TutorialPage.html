@@ -324,8 +324,16 @@
                     let netPitchChangeThreshold = 150;
 
                     //TODO This calculation is currently bugged, since Yaw only goes from [0, 360), Pitch only goes from [-90, 90], there's a problem with overflow
-                    netYawChange += Math.abs(previousYaw - newYaw);
-                    netPitchChange += Math.abs(previousPitch - newPitch);
+                    //netYawChange += Math.abs(previousYaw - newYaw);
+                    //netPitchChange += Math.abs(previousPitch - newPitch);
+
+                    let tempMouseX = event.clientX;
+                    let tempMouseY = event.clientY;
+                    netYawChange += Math.abs(tempMouseX - mouseX);
+                    netPitchChange += Math.abs(tempMouseY - mouseY);
+                    mouseX = tempMouseX;
+                    mouseY = tempMouseY;
+
                     previousYaw = newYaw;
                     previousPitch = newPitch;
                     if (netYawChange < netYawChangeThreshold) {

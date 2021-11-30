@@ -47,6 +47,9 @@
             <input type="checkbox" id="control4_checkbox">
             <button type="button" id="control4button" class="tablinks" onclick="switchTab('control4')">Drag and Drop
             </button>
+            <input type="checkbox" id="control5_checkbox">
+            <button type="button" id="control5button" class="tablinks" onclick="switchTab('control5')">Click and Move
+            </button>
         </div>
 
         <div id="player0"></div>
@@ -222,6 +225,12 @@
             <div id="dragAndDropBox0" class="blockBox"></div>
             <!--<div id="dragAndDropBox1" class="blockBox"></div>-->
         </div>
+        <div id="control5" class="tabContent">
+            <div id="tutorialSection5" style="margin-top: 10px;margin-bottom: 10px;text-align: center">
+            </div>
+            <div id="clickAndMoveBox0" class="cursorBox"></div>
+        </div>
+
         <div id="timelineBox0" class="blockBox"></div>
         <!-- The big play button is what is assumed to be the first step in every tutorial, since the user needs to click it
         to start. And when it's clicked, it calls onPlayClick(), which should play the video assuming it hasn't started.
@@ -255,7 +264,7 @@
 
     let PROPERTIES = ['yaw', 'pitch', 'roll', 'fov'];
     let player;
-    showVisualIndicator = false;
+    let showVisualIndicator = false;
     let videoControlPadding = 5; //5px of padding for the entire interface
     $('#videoControl0').css('padding', videoControlPadding + 'px');
     let controlOptionsPadding = 5;
@@ -285,6 +294,8 @@
     document.getElementById("control2_checkbox").disabled = true;
     document.getElementById("control3_checkbox").disabled = true;
     document.getElementById("control4_checkbox").disabled = true;
+    document.getElementById("control5_checkbox").disabled = true;
+
 
     let currentTutorialMethodNum = 0; //keeps track of which control method is active in the tutorial, 1 indicates control method 1, 2 indicates control method 2, etc.
     let currentTutorialStep = 0; //keeps track of which tutorial step the user is currently on, for now, 1 indicates step 1, 2 indicates step 2, etc.
@@ -921,7 +932,7 @@
     // if implementation changes, this will cause camera to behave like the center is at top left corner, until you move safe zone once
 
     let cursorBox0Active = true; //indicates if the cursor box is active
-    $('#cursorSafeZone0').click(function () {
+    $('#cursorBox0').click(function () { // this is now attached to cursorBox0 instead of cursorSafeZone0 because we're stopping the use of safezone mostly
         if (showVisualIndicator) {
             if (cursorBox0Active) {
                 $('#cursorSafeZone0').css('background-color', 'yellow');
@@ -930,23 +941,10 @@
             }
         }
         cursorBox0Active = !cursorBox0Active;
-        /*
-        if ((currentTutorialMethodNum == 1) && (currentTutorialStep == 4)) {
-            //$('#tutorial1Checkbox4').prop("checked", true);
-            nextStep(currentTutorialMethodNum, currentTutorialStep);
-            //$('#tutorial1Step5').css('display', 'inline');
-        }
-        //if ($('#tutorial1Checkbox4').prop("checked")) {
-        if ((currentTutorialMethodNum == 1) && (currentTutorialStep == 5)) {
-            //$('#tutorial1Checkbox5').prop("checked", true);
-            nextStep(currentTutorialMethodNum, currentTutorialStep);
-            //$('#tutorial1Step6').css('display', 'inline');
-        }
-        */
     });
 
     let cursorBox1Active = true; //indicates if the cursor box is active
-    $('#cursorSafeZone1').click(function () {
+    $('#cursorBox1').click(function () {
         if (showVisualIndicator) {
             if (cursorBox1Active) {
                 $('#cursorSafeZone1').css('background-color', 'yellow');
@@ -973,7 +971,9 @@
     document.getElementById("cursorBox0").addEventListener('mouseleave', function () {
         mouseInsideBox0 = false;
     });
-
+    document.getElementById("cursorSafeZone0").addEventListener('mouseenter', function () { //this section of code was removed for a while for some reason? I'm not sure why I did that
+        mouseInsideSafeZone0 = true;
+    });
     document.getElementById("cursorSafeZone0").addEventListener('mouseleave', function () {
         mouseInsideSafeZone0 = false;
     });
@@ -994,6 +994,8 @@
         mouseInsideSafeZone1 = false;
     });
 
+    //adding event listeners for Click and Move (control 5)
+    document.getElementById("clickAndMoveBox0").addEventListener('click', clickCameraMove);
 
     let mouseX = 0; // the mouse X coordinate WITH RESPECT TO THE VISIBLE SCREEN
     let mouseY = 0; // the code should show it with respect to
@@ -1136,6 +1138,23 @@
         }
     }
 
+    function clickCameraMove(event){ //function for moving camera in control 5 (click and move)
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+        //get the mouse cursor's current coordinates, with top left of cursor box to be 0,0
+        let x = Math.round(mouseX - playerLeftGapPublicHolder);
+        let y = Math.round(mouseY - control1HeightPublicHolder);
+        let newSettings = player.getSphericalProperties();
+        let xOffset = x - windowWidthPublicHolder / 2; /* The difference between x and the center of the current player,
+        with 0 being directly on the center,  positive being to the right of center, negative being to the left*/
+        let yOffset = y - windowHeightPublicHolder / 2; //same as xOffset, but positive being below, negative being above
+        console.log(xOffset);
+        console.log(yOffset);
+        newSettings['yaw'] -= xOffset/6.5;
+        newSettings['pitch'] +=0;
+        player.setSphericalProperties(newSettings);
+    }
+
     let timelineBarHeight = 50;//the height is 50 px
     let control1HeightPublicHolder;
     let playerLeftGapPublicHolder;
@@ -1243,6 +1262,13 @@
         dragAndDropBox1.css('opacity', 15 + '%');
         */
 
+        let clickAndMoveBox0 = $('#clickAndMoveBox0');
+        clickAndMoveBox0.css('pointer-events', 'auto');
+        clickAndMoveBox0.css('top', control1Height + 'px');
+        clickAndMoveBox0.css('width', windowWidth + 'px');
+        clickAndMoveBox0.css('height', windowHeight - timelineBarHeight + 'px');
+        clickAndMoveBox0.css('margin-left', playerLeftGap + 'px');
+
         let timelineBox0 = $('#timelineBox0'); //this blocks out the timeline if the hideControl URL parameter is 1
         timelineBox0.css('left', playerLeftGap + 'px');
         timelineBox0.css('top', control1Height + windowHeight - timelineBarHeight + 'px');
@@ -1304,6 +1330,7 @@
             $('#directionBlockBox2').css('background-color', 'transparent');
             $('#dragAndDropBox0').css('background-color', 'transparent');
             $('#dragAndDropBox1').css('background-color', 'transparent');
+            $('#clickAndMoveBox0').css('background-color', 'transparent');
             visualIndicatorLabel.html('Visual Indicator Shown');
         } else {
             $('#cursorBox0').css('background-color', 'lightblue');
@@ -1323,6 +1350,7 @@
             $('#directionBlockBox2').css('background-color', 'lightblue');
             $('#dragAndDropBox0').css('background-color', 'lightblue');
             $('#dragAndDropBox1').css('background-color', 'lightblue');
+            $('#clickAndMoveBox0').css('background-color', 'lightblue');
             visualIndicatorLabel.html('Visual Indicator Hidden');
         }
         showVisualIndicator = !showVisualIndicator;

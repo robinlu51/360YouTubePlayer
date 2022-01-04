@@ -1150,7 +1150,13 @@
         return radians * (180 / pi);
     }
 
+    function stopCamera() {
+        cancelAnimationFrame(animationID);
+    }
+
     function clickCameraMove(event) { //function for moving camera in control 5 (click and move)
+        let animationID; // to keep track of the animation requested if we need to stop/cancel it
+
         mouseX = event.clientX;
         mouseY = event.clientY;
         //get the mouse cursor's current coordinates, with top left of cursor box to be 0,0
@@ -1160,14 +1166,22 @@
         let xOffset = x - windowWidthPublicHolder / 2; /* The difference between x and the center of the current player,
         with 0 being directly on the center,  positive being to the right of center, negative being to the left*/
         let yOffset = y - windowHeightPublicHolder / 2; //same as xOffset, but positive being below, negative being above
-        //console.log(xOffset);
-        //console.log(yOffset);
         //newSettings['yaw'] -= xOffset/windowWidthPublicHolder*50*2;
-        newSettings['yaw'] -= radians_to_degrees(Math.atan(xOffset / (windowWidthPublicHolder / 2) * getTanFromDegrees(50)));
+        let totalYawChange = radians_to_degrees(Math.atan(xOffset / (windowWidthPublicHolder / 2) * getTanFromDegrees(50)));
+        //newSettings['yaw'] -= radians_to_degrees(Math.atan(xOffset / (windowWidthPublicHolder / 2) * getTanFromDegrees(50)));
         //newSettings['yaw'] -= radians_to_degrees(Math.atan(Math.sqrt(Math.pow(xOffset, 2) + Math.pow(yOffset, 2)) / (windowWidthPublicHolder / 2) * getTanFromDegrees(50)));
-        //newSettings['pitch'] -= 0;
-        newSettings['pitch'] -= radians_to_degrees(Math.atan(yOffset / (windowHeightPublicHolder / 2) * getTanFromDegrees(34))); //this value needs to be tempered with a bit more
-        player.setSphericalProperties(newSettings);
+        let totalPitchChange = radians_to_degrees(Math.atan(yOffset / (windowHeightPublicHolder / 2) * getTanFromDegrees(34))); //this value needs to be tempered with a bit more
+        for(let i = 0;i < 10;i++){
+            setTimeout(function(){
+                newSettings['yaw'] -= totalYawChange/10;
+                newSettings['pitch'] -= totalPitchChange/10;
+                player.setSphericalProperties(newSettings);
+            }, 100*i); //timeout at 16ms to ensure around 60 updates/second, since there are roughly 60 * 16 ms in a second
+        }
+        //newSettings['pitch'] -= radians_to_degrees(Math.atan(yOffset / (windowHeightPublicHolder / 2) * getTanFromDegrees(34))); //this value needs to be tempered with a bit more
+        //player.setSphericalProperties(newSettings);
+
+        animationID = requestAnimationFrame(clickCameraMove);
     }
 
     let timelineBarHeight = 50;//the height is 50 px
@@ -1521,6 +1535,7 @@
 
 
     //function below for camera control is currently defunct, but could potentially be used for future implementation
+
     let animationID; // to keep track of the animation requested if we need to stop/cancel it
     function lookUpLeft() {
         let newSettings = player.getSphericalProperties();

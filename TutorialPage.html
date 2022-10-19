@@ -291,7 +291,7 @@
     let netYawChangeThreshold = 2500;
     let netPitchChangeThreshold = 1500;
 
-    let activeControlMethod = 'control1';
+    let activeControlMethod = 'control1';// this keeps tracks of the current active control method number, currently only used for the tutorial
 
     document.getElementById("control1_checkbox").disabled = true;
     document.getElementById("control2_checkbox").disabled = true;
@@ -1153,6 +1153,9 @@
     let goalFramerate = 60; //the targeted fps we are looking for. Unit in frames per second
     let cameraMoveDuration = 0.4; //how long it takes to complete one camera movement. Unit in second
 
+    //TODO Right now this control 5 is only implemented in the tutorial page, need to move it to the main page as well
+    //Probably should've started this in the main page but I guess having this on the tutorial page first lets me try
+    //to get a look on how it'll look when I make tutorials for this, so that's still not entirely bad
     function clickCameraMove(event) { //function for moving camera in control 5 (click and move)
         let animationID; // to keep track of the animation requested if we need to stop/cancel it
 
@@ -1193,7 +1196,8 @@
         let videoRatioWidth = 16; //video player ratio is 16:9 for now
         let videoRatioHeight = 9;
         let videoId0 = myURL.searchParams.get("vidID");
-        let defaultVideoID = 'G-XZhKqQAHU'; //for now, default to the Alien 'HELP' video
+        //let defaultVideoID = 'G-XZhKqQAHU'; //for now, default to the Alien 'HELP' video
+        let defaultVideoID = 'ilyQMA0tq-U';//the default video is "Under the net"
         if (!videoId0 > '') { // if there's no URL parameter, default to designated video
             videoId0 = defaultVideoID;
         }
@@ -1455,6 +1459,10 @@
             currentTutorialStep = 1;
         } else if (activeControlMethod == 'control4') {
             currentTutorialMethodNum = 4;
+            currentTutorialStep = 1;
+        }
+        else if (activeControlMethod == 'control5') {
+            currentTutorialMethodNum = 5;
             currentTutorialStep = 1;
         }
     }

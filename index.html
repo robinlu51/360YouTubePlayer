@@ -513,7 +513,7 @@
         let newSettings = player.getSphericalProperties();
         let targetedXVelocity = 0; //the velocity we want to achieve
         let targetedYVelocity = 0;
-        if (!mouseHeldDown6) {
+        if (mouseHeldDown6) {
             targetedXVelocity = windowWidthPublicHolder / 2 - x; // find the center for cursor box, windowWidth/2 is the num of pixels from edge to center
             targetedYVelocity = windowHeightPublicHolder / 2 - y;
         }

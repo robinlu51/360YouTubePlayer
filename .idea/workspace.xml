@@ -24,8 +24,6 @@
   <component name="ChangeListManager">
     <list default="true" id="69f41ab2-6a1d-4f47-96ac-5c043c1176f2" name="Default Changelist" comment="Moved camera movement logging into its own data structure.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StyleControl.css" beforeDir="false" afterPath="$PROJECT_DIR$/StyleControl.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TutorialPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/TutorialPage.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -185,7 +183,7 @@
       <workItem from="1664997699733" duration="2551000" />
       <workItem from="1665600929082" duration="1422000" />
       <workItem from="1665604198687" duration="939000" />
-      <workItem from="1666206182860" duration="916000" />
+      <workItem from="1666206182860" duration="3690000" />
     </task>
     <task id="LOCAL-00001" summary="Moved camera movement logging into its own data structure.">
       <created>1631044767407</created>

@@ -53,6 +53,9 @@
             <input type="checkbox" id="control5_checkbox">
             <button type="button" id="control5button" class="tablinks" onclick="switchTab('control5')">Click and Move
             </button>
+            <input type="checkbox" id="control6_checkbox">
+            <button type="button" id="control6button" class="tablinks" onclick="switchTab('control6')">Perspective Control Alt
+            </button>
         </div>
 
         <div id="player0"></div>
@@ -148,6 +151,10 @@
         </div>
         <div id="control5" class="tabContent">
             <div id="clickAndMoveBox0" class="cursorBox"></div>
+        </div>
+        <div id="control6" class="tabContent">
+            <div id="cursorBox6" class="cursorBox">
+            </div>
         </div>
         <button type="button" id="bigPlayButton" class="bigButton"
                 onclick="onPlayClick();hideBigPlayButton()"><i class="fa fa-play"></i></button>
@@ -245,7 +252,6 @@
         cursorBox1Active = !cursorBox1Active;
     });
 
-
     let massValueText = document.querySelector('#massValue');
     //mass is the user assigned variable that controls the momentum of camera movement, on a scale of 0-1
     let mass = document.getElementById('massSliderValue').value; // exists to update the mass value and text for the first time only
@@ -297,21 +303,45 @@
         mouseInsideBox4 = false;
     });
 
+
     //adding event listeners for Click and Move (control 5)
     document.getElementById("clickAndMoveBox0").addEventListener('click', clickCameraMove);
 
+    //adding event listeners for Perspective Control Alt (control 6)
+    let mouseInsideBox6 = false;
+    let mouseHeldDown6 = false;
+    document.getElementById("cursorBox6").addEventListener('mouseenter', function () {
+        mouseInsideBox6 = true;
+    });
+    document.getElementById("cursorBox6").addEventListener('mouseleave', function () {
+        mouseInsideBox6 = false;
+    });
+    document.getElementById("cursorBox6").addEventListener('mousedown', function () {
+        mouseHeldDown6 = true;
+    });
+    document.getElementById("cursorBox6").addEventListener('mouseup', function () {
+        mouseHeldDown6 = false;
+    });
+
     let mouseX = 0; // the mouse X coordinate WITH RESPECT TO THE VISIBLE SCREEN
     let mouseY = 0; // the code should show it with respect to
+
+    //control for Perspective Control 1
     document.getElementById("cursorBox0").addEventListener('mouseenter', updateCoords);
     document.getElementById("cursorBox0").addEventListener('mousemove', updateCoords);
     document.getElementById("cursorBox0").addEventListener('mouseenter', cursorCameraControl0);
+
+    //control for Perspective Control 2
     document.getElementById("cursorBox1").addEventListener('mouseenter', updateCoords);
     document.getElementById("cursorBox1").addEventListener('mousemove', updateCoords);
     document.getElementById("cursorBox1").addEventListener('mouseenter', cursorCameraControl1);
     document.getElementById("cursorBox1").addEventListener('click', moveSafeZone);
+
     //this line below should add an event listener, to update the playing status, in case that the user pause/unpauses in
     //Drag&Drop method and the Play/Pause button isn't updated
     //document.getElementById('cursorBox1').addEventListener('click', checkPauseStatus);
+
+    //control for control method 4
     let cameraControl4Active = false;
     document.getElementById('cursorBox4').addEventListener('mouseenter', updateCoords);
     document.getElementById('cursorBox4').addEventListener('mousemove', updateCoords);
@@ -325,6 +355,10 @@
         cameraControl4Active = false;
     });
 
+    //control for Perspective Control Alt
+    document.getElementById("cursorBox6").addEventListener('mouseenter', updateCoords);
+    document.getElementById("cursorBox6").addEventListener('mousemove', updateCoords);
+    document.getElementById("cursorBox6").addEventListener('mouseenter', cursorCameraControl6);
 
     //let mouseCoordsText0 = document.querySelector('#mouseCoords0');
     //let mouseCoordsText1 = document.querySelector('#mouseCoords1');
@@ -469,6 +503,32 @@
         //player.setSphericalProperties(newSettings);
     }
 
+    function cursorCameraControl6() { //camera control for Perspective Control Alt (control 6)
+        //get the mouse cursor's current coordinates, with top left of cursor box to be 0,0
+        let x = Math.round(mouseX - playerLeftGapPublicHolder);
+        let y = Math.round(mouseY - control1HeightPublicHolder);
+
+        let cameraMultiplierX = 0.003; //necessary to control the overall camera speed
+        let cameraMultiplierY = 0.002;
+        let newSettings = player.getSphericalProperties();
+        let targetedXVelocity = 0; //the velocity we want to achieve
+        let targetedYVelocity = 0;
+        if (!mouseHeldDown6) {
+            targetedXVelocity = windowWidthPublicHolder / 2 - x; // find the center for cursor box, windowWidth/2 is the num of pixels from edge to center
+            targetedYVelocity = windowHeightPublicHolder / 2 - y;
+        }
+        let combinedXVelocity = ((1 - mass) * targetedXVelocity + mass * prevXVelocity); // the actual velocity calculated with momentum
+        let combinedYVelocity = ((1 - mass) * targetedYVelocity + mass * prevYVelocity);
+        newSettings['yaw'] += xModifier * cameraMultiplierX * combinedXVelocity;
+        newSettings['pitch'] += yModifier * cameraMultiplierY * combinedYVelocity;
+        player.setSphericalProperties(newSettings);
+        prevXVelocity = combinedXVelocity; //update the previous velocity with the newly calculated value
+        prevYVelocity = combinedYVelocity;
+        if (mouseInsideBox6) {
+            setTimeout(cursorCameraControl6, 16); //timeout at 16ms to ensure around 60 updates/second, since there are roughly 60 * 16 ms in a second
+        }
+    }
+
     let timelineBarHeight = 50;//the height is 50 px
     let control1HeightPublicHolder;
     let playerLeftGapPublicHolder;
@@ -590,6 +650,14 @@
         clickAndMoveBox0.css('height', windowHeight - timelineBarHeight + 'px');
         clickAndMoveBox0.css('margin-left', playerLeftGap + 'px');
 
+        //css for control method 6
+        let cursorBox6 = $('#cursorBox6');
+        cursorBox6.css('pointer-events', 'none');
+        cursorBox6.css('top', control1Height + 'px');
+        cursorBox6.css('width', windowWidth + 'px');
+        cursorBox6.css('height', windowHeight - timelineBarHeight + 'px');
+        cursorBox6.css('margin-left', playerLeftGap + 'px');
+
         let timelineBox0 = $('#timelineBox0'); //this blocks out the timeline if the hideControl URL parameter is 1
         timelineBox0.css('left', playerLeftGap + 'px');
         timelineBox0.css('top', control1Height + windowHeight - timelineBarHeight + 'px');
@@ -653,6 +721,7 @@
             $('#dragAndDropBox1').css('background-color', 'transparent');
             $('#cursorBox4').css('background-color', 'transparent');
             $('#clickAndMoveBox0').css('background-color', 'transparent');
+            $('#cursorBox6').css('background-color', 'transparent');
             visualIndicatorLabel.html('Visual Indicator Shown');
         } else {
             $('#cursorBox0').css('background-color', 'lightblue');
@@ -674,6 +743,7 @@
             $('#dragAndDropBox1').css('background-color', 'lightblue');
             $('#cursorBox4').css('background-color', 'lightblue');
             $('#clickAndMoveBox0').css('background-color', 'lightblue');
+            $('#cursorBox6').css('background-color', 'lightblue');
             visualIndicatorLabel.html('Visual Indicator Hidden');
         }
         showVisualIndicator = !showVisualIndicator;
@@ -689,6 +759,7 @@
         $('#cursorSafeZone0').css('pointer-events', 'auto');
         $('#cursorBox1').css('pointer-events', 'auto');
         $('#cursorSafeZone1').css('pointer-events', 'auto');
+        $('#cursorBox6').css('pointer-events', 'auto');
     }
 
     function onLoadClick() {

@@ -1347,6 +1347,9 @@
         if (controlMethod != 0) {
             exclusiveTab('control' + controlMethod);
         }
+        else{
+            switchTab('control1');//if no URL parameter is given, show all controls, but only control 1 is functional
+        }
     }
 
     function toggleVisualIndicator() { //toggle colored visual indicator for clickable/unclickable zones

@@ -10,6 +10,36 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
+<!-- we will want to eventually remove the button for it to trigger automatically -->
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#videoSeenModal">
+    Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="videoSeenModal" tabindex="-1" role="dialog" aria-labelledby="videoSeenModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="videoSeenModalLabel">Video Library</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Please select the videos you have already seen <br>
+                <br>
+                <img style="max-width: 450px; max-height: 300px" src="https://thedali.org/wp-content/uploads/2020/03/1200x500-Exhibit-Dreams-of-Dali.jpg"
+                     onclick="modalVideoSelect = 1;"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="if(modalVideoSelect==1){}window.open('https://robinlu51.github.io/360YouTubePlayer/?vidID=sPyAQQklc1s');">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <form id="videoControl0">
     <!--
     sPyAQQklc1s
@@ -196,6 +226,8 @@
     document.getElementById("control3_checkbox").disabled = true;
     document.getElementById("control4_checkbox").disabled = true;
     document.getElementById("control5_checkbox").disabled = true;
+
+    let modalVideoSelect = 0;//keeps track of which video the user has seen
 
     let myURL = new URL(window.location.href); //collection for all URL parameters
 

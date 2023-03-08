@@ -29,15 +29,33 @@
             <div class="modal-body">
                 Please select the videos you have already seen <br>
                 <br>
-                <img style="max-width: 450px; max-height: 300px" src="https://thedali.org/wp-content/uploads/2020/03/1200x500-Exhibit-Dreams-of-Dali.jpg"
-                     onclick="modalVideoSelect = 1;"/>
-                <img style="max-width: 450px; max-height: 300px" src="https://i.ytimg.com/vi/ilyQMA0tq-U/maxresdefault.jpg">
-                <img style="max-width: 450px; max-height: 300px" src="./DreamsOfDali.png">
+                <input type="checkbox" id="video1ModalCheckbox">
+                <label for="video1ModalCheckbox" id="video1ModalLabel">Video 1</label>
+                <img style="max-width: 450px; max-height: 300px; padding: 10px 10px 10px 10px" src="https://thedali.org/wp-content/uploads/2020/03/1200x500-Exhibit-Dreams-of-Dali.jpg"
+                     onclick="modalVideoSelectToggle('1')">
+                <br>
+
+                <input type="checkbox" id="video2ModalCheckbox">
+                <label for="video2ModalCheckbox" id="video2ModalLabel">Video 2</label>
+                <img style="max-width: 450px; max-height: 300px; padding: 10px 10px 10px 10px" src="https://i.ytimg.com/vi/ilyQMA0tq-U/maxresdefault.jpg"
+                     onclick="modalVideoSelectToggle('2')">
+                <br>
+
+                <input type="checkbox" id="video3ModalCheckbox">
+                <label for="video3ModalCheckbox" id="video3ModalLabel">Video 3</label>
+                <img style="max-width: 450px; max-height: 300px; padding: 10px 10px 10px 10px" src="./DreamsOfDali.png"
+                     onclick="modalVideoSelectToggle('3')">
+                <br>
+
+                <input type="checkbox" id="video4ModalCheckbox">
+                <label for="video4ModalCheckbox" id="video4ModalLabel">Video 4</label>
+                <img style="max-width: 450px; max-height: 300px; padding: 10px 10px 10px 10px" src="./DreamsOfDali.png"
+                     onclick="modalVideoSelectToggle('4')">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <!-- change the video-->
-                <button type="button" class="btn btn-primary" onclick="if(modalVideoSelect==1){}window.open('https://robinlu51.github.io/360YouTubePlayer/?vidID=sPyAQQklc1s');">Save changes</button>
+                <button type="button" class="btn btn-primary" onclick="videoRandomization();">Save changes</button>
             </div>
         </div>
     </div>
@@ -224,13 +242,17 @@
         $('#control5').css('display', 'none');
     });
 
-    document.getElementById("control1_checkbox").disabled = true;
+    document.getElementById("control1_checkbox").disabled = true;//so that users can't manually check/uncheck just the boxes
     document.getElementById("control2_checkbox").disabled = true;
     document.getElementById("control3_checkbox").disabled = true;
     document.getElementById("control4_checkbox").disabled = true;
     document.getElementById("control5_checkbox").disabled = true;
 
-    let modalVideoSelect = 0;//keeps track of which video the user has seen
+    //document.getElementById("video1ModalCheckbox").disabled = true;
+    //document.getElementById("video2ModalCheckbox").disabled = true;
+    //document.getElementById("video3ModalCheckbox").disabled = true;
+    //document.getElementById("video4ModalCheckbox").disabled = true;
+
 
     let myURL = new URL(window.location.href); //collection for all URL parameters
 
@@ -576,9 +598,10 @@
         let videoRatioHeight = 9;
         let videoId0 = myURL.searchParams.get("vidID");
         //let defaultVideoID = 'G-XZhKqQAHU'; //for now, default to the Alien 'HELP' video
-        let defaultVideoID = 'ilyQMA0tq-U';//the default video is "Under the net"
+        //let defaultVideoID = 'ilyQMA0tq-U';//the default video is "Under the net"
         if (!videoId0 > '') { // if there's no URL parameter, default to designated video
-            videoId0 = defaultVideoID;
+            //videoId0 = defaultVideoID;
+            videoId0 = null;
         }
 
         //let adjustedWidth = window.innerWidth * 2 / 3 - 20; //ratio for the col-8 and 4 bootstrap grid
@@ -596,6 +619,8 @@
         player0.css('position', 'absolute');
         player0.css('top', control1Height + 'px');
         player0.css('left', playerLeftGap + 'px');
+
+        hideBigPlayButton();
         let bigPlayButtonHeight = 250;
         let bigPlayButtonWidth = 250;
         $('#bigPlayButton').css('font-size', bigPlayButtonHeight / 2 + 'px');
@@ -720,7 +745,7 @@
             $('#sliderBar').css('display', 'none');
         }
 
-        if (player == null) { // if there's no pre-existing video player, we create it here
+        if (player == null && videoId0 != null) { // if there's no pre-existing video player, we create it here
             player = new YT.Player('player0', {
                 //height: 700,
                 //width: adjustedWidth,
@@ -737,6 +762,7 @@
                 }
             });
         }
+
         if (controlMethod != 0) {
             exclusiveTab('control' + controlMethod);
         }
@@ -790,6 +816,7 @@
     // The API will call this function when the video player is ready.
     function onPlayerReady(event) { //currently unused
         //event.target.playVideo();
+        showBigPlayButton();
     }
 
     function onStateChange(event) { //called when video state changes
@@ -824,6 +851,11 @@
         }
     }
 
+    //show the big play button
+    function showBigPlayButton() {
+        $('#bigPlayButton').css('display', 'initial');
+    }
+
     //hides the big play button
     function hideBigPlayButton() {
         $('#bigPlayButton').css('display', 'none');
@@ -851,6 +883,78 @@
             player.unMute();
             $('#muteButton').html('Mute');
         }
+    }
+
+    //toggles whether the video has been selected and updates the checkbox
+    function modalVideoSelectToggle(modalVideoNum){
+        let videoSelected = $('#video' + modalVideoNum + 'ModalCheckbox');
+        if(videoSelected.is(":checked")){
+            videoSelected.prop('checked', false);
+        }
+        else{
+            videoSelected.prop('checked', true);
+        }
+    }
+
+    //provides a random video to load, based on which video has been selected
+    function videoRandomization(){ //TODO currently doesn't actually care which videos have been selected
+        let videoNum = Math.floor(Math.random() * 4) + 1;// generates a random integer from 1-4, assumed for 4 different videos
+        let newVideoId0;
+        /* Here are the video ID's
+        * sPyAQQklc1s Lions 360
+        * ilyQMA0tq-U Under the Net
+        * F1eLeIocAcU Dreams of Dali
+        * BLvRnZS_OdQ 360 video player FOV calibration
+        * */
+        if (videoNum == 1){
+            newVideoId0 = 'sPyAQQklc1s';
+        }
+        else if (videoNum == 2){
+            newVideoId0 = 'ilyQMA0tq-U';
+        }
+        else if (videoNum == 3){
+            newVideoId0 = 'F1eLeIocAcU';
+        }
+        else{
+            newVideoId0 = 'BLvRnZS_OdQ';
+        }
+        if (player == null) { // if there's no pre-existing video player, we create it here
+            player = new YT.Player('player0', {
+                //height: 700,
+                //width: adjustedWidth,
+                height: windowHeightPublicHolder,
+                width: windowWidthPublicHolder,
+                videoId: newVideoId0,
+                playerVars: {
+                    rel: 0, // on pause screen, only display videos from same channel, since we can't disable this following YouTube update
+                    disablekb: 1 //disable keyboard control
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onStateChange
+                }
+            });
+        }
+    }
+
+    //force loads a new video
+    //Doesn't work rn, need new approach
+    function loadNewVideo(){
+        player = new YT.Player('player0', {
+            //height: 700,
+            //width: adjustedWidth,
+            height: 2000,
+            width: 1000,
+            videoId: 'BLvRnZS_OdQ',
+            playerVars: {
+                rel: 0, // on pause screen, only display videos from same channel, since we can't disable this following YouTube update
+                disablekb: 1 //disable keyboard control
+            },
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onStateChange
+            }
+        });
     }
 
     //this switches tabs-->switches control method

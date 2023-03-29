@@ -10,11 +10,12 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<!-- we will want to eventually remove the button for it to trigger automatically -->
-<!-- Button trigger modal -->
+<!-- Button trigger modal, unused for now -->
+<!--
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#videoSeenModal">
     Launch demo modal
 </button>
+-->
 
 <!-- Modal -->
 <div class="modal fade" id="videoSeenModal" tabindex="-1" role="dialog" aria-labelledby="videoSeenModalLabel" aria-hidden="true">
@@ -55,7 +56,8 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <!-- change the video-->
-                <button type="button" class="btn btn-primary" onclick="videoRandomization();">Save changes</button>
+                <button type="button" class="btn btn-primary" onclick="videoRandomization();
+                $('#videoSeenModal').modal('hide');">Save changes</button>
             </div>
         </div>
     </div>
@@ -240,6 +242,9 @@
         $('#control3').css('display', 'none');
         $('#control4').css('display', 'none');
         $('#control5').css('display', 'none');
+
+        //auto show the modal window on load to check which video the user has seen
+        $('#videoSeenModal').modal('show');
     });
 
     document.getElementById("control1_checkbox").disabled = true;//so that users can't manually check/uncheck just the boxes

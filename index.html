@@ -745,6 +745,9 @@
             $('#sliderBar').css('display', 'none');
         }
 
+        //This section only executes and creates a video player if there's URL parameter specifying which video to load
+        //If not, then the player should only be loaded upon the user selecting which videos they've already watched,
+        //and done in videoRandomization()
         if (player == null && videoId0 != null) { // if there's no pre-existing video player, we create it here
             player = new YT.Player('player0', {
                 //height: 700,

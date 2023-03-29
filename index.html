@@ -228,6 +228,8 @@
     let firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
+    let videoCount = 4; //total number of videos available from videoRandomization() process
+
     let PROPERTIES = ['yaw', 'pitch', 'roll', 'fov'];
     let player;
     let showVisualIndicator = false;
@@ -896,7 +898,7 @@
     //toggles whether the video has been selected and updates the checkbox
     function modalVideoSelectToggle(modalVideoNum){
         let videoSelected = $('#video' + modalVideoNum + 'ModalCheckbox');
-        if(videoSelected.is(":checked")){
+        if(videoSelected.is(':checked')){
             videoSelected.prop('checked', false);
         }
         else{
@@ -904,28 +906,55 @@
         }
     }
 
+
+
     //provides a random video to load, based on which video has been selected
-    function videoRandomization(){ //TODO currently doesn't actually care which videos have been selected
-        let videoNum = Math.floor(Math.random() * 4) + 1;// generates a random integer from 1-4, assumed for 4 different videos
-        let newVideoId0;
+    function videoRandomization(){ //TODO currently doesn't actually randomize yet, need to fix
         /* Here are the video ID's
         * sPyAQQklc1s Lions 360
         * ilyQMA0tq-U Under the Net
         * F1eLeIocAcU Dreams of Dali
         * BLvRnZS_OdQ 360 video player FOV calibration
         * */
-        if (videoNum == 1){
+        let newVideoId0;
+        let videoIndex;
+        let uncheckedVideoCount = 0; //counter for how many videos have been checked
+        let videoBoxCheckedArr = []; // used to keep track of which video's box were checked, indicating
+        //which one have been watched, for example, videoBoxCheckedArr[0] will hold whether video 1 was watched,
+        //videoBoxCheckedArr[1] holds video 2's, etc.
+        let videoLeftArr = []; //keeps track of which videos are left to be randomized
+        //this exists so we can randomize with nice index that only correspond to videos that haven't been watched
+        //I don't see a better way to do this at the moment
+
+        for(let i = 0; i < videoCount; i++){
+            videoBoxCheckedArr[i] = $('#video'+(i+1)+'ModalCheckbox').is(':checked');
+            if(!videoBoxCheckedArr[i]){
+                uncheckedVideoCount++;
+                videoLeftArr[videoLeftArr.length] = i+1;//i+1 is used to indicate the video number, which will be 1 for video 1, etc.
+            }
+        }
+        if(uncheckedVideoCount == 0){ //if the user has already watched all videos, serve up a default video
+            //TODO change this to random out of all videos
             newVideoId0 = 'sPyAQQklc1s';
         }
-        else if (videoNum == 2){
-            newVideoId0 = 'ilyQMA0tq-U';
+        else {
+            // generates a random integer from 1-whatever the number of unwatched videos is
+            videoIndex = Math.floor(Math.random() * uncheckedVideoCount) + 1;
+            if (videoLeftArr[videoIndex-1] == 1){
+                newVideoId0 = 'sPyAQQklc1s';
+            }
+            else if (videoLeftArr[videoIndex-1] == 2){
+                newVideoId0 = 'ilyQMA0tq-U';
+            }
+            else if (videoLeftArr[videoIndex-1] == 3){
+                newVideoId0 = 'F1eLeIocAcU';
+            }
+            else{
+                newVideoId0 = 'BLvRnZS_OdQ';
+            }
         }
-        else if (videoNum == 3){
-            newVideoId0 = 'F1eLeIocAcU';
-        }
-        else{
-            newVideoId0 = 'BLvRnZS_OdQ';
-        }
+
+
         if (player == null) { // if there's no pre-existing video player, we create it here
             player = new YT.Player('player0', {
                 //height: 700,

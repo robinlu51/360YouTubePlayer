@@ -20,9 +20,42 @@
 <!-- Modal -->
 
 <!--
-TODO add sanity check to ask user how many videos they've watched (0-3) to make sure there's not accidental mis-selection
+TODO add sanity check to ask user how many videos they've watched (0-3) to make sure there's no accidental selection
 if there's a mismatch, send back to first window to reselect.
 -->
+<div class="modal fade" id="videoSeenCountModal" tabindex="-1" role="dialog" aria-labelledby="videoSeenCountModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="videoSeenCountModalLabel">Video Library</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Please select the number of videos you have watched so far</p>
+                <form name="videoSeenCountForm">
+                    <input type="radio" id="videoSeenCount0" name="videoCount" value="0">
+                    <label for="videoSeenCount0">0</label><br>
+                    <input type="radio" id="videoSeenCount1" name="videoCount" value="1">
+                    <label for="videoSeenCount1">1</label><br>
+                    <input type="radio" id="videoSeenCount2" name="videoCount" value="2">
+                    <label for="videoSeenCount2">2</label><br>
+                    <input type="radio" id="videoSeenCount3" name="videoCount" value="3">
+                    <label for="videoSeenCount3">3</label><br>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <!-- change the video-->
+                <button type="button" class="btn btn-primary" onclick="$('#videoSeenCountModal').modal('hide');
+                    $('#videoSeenModal').modal('show');">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="modal fade" id="videoSeenModal" tabindex="-1" role="dialog" aria-labelledby="videoSeenModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -35,27 +68,27 @@ if there's a mismatch, send back to first window to reselect.
             <div class="modal-body">
                 Please select the videos you have already seen <br>
                 <br>
-                <!-- TODO add a title for video, shrink thumbnail-->
+                <!-- TODO adjust thumbnail to appropriate size-->
                 <input type="checkbox" id="video1ModalCheckbox">
-                <label for="video1ModalCheckbox" id="video1ModalLabel">Video 1</label>
+                <label for="video1ModalCheckbox" id="video1ModalLabel">Lions 360</label><br>
                 <img style="max-width: 450px; max-height: 300px; padding: 10px 10px 10px 10px" src="./lions360.jpg"
                      onclick="modalVideoSelectToggle('1')">
                 <br>
 
                 <input type="checkbox" id="video2ModalCheckbox">
-                <label for="video2ModalCheckbox" id="video2ModalLabel">Video 2</label>
+                <label for="video2ModalCheckbox" id="video2ModalLabel">Under the Net</label><br>
                 <img style="max-width: 450px; max-height: 300px; padding: 10px 10px 10px 10px" src="https://i.ytimg.com/vi/ilyQMA0tq-U/maxresdefault.jpg"
                      onclick="modalVideoSelectToggle('2')">
                 <br>
 
                 <input type="checkbox" id="video3ModalCheckbox">
-                <label for="video3ModalCheckbox" id="video3ModalLabel">Video 3</label>
+                <label for="video3ModalCheckbox" id="video3ModalLabel">Dreams of Dali</label><br>
                 <img style="max-width: 450px; max-height: 300px; padding: 10px 10px 10px 10px" src="./DreamsOfDali.png"
                      onclick="modalVideoSelectToggle('3')">
                 <br>
 
                 <input type="checkbox" id="video4ModalCheckbox">
-                <label for="video4ModalCheckbox" id="video4ModalLabel">Video 4</label>
+                <label for="video4ModalCheckbox" id="video4ModalLabel">360 Calibration</label><br>
                 <img style="max-width: 450px; max-height: 300px; padding: 10px 10px 10px 10px" src="./DreamsOfDali.png"
                      onclick="modalVideoSelectToggle('4')">
             </div>
@@ -238,6 +271,9 @@ if there's a mismatch, send back to first window to reselect.
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     let videoCount = 4; //total number of videos available from videoRandomization() process
+    let videoSeenCount = 0;
+
+
 
     let PROPERTIES = ['yaw', 'pitch', 'roll', 'fov'];
     let player;
@@ -255,7 +291,8 @@ if there's a mismatch, send back to first window to reselect.
         $('#control5').css('display', 'none');
 
         //auto show the modal window on load to check which video the user has seen
-        $('#videoSeenModal').modal('show');
+        $('#videoSeenCountModal').modal('show');
+        //$('#videoSeenModal').modal('show');
     });
 
     document.getElementById("control1_checkbox").disabled = true;//so that users can't manually check/uncheck just the boxes
@@ -980,6 +1017,15 @@ if there's a mismatch, send back to first window to reselect.
                     'onStateChange': onStateChange
                 }
             });
+        }
+        let radios = document.forms["videoSeenCountForm"].elements["videoCount"];
+        for(let i = 0, max = radios.length; i < max; i++) {
+            radios[i].onclick = function() {
+                videoSeenCount = this.value;
+            }
+        }
+        if (videoCount != (4-uncheckedVideoCount)){
+            alert("BAD!");
         }
     }
 

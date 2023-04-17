@@ -48,8 +48,7 @@ if there's a mismatch, send back to first window to reselect.
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <!-- change the video-->
-                <button type="button" class="btn btn-primary" onclick="$('#videoSeenCountModal').modal('hide');
-                    $('#videoSeenModal').modal('show');">Save changes</button>
+                <button type="button" id = "savechange" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
@@ -289,6 +288,15 @@ if there's a mismatch, send back to first window to reselect.
         $('#control3').css('display', 'none');
         $('#control4').css('display', 'none');
         $('#control5').css('display', 'none');
+
+        document.getElementById("savechange").addEventListener("click", function(){
+            $('#videoSeenCountModal').modal('hide');
+            $('#videoSeenModal').modal('show');
+            $('#videoSeenModal').css("overflow", "auto");
+          //  let myModal = new bootstrap.Modal(document.getElementbyId('videoSeenModal',{}));
+            //myModal.show();
+
+        })
 
         //auto show the modal window on load to check which video the user has seen
         $('#videoSeenCountModal').modal('show');

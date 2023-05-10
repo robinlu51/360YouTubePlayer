@@ -197,6 +197,8 @@
       <workItem from="1679518670871" duration="3685000" />
       <workItem from="1681316244052" duration="3331000" />
       <workItem from="1681322935267" duration="2128000" />
+      <workItem from="1682532326620" duration="2147000" />
+      <workItem from="1683730167477" duration="1830000" />
     </task>
     <task id="LOCAL-00001" summary="Moved camera movement logging into its own data structure.">
       <created>1631044767407</created>

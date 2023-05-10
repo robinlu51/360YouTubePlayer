@@ -271,8 +271,13 @@ if there's a mismatch, send back to first window to reselect.
 
     let videoCount = 4; //total number of videos available from videoRandomization() process
     let videoSeenCount = 0;
-
-
+    //adds event listener for the radio buttons that's used to keep track of how many videos the user has seen
+    let radios = document.forms["videoSeenCountForm"].elements["videoCount"];
+    for(let i = 0, max = radios.length; i < max; i++) {
+        radios[i].onclick = function() {
+            videoSeenCount = this.value;
+        }
+    }
 
     let PROPERTIES = ['yaw', 'pitch', 'roll', 'fov'];
     let player;
@@ -972,7 +977,7 @@ if there's a mismatch, send back to first window to reselect.
         * */
         let newVideoId0;
         let videoIndex;
-        let uncheckedVideoCount = 0; //counter for how many videos have been checked
+        let uncheckedVideoCount = 0; //counter for how many videos have been checked in the image selection page
         let videoBoxCheckedArr = []; // used to keep track of which video's box were checked, indicating
         //which one have been watched, for example, videoBoxCheckedArr[0] will hold whether video 1 was watched,
         //videoBoxCheckedArr[1] holds video 2's, etc.
@@ -987,6 +992,13 @@ if there's a mismatch, send back to first window to reselect.
                 videoLeftArr[videoLeftArr.length] = i+1;//i+1 is used to indicate the video number, which will be 1 for video 1, etc.
             }
         }
+        //human error checking, making sure the number of videos seen that the user provided on first modal window
+        // match with the number of videos they selected on the second modal window
+        if (videoSeenCount != (4-uncheckedVideoCount)){
+            alert("The number of video seen does not match videos selected! Please reload page before proceeding.");
+            return;
+        }
+
         if(uncheckedVideoCount == 0){ //if the user has already watched all videos, serve up a default video
             //TODO show a toast popup window https://getbootstrap.com/docs/5.0/components/toasts/
             newVideoId0 = 'sPyAQQklc1s';
@@ -1025,15 +1037,6 @@ if there's a mismatch, send back to first window to reselect.
                     'onStateChange': onStateChange
                 }
             });
-        }
-        let radios = document.forms["videoSeenCountForm"].elements["videoCount"];
-        for(let i = 0, max = radios.length; i < max; i++) {
-            radios[i].onclick = function() {
-                videoSeenCount = this.value;
-            }
-        }
-        if (videoCount != (4-uncheckedVideoCount)){
-            alert("BAD!");
         }
     }
 

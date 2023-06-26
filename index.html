@@ -996,6 +996,7 @@ if there's a mismatch, send back to first window to reselect.
         // match with the number of videos they selected on the second modal window
         if (videoSeenCount != (4-uncheckedVideoCount)){
             alert("The number of video seen does not match videos selected! Please reload page before proceeding.");
+            location.reload();
             return;
         }
 

@@ -23,10 +23,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="69f41ab2-6a1d-4f47-96ac-5c043c1176f2" name="Default Changelist" comment="Moved camera movement logging into its own data structure.">
-      <change afterPath="$PROJECT_DIR$/BabyPandas.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CruiseTour.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LockdownCity.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/carbonara.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dreamsofdali.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mountainbiking.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rollercoaster.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DreamsOfDali.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -202,7 +204,8 @@
       <workItem from="1681322935267" duration="2128000" />
       <workItem from="1682532326620" duration="2147000" />
       <workItem from="1683730167477" duration="1830000" />
-      <workItem from="1691427120770" duration="515000" />
+      <workItem from="1691427120770" duration="2239000" />
+      <workItem from="1692028475591" duration="2968000" />
     </task>
     <task id="LOCAL-00001" summary="Moved camera movement logging into its own data structure.">
       <created>1631044767407</created>

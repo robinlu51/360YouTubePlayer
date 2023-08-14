@@ -72,25 +72,25 @@ if there's a mismatch in number of videos seen, send back to first window to res
                 <!-- TODO adjust thumbnail to appropriate size-->
                 <input type="checkbox" id="video1ModalCheckbox">
                 <label for="video1ModalCheckbox" id="video1ModalLabel">Lockdown City</label><br>
-                <img style="max-width: 450px; max-height: 300px; padding: 10px 10px 10px 10px" src="./LockdownCity.jpg"
+                <img id="video1Thumbnail" style="max-width: 450px; max-height: 300px; padding: 10px 10px 10px 10px" src="./LockdownCity.jpg"
                      onclick="modalVideoSelectToggle('1')">
                 <br>
 
                 <input type="checkbox" id="video2ModalCheckbox">
                 <label for="video2ModalCheckbox" id="video2ModalLabel">Baby Pandas</label><br>
-                <img style="max-width: 450px; max-height: 300px; padding: 10px 10px 10px 10px" src="./BabyPandas.jpg"
+                <img id="video2Thumbnail" style="max-width: 450px; max-height: 300px; padding: 10px 10px 10px 10px" src="./BabyPandas.jpg"
                      onclick="modalVideoSelectToggle('2')">
                 <br>
 
                 <input type="checkbox" id="video3ModalCheckbox">
                 <label for="video3ModalCheckbox" id="video3ModalLabel">Cruise Tour</label><br>
-                <img style="max-width: 450px; max-height: 300px; padding: 10px 10px 10px 10px" src="./CruiseTour.jpg"
+                <img id="video3Thumbnail" style="max-width: 450px; max-height: 300px; padding: 10px 10px 10px 10px" src="./CruiseTour.jpg"
                      onclick="modalVideoSelectToggle('3')">
                 <br>
 
                 <input type="checkbox" id="video4ModalCheckbox">
                 <label for="video4ModalCheckbox" id="video4ModalLabel">Lions 360</label><br>
-                <img style="max-width: 450px; max-height: 300px; padding: 10px 10px 10px 10px" src="./lions360.jpg"
+                <img id="video4Thumbnail" style="max-width: 450px; max-height: 300px; padding: 10px 10px 10px 10px" src="./lions360.jpg"
                      onclick="modalVideoSelectToggle('4')">
             </div>
             <div class="modal-footer">
@@ -342,10 +342,29 @@ if there's a mismatch in number of videos seen, send back to first window to res
         hideControlOption = defaultHideControlOption;
     }
 
+    //TODO this is currently unused, need to implement feature
     let showTutorial = myURL.searchParams.get("showTutorial"); //URL parameter for whether the tutorial is shown
     let defaultShowTutorial = '0';
-    if (!showTutorial > '') { // if there's no input for this, default to 0, which shows all control options
+    if (!showTutorial > '') { // if there's no input for this, default to 0, which shows tutorial
         showTutorial = defaultShowTutorial;
+    }
+
+    let videoType = myURL.searchParams.get("videoType"); //URL parameter for whether the randomization pulls from
+    // dynamic or static video pool
+    let defaultVideoType = '0'; //default is 0, which is for static videos, value should be set to 1 for dynamic
+    if(!videoType > '') { // if there's no input for this, default to 0, which show static videos
+        videoType = defaultVideoType;
+    }
+
+    if (videoType == 1){ //if video type is 1, switch to dynamic videos
+        $('#video1ModalLabel').html('Roller Coaster');
+        $('#video1Thumbnail').attr("src", 'rollercoaster.jpg');
+        $('#video2ModalLabel').html('Dreams of Dali');
+        $('#video2Thumbnail').attr("src", "dreamsofdali.jpg");
+        $('#video3ModalLabel').html('Mountain Biking');
+        $('#video3Thumbnail').attr("src", "mountainbiking.jpg");
+        $('#video4ModalLabel').html('Making Carbonara');
+        $('#video4Thumbnail').attr("src", "carbonara.jpg");
     }
 
     let movableSafeZoneCenterX = 0; //with respect to the cursor box, at 0, 0 if at top left
@@ -1010,16 +1029,28 @@ if there's a mismatch in number of videos seen, send back to first window to res
             // generates a random integer from 1-whatever the number of unwatched videos is
             videoIndex = Math.floor(Math.random() * uncheckedVideoCount);
             if (videoLeftArr[videoIndex] == 1){
-                newVideoId0 = 'zCbQffIER_E';
+                newVideoId0 = 'zCbQffIER_E'; //lockdown city
+                if(videoType == 1){ //if video type is 1, switch to dynamic video
+                    newVideoId0 = 'hNAbQYU0wpg'; //rollercoaster
+                }
             }
             else if (videoLeftArr[videoIndex] == 2){
-                newVideoId0 = '0XrH2WO1Mzs';
+                newVideoId0 = '0XrH2WO1Mzs'; //baby pandas
+                if(videoType == 1){
+                    newVideoId0 = 'F1eLeIocAcU'; //dreams of dali
+                }
             }
             else if (videoLeftArr[videoIndex] == 3){
-                newVideoId0 = 'x4zyGhdGkmg';
+                newVideoId0 = 'x4zyGhdGkmg'; //cruise tour
+                if(videoType == 1){
+                    newVideoId0 = '5pXzFcicSHE'; //mountain biking
+                }
             }
             else{
-                newVideoId0 = 'sPyAQQklc1s';
+                newVideoId0 = 'sPyAQQklc1s'; //lions 360
+                if(videoType == 1){
+                    newVideoId0 = 'zm3oZFu3rO4'; //making pasta
+                }
             }
         }
 

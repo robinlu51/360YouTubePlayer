@@ -50,6 +50,9 @@
             <input type="checkbox" id="control5_checkbox">
             <button type="button" id="control5button" class="tablinks" onclick="switchTab('control5')">Click and Move
             </button>
+            <input type="checkbox" id="control6_checkbox">
+            <button type="button" id="control6button" class="tablinks" onclick="switchTab('control6')">Perspective Control Alt (Unimplemented)
+            </button>
         </div>
 
         <div id="player0"></div>
@@ -231,6 +234,10 @@
             </div>
             <div id="clickAndMoveBox0" class="cursorBox"></div>
         </div>
+        <div id="control6" class="tabContent">
+            <div id="cursorBox6" class="cursorBox">
+            </div>
+        </div>
 
         <div id="timelineBox0" class="blockBox"></div>
         <!-- The big play button is what is assumed to be the first step in every tutorial, since the user needs to click it
@@ -302,25 +309,7 @@
 
     let currentTutorialMethodNum = 0; //keeps track of which control method is active in the tutorial, 1 indicates control method 1, 2 indicates control method 2, etc.
     let currentTutorialStep = 0; //keeps track of which tutorial step the user is currently on, for now, 1 indicates step 1, 2 indicates step 2, etc.
-    /*document.getElementById("tutorial1Checkbox1").disabled = true;
-    document.getElementById("tutorial1Checkbox2").disabled = true;
-    document.getElementById("tutorial1Checkbox3").disabled = true;
-    document.getElementById("tutorial1Checkbox4").disabled = true;
-    document.getElementById("tutorial1Checkbox5").disabled = true;
 
-    document.getElementById("tutorial2Checkbox1").disabled = true;
-    document.getElementById("tutorial2Checkbox2").disabled = true;
-    document.getElementById("tutorial2Checkbox3").disabled = true;
-    document.getElementById("tutorial2Checkbox4").disabled = true;
-    document.getElementById("tutorial2Checkbox5").disabled = true;
-    document.getElementById("tutorial2Checkbox6").disabled = true;
-
-    document.getElementById("tutorial3Checkbox1").disabled = true;
-    document.getElementById("tutorial3Checkbox2").disabled = true;
-    document.getElementById("tutorial3Checkbox3").disabled = true;
-
-    document.getElementById("tutorial4Checkbox1").disabled = true;
-    document.getElementById("tutorial4Checkbox2").disabled = true;*/
     let tutorialMessage1 = [ // component used to assemble the messages that will be shown to the user for control method 1 tutorial
         {
             type: 0, //type 0 for instruction message, type 1 for message that will be displayed on completion

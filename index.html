@@ -295,6 +295,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
         $('#control3').css('display', 'none');
         $('#control4').css('display', 'none');
         $('#control5').css('display', 'none');
+        //TODO check how this is working without hiding control 6
 
         document.getElementById("savechange").addEventListener("click", function(){
             $('#videoSeenCountModal').modal('hide');
@@ -310,17 +311,24 @@ if there's a mismatch in number of videos seen, send back to first window to res
         //$('#videoSeenModal').modal('show');
     });
 
-    document.getElementById("control1_checkbox").disabled = true;//so that users can't manually check/uncheck just the boxes
+    let netYawChange = 0; //keeps track of how much the horizontal FOV has changed
+    let netPitchChange = 0; //keeps track of how much the vertical FOV has changed
+    let firstYawAlert1 = false; //keeps track of whether the first yaw change alert has been sent out
+    //It's name firstYawAlert1, because the 1 indicates it's used for tutorial 1
+    let firstPitchAlert1 = false; //keeps track of whether the first pitch change alert has been sent out
+    let firstYawAlert2 = false; //keeps track of whether the first yaw change alert has been sent out
+    //It's name firstYawAlert2, because the 2 indicates it's used for tutorial 2
+    let firstPitchAlert2 = false; //keeps track of whether the first pitch change alert has been sent out
+    let netYawChangeThreshold = 2500;
+    let netPitchChangeThreshold = 1500;
+
+    let activeControlMethod = 'control1';// this keeps tracks of the current active control method number, currently only used for the tutorial
+
+    document.getElementById("control1_checkbox").disabled = true;
     document.getElementById("control2_checkbox").disabled = true;
     document.getElementById("control3_checkbox").disabled = true;
     document.getElementById("control4_checkbox").disabled = true;
     document.getElementById("control5_checkbox").disabled = true;
-    document.getElementById("control6_checkbox").disabled = true;
-
-    //document.getElementById("video1ModalCheckbox").disabled = true;
-    //document.getElementById("video2ModalCheckbox").disabled = true;
-    //document.getElementById("video3ModalCheckbox").disabled = true;
-    //document.getElementById("video4ModalCheckbox").disabled = true;
 
     let currentTutorialMethodNum = 0; //keeps track of which control method is active in the tutorial, 1 indicates control method 1, 2 indicates control method 2, etc.
     let currentTutorialStep = 0; //keeps track of which tutorial step the user is currently on, for now, 1 indicates step 1, 2 indicates step 2, etc.

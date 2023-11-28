@@ -51,6 +51,9 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/index.html" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="ProjectId" id="1Zg27SFins2LRdLAPWIO1jZJzdQ" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -203,6 +206,7 @@
       <workItem from="1692028475591" duration="4148000" />
       <workItem from="1696352070224" duration="2524000" />
       <workItem from="1699983707670" duration="4974000" />
+      <workItem from="1701194464668" duration="1754000" />
     </task>
     <task id="LOCAL-00001" summary="Moved camera movement logging into its own data structure.">
       <created>1631044767407</created>

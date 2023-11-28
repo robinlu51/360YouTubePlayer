@@ -181,6 +181,9 @@ if there's a mismatch in number of videos seen, send back to first window to res
         </div>
 
         <div id="control2" class="tabContent">
+            <div id="tutorialSection2" style="margin-top: 10px;margin-bottom: 10px;text-align: center">
+            </div>
+
             <!--
             <p id="mouseCoords1" style="clear: none;">Mouse cursor X/Y: 0, 0</p>
             -->
@@ -190,49 +193,9 @@ if there's a mismatch in number of videos seen, send back to first window to res
         </div>
 
         <div id="control3" class="tabContent">
-            <!--
-            <div>
-                <button id="upLeftButton" type="button" class="button" onmousedown="lookUpLeft()"
-                        onmouseup="stopCamera()">
-                    Up
-                    Left
-                </button>
-                <button id="upButton" type="button" class="button" onmousedown="lookUp()" onmouseup="stopCamera()">
-                    Up
-                </button>
-                <button id="upRightButton" type="button" class="button" onmousedown="lookUpRight()"
-                        onmouseup="stopCamera()">Up
-                    Right
-                </button>
+            <div id="tutorialSection3" style="margin-top: 10px;margin-bottom: 10px;text-align: center">
             </div>
-            <div>
-                <button id="leftButton" type="button" class="button" onmousedown="lookLeft()"
-                        onmouseup="stopCamera()">
-                    Left
-                </button>
-                <button id="midButton" type="button" class="button" onmousedown="lookReset()"
-                        onmouseup="stopCamera()">
-                    Mid
-                </button>
-                <button id="rightButton" type="button" class="button" onmousedown="lookRight()"
-                        onmouseup="stopCamera()">
-                    Right
-                </button>
-            </div>
-            <div>
-                <button id="downLeftButton" type="button" class="button" onmousedown="lookDownLeft()"
-                        onmouseup="stopCamera()">
-                    Down Left
-                </button>
-                <button id="downButton" type="button" class="button" onmousedown="lookDown()"
-                        onmouseup="stopCamera()">
-                    Down
-                </button>
-                <button id="downRightButton" type="button" class="button" onmousedown="lookDownRight()"
-                        onmouseup="stopCamera()">Down Right
-                </button>
-            </div>
-            -->
+
             <div id="directionBlockBox0" class="blockBox"></div>
             <div id="directionBlockBox1" class="blockBox"></div>
             <div id="directionBlockBox2" class="blockBox"></div>
@@ -240,6 +203,9 @@ if there's a mismatch in number of videos seen, send back to first window to res
             </div>
         </div>
         <div id="control4" class="tabContent">
+            <div id="tutorialSection4" style="margin-top: 10px;margin-bottom: 10px;text-align: center">
+            </div>
+
             <div id="cursorBox4" class="cursorBox">
                 <div id="dragAndDropBox0" class="blockBox"></div>
                 <!--<div id="dragAndDropBox1" class="blockBox"></div>-->
@@ -247,9 +213,15 @@ if there's a mismatch in number of videos seen, send back to first window to res
             <div id="timelineBox0" class="blockBox"></div>
         </div>
         <div id="control5" class="tabContent">
+            <div id="tutorialSection5" style="margin-top: 10px;margin-bottom: 10px;text-align: center">
+            </div>
+
             <div id="clickAndMoveBox0" class="cursorBox"></div>
         </div>
         <div id="control6" class="tabContent">
+            <div id="tutorialSection6" style="margin-top: 10px;margin-bottom: 10px;text-align: center">
+            </div>
+
             <div id="cursorBox6" class="cursorBox">
             </div>
         </div>
@@ -305,9 +277,6 @@ if there's a mismatch in number of videos seen, send back to first window to res
             $('#videoSeenCountModal').modal('hide');
             $('#videoSeenModal').modal('show');
             $('#videoSeenModal').css("overflow", "auto");
-          //  let myModal = new bootstrap.Modal(document.getElementbyId('videoSeenModal',{}));
-            //myModal.show();
-
         })
 
         //auto show the modal window on load to check which video the user has seen
@@ -880,6 +849,117 @@ if there's a mismatch in number of videos seen, send back to first window to res
 
     ];
 
+    let tutorialMessage5 = [ // component used to assemble the messages that will be shown to the user for control method 4 tutorial
+        {
+            type: 0, //type 0 for instruction message, type 1 for message that will be displayed on completion
+            //if we add more types, remember to update logic in renderHTML()
+            sectionID: 5, //indicate which tutorial this is for, with Perspective Control w/ Mouse being 1, Drag & Drop being 4, etc.
+            stepNum: 1, // step number that this message belongs to, start at 1 corresponding to the step number. Completion messages have the same step number as the step it belongs to
+            message: "To start, first click on the big start button in the middle", // Leave a space at the beginning of instructions because of the existence of checkboxes
+            verifyFunc: function () { // verifyFunc is used to set up event listeners and other functions that will be used to check tutorial progress within each step
+                //let eventLF = function () { //this currently doesn't do anything since nothing calls verifyFunc() for this element yet
+                console.log('Alert 0'); // this alert is currently only for debugging purposes, remove when finished implementing
+                //}
+                //document.getElementById("bigPlayButton").addEventListener('click', eventLF);
+            }
+        },
+        {
+            type: 1,
+            sectionID: 5,
+            stepNum: 1,
+            message: "Well done! Click this button to go to the next step.",
+            verifyFunc: function () {
+                console.log('Alert 1');
+            }
+        },
+        {
+            type: 0,
+            sectionID: 5,
+            stepNum: 2,
+            message: "To move the camera around, click the highlighted button wheel, camera will move in the direction you click on",
+            verifyFunc: function () {
+                if (true) {//TODO this currently just advances to the next step, since I don't know what to check for, without a eventListener I can add
+                    nextStep(currentTutorialMethodNum, currentTutorialStep);
+                }
+                console.log('Alert 2');
+            }
+        },
+        {
+            type: 1,
+            sectionID: 5,
+            stepNum: 2,
+            message: "Well done! Click this button to go to the next step.",
+            verifyFunc: function () {
+                console.log('Alert 3');
+            }
+        },
+        {
+            type: 0,
+            sectionID: 5,
+            stepNum: 3,
+            message: "Congratulations! You've completed this tutorial. Here is the code: 1234",
+            verifyFunc: function () {
+                console.log('Alert 4');
+            }
+        }
+    ];
+
+    let tutorialMessage6 = [ // component used to assemble the messages that will be shown to the user for control method 4 tutorial
+        {
+            type: 0, //type 0 for instruction message, type 1 for message that will be displayed on completion
+            //if we add more types, remember to update logic in renderHTML()
+            sectionID: 6, //indicate which tutorial this is for, with Perspective Control w/ Mouse being 1, Drag & Drop being 4, etc.
+            stepNum: 1, // step number that this message belongs to, start at 1 corresponding to the step number. Completion messages have the same step number as the step it belongs to
+            message: "To start, first click on the big start button in the middle", // Leave a space at the beginning of instructions because of the existence of checkboxes
+            verifyFunc: function () { // verifyFunc is used to set up event listeners and other functions that will be used to check tutorial progress within each step
+                //let eventLF = function () { //this currently doesn't do anything since nothing calls verifyFunc() for this element yet
+                console.log('Alert 0'); // this alert is currently only for debugging purposes, remove when finished implementing
+                //}
+                //document.getElementById("bigPlayButton").addEventListener('click', eventLF);
+            }
+        },
+        {
+            type: 1,
+            sectionID: 6,
+            stepNum: 1,
+            message: "Well done! Click this button to go to the next step.",
+            verifyFunc: function () {
+                console.log('Alert 1');
+            }
+        },
+        {
+            type: 0,
+            sectionID: 6,
+            stepNum: 2,
+            message: "To move the camera around, click the highlighted button wheel, camera will move in the direction you click on",
+            verifyFunc: function () {
+                if (true) {//TODO this currently just advances to the next step, since I don't know what to check for, without a eventListener I can add
+                    nextStep(currentTutorialMethodNum, currentTutorialStep);
+                }
+                console.log('Alert 2');
+            }
+        },
+        {
+            type: 1,
+            sectionID: 6,
+            stepNum: 2,
+            message: "Well done! Click this button to go to the next step.",
+            verifyFunc: function () {
+                console.log('Alert 3');
+            }
+        },
+        {
+            type: 0,
+            sectionID: 6,
+            stepNum: 3,
+            message: "Congratulations! You've completed this tutorial. Here is the code: 1234",
+            verifyFunc: function () {
+                console.log('Alert 4');
+            }
+        }
+
+    ];
+
     let renderHTML = function (message) { //this renders the html elements, assembling them together
         let renderedHTML;
         if (message.type == 0) { // if it's an instruction message, render it this way
@@ -908,6 +988,12 @@ if there's a mismatch in number of videos seen, send back to first window to res
         }
         for (let i = 0; i < tutorialMessage4.length; i++) {
             $('#tutorialSection4').append(renderHTML(tutorialMessage4[i]));
+        }
+        for (let i = 0; i < tutorialMessage5.length; i++) {
+            $('#tutorialSection5').append(renderHTML(tutorialMessage5[i]));
+        }
+        for (let i = 0; i < tutorialMessage6.length; i++) {
+            $('#tutorialSection6').append(renderHTML(tutorialMessage6[i]));
         }
     }
 
@@ -1565,9 +1651,11 @@ if there's a mismatch in number of videos seen, send back to first window to res
         } else if (activeControlMethod == 'control4') {
             currentTutorialMethodNum = 4;
             currentTutorialStep = 1;
-        }
-        else if (activeControlMethod == 'control5') {
+        } else if (activeControlMethod == 'control5') {
             currentTutorialMethodNum = 5;
+            currentTutorialStep = 1;
+        } else if (activeControlMethod == 'control6') {
+            currentTutorialMethodNum = 6;
             currentTutorialStep = 1;
         }
     }
@@ -1735,6 +1823,8 @@ if there's a mismatch in number of videos seen, send back to first window to res
         $('#' + controlNum).css('display', 'block');
         $('#' + controlNum + '_checkbox').prop('checked', true);
         $('#' + controlNum + 'button').css('background-color', '#8ff2a3');
+
+        activeControlMethod = controlNum;
     }
 
     //this function will make sure only the given control method is displayed, every other control method will be hidden
@@ -1752,6 +1842,8 @@ if there's a mismatch in number of videos seen, send back to first window to res
         $('#' + controlNum + '_checkbox').prop('checked', true);
         $('#' + controlNum + 'button').css('background-color', '#8ff2a3');
         $('#' + controlNum + 'button').css('display', 'inline');
+
+        activeControlMethod = controlNum;
     }
 
 

@@ -168,9 +168,13 @@ if there's a mismatch in number of videos seen, send back to first window to res
                 <input class='slider' type='range' min='0' max='99' value='95' id='massSliderValue'
                        onchange="updateMass(this.value)">
             </div>
+
             <!--
-            <p id="mouseCoords0" style="clear: none;">Mouse cursor X/Y: 0, 0</p>
+            Tutorial insertion
             -->
+            <div id="tutorialSection1" style="margin-top: 10px;margin-bottom: 10px;text-align: center">
+            </div>
+
             <div id="cursorBox0" class="cursorBox">
                 <div id="cursorSafeZone0" class="safeZone"></div>
             </div>
@@ -252,7 +256,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
 
         <!-- TODO make big play button smaller and more transparent-->
         <button type="button" id="bigPlayButton" class="bigButton"
-                onclick="onPlayClick();hideBigPlayButton()"><i class="fa fa-play"></i></button>
+                onclick="hideBigPlayButton();switchTutorialStepTracker();onPlayClick()"><i class="fa fa-play"></i></button>
 
     </div>
 </form>
@@ -1528,6 +1532,9 @@ if there's a mismatch in number of videos seen, send back to first window to res
         if (player.getPlayerState() == 5 || player.getPlayerState() == 2) {
             player.playVideo();
             $('#playButton').html('Pause');
+            if (currentTutorialStep == 1) { //this assumes that every tutorial's first step is to play the video, if that changes, remember to change this to match the else if branches below and uncomment them
+                nextStep(currentTutorialMethodNum, currentTutorialStep);
+            }
         } else if (player.getPlayerState() == 1) {
             player.pauseVideo();
             $('#playButton').html('Play');
@@ -1542,6 +1549,35 @@ if there's a mismatch in number of videos seen, send back to first window to res
     //hides the big play button
     function hideBigPlayButton() {
         $('#bigPlayButton').css('display', 'none');
+    }
+
+    //switches to the first step of the tutorial for the given control method
+    function switchTutorialStepTracker() {
+        if (activeControlMethod == 'control1') {
+            currentTutorialMethodNum = 1;
+            currentTutorialStep = 1;
+        } else if (activeControlMethod == 'control2') {
+            currentTutorialMethodNum = 2;
+            currentTutorialStep = 1;
+        } else if (activeControlMethod == 'control3') {
+            currentTutorialMethodNum = 3;
+            currentTutorialStep = 1;
+        } else if (activeControlMethod == 'control4') {
+            currentTutorialMethodNum = 4;
+            currentTutorialStep = 1;
+        }
+        else if (activeControlMethod == 'control5') {
+            currentTutorialMethodNum = 5;
+            currentTutorialStep = 1;
+        }
+    }
+
+    //helper function that goes to the next step in the tutorial. Hides the current step that has been finished and display the current step's complete message
+    function nextStep(currentTutorialMethodNum, currentTutorialStep) {
+        let stepName = 'tutorial' + currentTutorialMethodNum + 'Step' + currentTutorialStep;
+        let completeMessage = 'tutorial' + currentTutorialMethodNum + 'CompleteMessage' + currentTutorialStep;
+        $('#' + stepName).css('display', 'none');
+        $('#' + completeMessage).css('display', 'inline');
     }
 
     //somehow it's not working, will need to debug later

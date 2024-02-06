@@ -292,8 +292,8 @@ if there's a mismatch in number of videos seen, send back to first window to res
     let firstYawAlert2 = false; //keeps track of whether the first yaw change alert has been sent out
     //It's name firstYawAlert2, because the 2 indicates it's used for tutorial 2
     let firstPitchAlert2 = false; //keeps track of whether the first pitch change alert has been sent out
-    let netYawChangeThreshold = 2500;
-    let netPitchChangeThreshold = 1500;
+    let netYawChangeThreshold = 1500;
+    let netPitchChangeThreshold = 750;
 
     let activeControlMethod = 'control1';// this keeps tracks of the current active control method number, currently only used for the tutorial
 
@@ -383,11 +383,11 @@ if there's a mismatch in number of videos seen, send back to first window to res
 
                     if (netYawChange > netYawChangeThreshold && firstYawAlert1 == false) {
                         firstYawAlert1 = true;
-                        console.log('Yaw moved 2500');
+                        console.log('Yaw moved 1500');
                     }
                     if (netPitchChange > netPitchChangeThreshold && firstPitchAlert1 == false) {
                         firstPitchAlert1 = true;
-                        console.log('Pitch moved 1500');
+                        console.log('Pitch moved 750');
                     }
                     //TODO remember to remove event listener
                 }
@@ -561,11 +561,11 @@ if there's a mismatch in number of videos seen, send back to first window to res
 
                     if (netYawChange > netYawChangeThreshold && firstYawAlert2 == false) {
                         firstYawAlert2 = true;
-                        console.log('Yaw moved 2500');
+                        console.log('Yaw moved 1500');
                     }
                     if (netPitchChange > netPitchChangeThreshold && firstPitchAlert2 == false) {
                         firstPitchAlert2 = true;
-                        console.log('Pitch moved 1500');
+                        console.log('Pitch moved 750');
                     }
                     //TODO remember to remove event listener
                 }

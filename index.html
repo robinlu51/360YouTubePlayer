@@ -1205,8 +1205,8 @@ if there's a mismatch in number of videos seen, send back to first window to res
     }
 
     function moveSafeZone(event) { // moves the safe zone based on mouse click location, center on click location
-        $('#cursorSafeZone1').css('margin-left', mouseX - playerLeftGapPublicHolder - safeZone0Radius + 'px');
-        $('#cursorSafeZone1').css('margin-top', mouseY - control1HeightPublicHolder - safeZone0Radius + 'px');
+        $('#cursorSafeZone1').css('margin-left', mouseX - playerLeftGapPublicHolder - safeZone1Radius + 'px');
+        $('#cursorSafeZone1').css('margin-top', mouseY - control1HeightPublicHolder - safeZone1Radius + 'px');
         movableSafeZoneCenterX = mouseX - playerLeftGapPublicHolder;
         movableSafeZoneCenterY = mouseY - control1HeightPublicHolder;
     }
@@ -1266,9 +1266,11 @@ if there's a mismatch in number of videos seen, send back to first window to res
         if (!mouseInsideSafeZone1 && cursorBox1Active) {
             targetedXVelocity = movableSafeZoneCenterX - x; // find the center for cursor box, windowWidth/2 is the num of pixels from edge to center
             targetedYVelocity = movableSafeZoneCenterY - y;
+            /*Currently not normalized, normalization changes speed unexpectedly if safe zone was moved
             //the next step normalizes the target velocity so the max velocity is the same no matter the screen size
             targetedXVelocity = 450 * targetedXVelocity/movableSafeZoneCenterX;
             targetedYVelocity = 450 * (9/16) * targetedYVelocity/movableSafeZoneCenterY;//multiplied by 9/16 for the height/width ratio
+            */
         }
         let combinedXVelocity = ((1 - mass) * targetedXVelocity + mass * prevXVelocity); // the actual velocity calculated with momentum
         let combinedYVelocity = ((1 - mass) * targetedYVelocity + mass * prevYVelocity);
@@ -1371,7 +1373,9 @@ if there's a mismatch in number of videos seen, send back to first window to res
     let playerLeftGapPublicHolder;
     let windowWidthPublicHolder;
     let windowHeightPublicHolder;
+    //the following radius values are default values, it will change since we adjust them based on video player size
     let safeZone0Radius = $('#cursorSafeZone0').height() / 2; //the Cursor Box control method's safe zone area's radius
+    let safeZone1Radius = $('#cursorSafeZone1').height() / 2; //the Alt Cursor Box control method's safe zone area's radius
 
     function onYouTubeIframeAPIReady() { //<=== does as it says
         let videoRatioWidth = 16; //video player ratio is 16:9 for now
@@ -1420,6 +1424,9 @@ if there's a mismatch in number of videos seen, send back to first window to res
         cursorBox0.css('margin-left', playerLeftGap + 'px');
         windowWidthPublicHolder = windowWidth;
         windowHeightPublicHolder = windowHeight;
+        $('#cursorSafeZone0').css('height', windowHeight/4 + 'px');
+        $('#cursorSafeZone0').css('width', windowHeight/4 + 'px');
+        safeZone0Radius = $('#cursorSafeZone0').height() / 2;
         $('#cursorSafeZone0').css('margin-top', windowHeight / 2 - safeZone0Radius + 'px');
         $('#cursorSafeZone0').css('margin-left', windowWidth / 2 - safeZone0Radius + 'px');
         $('#cursorSafeZone0').css('pointer-events', 'none');
@@ -1427,15 +1434,17 @@ if there's a mismatch in number of videos seen, send back to first window to res
 
         movableSafeZoneCenterX = windowWidth / 2;
         movableSafeZoneCenterY = windowHeight / 2;
-        let safeZone1Radius = $('#cursorSafeZone1').height() / 2; //the Cursor Box Alt control method's safe zone area's radius
         let cursorBox1 = $('#cursorBox1');
         cursorBox1.css('pointer-events', 'none');
         cursorBox1.css('top', control1Height + 'px');
         cursorBox1.css('width', windowWidth + 'px');
         cursorBox1.css('height', windowHeight - timelineBarHeight + 'px');
         cursorBox1.css('margin-left', playerLeftGap + 'px');
-        $('#cursorSafeZone1').css('margin-top', windowHeight / 2 - safeZone0Radius + 'px');
-        $('#cursorSafeZone1').css('margin-left', windowWidth / 2 - safeZone0Radius + 'px');
+        $('#cursorSafeZone1').css('height', windowHeight/4 + 'px');
+        $('#cursorSafeZone1').css('width', windowHeight/4 + 'px');
+        safeZone1Radius = $('#cursorSafeZone1').height() / 2;
+        $('#cursorSafeZone1').css('margin-top', windowHeight / 2 - safeZone1Radius + 'px');
+        $('#cursorSafeZone1').css('margin-left', windowWidth / 2 - safeZone1Radius + 'px');
         $('#cursorSafeZone1').css('pointer-events', 'none');
 
 

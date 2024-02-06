@@ -1236,6 +1236,9 @@ if there's a mismatch in number of videos seen, send back to first window to res
         if (!mouseInsideSafeZone0 && cursorBox0Active) {
             targetedXVelocity = windowWidthPublicHolder / 2 - x; // find the center for cursor box, windowWidth/2 is the num of pixels from edge to center
             targetedYVelocity = windowHeightPublicHolder / 2 - y;
+            //the next step normalizes the target velocity so the max velocity is the same no matter the screen size
+            targetedXVelocity = 450 * targetedXVelocity/(windowWidthPublicHolder/2);
+            targetedYVelocity = 450 * (9/16) * targetedYVelocity/(windowHeightPublicHolder/2);//multiplied by 9/16 for the height/width ratio
         }
         let combinedXVelocity = ((1 - mass) * targetedXVelocity + mass * prevXVelocity); // the actual velocity calculated with momentum
         let combinedYVelocity = ((1 - mass) * targetedYVelocity + mass * prevYVelocity);
@@ -1263,6 +1266,9 @@ if there's a mismatch in number of videos seen, send back to first window to res
         if (!mouseInsideSafeZone1 && cursorBox1Active) {
             targetedXVelocity = movableSafeZoneCenterX - x; // find the center for cursor box, windowWidth/2 is the num of pixels from edge to center
             targetedYVelocity = movableSafeZoneCenterY - y;
+            //the next step normalizes the target velocity so the max velocity is the same no matter the screen size
+            targetedXVelocity = 450 * targetedXVelocity/movableSafeZoneCenterX;
+            targetedYVelocity = 450 * (9/16) * targetedYVelocity/movableSafeZoneCenterY;//multiplied by 9/16 for the height/width ratio
         }
         let combinedXVelocity = ((1 - mass) * targetedXVelocity + mass * prevXVelocity); // the actual velocity calculated with momentum
         let combinedYVelocity = ((1 - mass) * targetedYVelocity + mass * prevYVelocity);

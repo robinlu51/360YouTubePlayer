@@ -302,6 +302,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
     document.getElementById("control3_checkbox").disabled = true;
     document.getElementById("control4_checkbox").disabled = true;
     document.getElementById("control5_checkbox").disabled = true;
+    document.getElementById("control6_checkbox").disabled = true;
 
     let currentTutorialMethodNum = 0; //keeps track of which control method is active in the tutorial, 1 indicates control method 1, 2 indicates control method 2, etc.
     let currentTutorialStep = 0; //keeps track of which tutorial step the user is currently on, for now, 1 indicates step 1, 2 indicates step 2, etc.
@@ -409,7 +410,6 @@ if there's a mismatch in number of videos seen, send back to first window to res
             stepNum: 3,
             message: "To stop camera movement, simply move your mouse cursor back to the center of the video player<p id=\"tutorial1li3\" style=\"display:inline-block;margin-left: 10px\">Stop counter: 0/3</p>",
             verifyFunc: function () {
-                //
                 let control1StopCounter = 0;
                 let eventLF = function () {
                     mouseInsideSafeZone0 = true;
@@ -931,11 +931,17 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 6,
             stepNum: 2,
-            message: "To move the camera around, click the highlighted button wheel, camera will move in the direction you click on",
+            message: "To move the camera around, click on where you'd like your camera to turn towards, do this 3 times, (0/3)",
             verifyFunc: function () {
-                if (true) {//TODO this currently just advances to the next step, since I don't know what to check for, without a eventListener I can add
-                    nextStep(currentTutorialMethodNum, currentTutorialStep);
+                let clickMoveTutorialCounter = 0;
+                let clickMoveTutorialGoal = 3;
+                let eventLF = function () {
+                    clickMoveTutorialCounter++;
+                    if (clickMoveTutorialCounter >= clickMoveTutorialGoal) { //if the user has clicked enough times
+                        nextStep(currentTutorialMethodNum, currentTutorialStep);
+                    }
                 }
+                document.getElementById("cursorBox6").addEventListener('click', eventLF)
                 console.log('Alert 2');
             }
         },

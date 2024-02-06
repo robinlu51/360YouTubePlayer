@@ -210,7 +210,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
                 <div id="dragAndDropBox0" class="blockBox"></div>
                 <!--<div id="dragAndDropBox1" class="blockBox"></div>-->
             </div>
-            <div id="timelineBox0" class="blockBox"></div>
+            <!--<div id="timelineBox0" class="blockBox"></div> currently not needed sincewe don't block timeline control-->
         </div>
         <div id="control5" class="tabContent">
             <div id="tutorialSection5" style="margin-top: 10px;margin-bottom: 10px;text-align: center">
@@ -315,7 +315,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
             message: "To start, first click on the big start button in the middle", // Leave a space at the beginning of instructions because of the existence of checkboxes
             verifyFunc: function () { // verifyFunc is used to set up event listeners and other functions that will be used to check tutorial progress within each step
                 //let eventLF = function () { //this currently doesn't do anything since nothing calls verifyFunc() for this element yet
-                console.log('Alert 0'); // this alert is currently only for debugging purposes, remove when finished implementing
+                console.log('Alert 0'); //TODO this alert is currently only for debugging purposes, remove when finished implementing
                 //}
                 //document.getElementById("bigPlayButton").addEventListener('click', eventLF);
             }
@@ -1006,11 +1006,15 @@ if there's a mismatch in number of videos seen, send back to first window to res
 
     let myURL = new URL(window.location.href); //collection for all URL parameters
 
+    //There is currently one more URL parameter located in onYouTubeIframeAPIReady(), vidID, which is the video ID
+
+    /* currently unused because we're not blocking timeline control access
+    should also be renamed disableTimelineControl, because it's meant to disable timeline control
     let hideControl = myURL.searchParams.get("hideControl"); //URL parameter for whether timeline control is hidden
     let defaultHideControl = '0';
     if (!hideControl > '') { // if there's no control number, default to control 1
         hideControl = defaultHideControl;
-    }
+    }*/
 
     let controlMethod = myURL.searchParams.get("controlMethod"); //URL parameter for the control method on load
     let defaultControlMethod = '0';
@@ -1376,7 +1380,8 @@ if there's a mismatch in number of videos seen, send back to first window to res
 
         //let adjustedWidth = window.innerWidth * 2 / 3 - 20; //ratio for the col-8 and 4 bootstrap grid
         let control1Height = $('#playButton').height() + $('#controlMethodTab').height() + $('#x_axis_label').height() + $('#massValue').height() + $('#sliderBar').height() + 35; //+ $('#mouseCoords').height()
-        let windowHeight = window.innerHeight - 20 - control1Height; //these numbers indicate the maximum size the video player can be
+        let windowHeight = window.innerHeight - 20 - control1Height; //these numbers indicate the maximum size the video player can be,
+        //it is actually the video player's height, no the window
         let windowWidth = window.innerWidth; //maximum width on screen that can be used for display
         //we want to make the video player as large as allowed without needing to scroll, while maintaining a 16:9 ratio
         if (windowHeight >= videoRatioHeight / videoRatioWidth * windowWidth) {
@@ -1488,6 +1493,8 @@ if there's a mismatch in number of videos seen, send back to first window to res
         cursorBox6.css('height', windowHeight - timelineBarHeight + 'px');
         cursorBox6.css('margin-left', playerLeftGap + 'px');
 
+        /* currently not needed, since we're not blocking out timeline control
+        it also lacks actually blocking functionality as of now, users can just click through
         let timelineBox0 = $('#timelineBox0'); //this blocks out the timeline if the hideControl URL parameter is 1
         timelineBox0.css('left', playerLeftGap + 'px');
         timelineBox0.css('top', control1Height + windowHeight - timelineBarHeight + 'px');
@@ -1498,7 +1505,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
         if (hideControl == 1) {
             timelineBox0.css('display', 'block');
             timelineBox0.css('background-color', 'white');
-        }
+        }*/
 
         //this hides almost all control options if the hideControlOption URL parameter is 1
         if (hideControlOption == 1) {
@@ -1534,13 +1541,15 @@ if there's a mismatch in number of videos seen, send back to first window to res
                     'onStateChange': onStateChange
                 }
             });
+            $('#videoSeenCountModal').modal('hide');//auto hide modal window if a specific video ID is given,
+            //since we don't need to randomize for a video any more
         }
 
         if (controlMethod != 0) {
             exclusiveTab('control' + controlMethod);
         }
         else{
-            switchTab('control1');//if no URL parameter is given, show all controls, but only control 1 is functional
+            switchTab('control1');//if no URL parameter is given, show all controls
         }
     }
 

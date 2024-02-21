@@ -206,10 +206,6 @@ if there's a mismatch in number of videos seen, send back to first window to res
             <div id="tutorialSection4" style="margin-top: 10px;margin-bottom: 10px;text-align: center">
             </div>
 
-            <div id="cursorBox4" class="cursorBox">
-                <div id="dragAndDropBox0" class="blockBox"></div>
-                <!--<div id="dragAndDropBox1" class="blockBox"></div>-->
-            </div>
             <!--<div id="timelineBox0" class="blockBox"></div> currently not needed sincewe don't block timeline control-->
         </div>
         <div id="control5" class="tabContent">
@@ -1131,6 +1127,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
     });
 
     //adding event listeners for Drag & Drop Alt
+    /*
     //TODO look into this one, is this a remnant of the failed alternative drag and drop?
     let mouseInsideBox4 = false;
     document.getElementById("cursorBox4").addEventListener('mouseenter', function () {
@@ -1139,7 +1136,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
     document.getElementById("cursorBox4").addEventListener('mouseleave', function () {
         mouseInsideBox4 = false;
     });
-
+    */
 
     //adding event listeners for Click and Move (control 5)
     document.getElementById("clickAndMoveBox0").addEventListener('click', clickCameraMove);
@@ -1178,6 +1175,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
     //Drag&Drop method and the Play/Pause button isn't updated
     //document.getElementById('cursorBox1').addEventListener('click', checkPauseStatus);
 
+    /*
     //control for control method 4
     let cameraControl4Active = false;
     document.getElementById('cursorBox4').addEventListener('mouseenter', updateCoords);
@@ -1190,7 +1188,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
     document.getElementById('cursorBox4').addEventListener('mouseup', function () {
         $(this).css('pointer-events', 'auto');
         cameraControl4Active = false;
-    });
+    });*/
 
     //control for Perspective Control Alt
     document.getElementById("cursorBox6").addEventListener('mouseenter', updateCoords);
@@ -1478,12 +1476,13 @@ if there's a mismatch in number of videos seen, send back to first window to res
         directionBlockBox2.css('width', windowWidth + 'px');
         directionBlockBox2.css('height', windowHeight - directionButtonHeight - directionButtonTopGap - timelineBarHeight + 'px');
 
+        /*
         let cursorBox4 = $('#cursorBox4');
         //cursorBox4.css('pointer-events', 'none');
         cursorBox4.css('top', control1Height + 'px');
         cursorBox4.css('width', windowWidth + 'px');
         cursorBox4.css('height', windowHeight - timelineBarHeight + 'px');
-        cursorBox4.css('margin-left', playerLeftGap + 'px');
+        cursorBox4.css('margin-left', playerLeftGap + 'px');*/
 
         let dragAndDropBox0 = $('#dragAndDropBox0'); //block out the direction wheel for Drag & Drop
         dragAndDropBox0.css('left', playerLeftGap + 'px');
@@ -1586,7 +1585,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
             $('#directionBlockBox2').css('background-color', 'transparent');
             $('#dragAndDropBox0').css('background-color', 'transparent');
             $('#dragAndDropBox1').css('background-color', 'transparent');
-            $('#cursorBox4').css('background-color', 'transparent');
+            //$('#cursorBox4').css('background-color', 'transparent');
             $('#clickAndMoveBox0').css('background-color', 'transparent');
             $('#cursorBox6').css('background-color', 'transparent');
             visualIndicatorLabel.html('Visual Indicator Shown');
@@ -1608,7 +1607,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
             $('#directionBlockBox2').css('background-color', 'lightblue');
             $('#dragAndDropBox0').css('background-color', 'lightblue');
             $('#dragAndDropBox1').css('background-color', 'lightblue');
-            $('#cursorBox4').css('background-color', 'lightblue');
+            //$('#cursorBox4').css('background-color', 'lightblue');
             $('#clickAndMoveBox0').css('background-color', 'lightblue');
             $('#cursorBox6').css('background-color', 'lightblue');
             visualIndicatorLabel.html('Visual Indicator Hidden');

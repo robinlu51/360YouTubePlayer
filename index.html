@@ -927,12 +927,17 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 6,
             stepNum: 2,
-            message: "To move the camera around, click on where you'd like your camera to turn towards, do this 3 times, (0/3)",
+            message: "To move the camera around, click on where you'd like your camera to turn towards, do this 3 times, (<p id=\"tutorial6li2\" style=\"display:inline-block;\"> <span id='tutorial6CameraTrack1'>0</span>"+"/3)",
             verifyFunc: function () {
                 let clickMoveTutorialCounter = 0;
                 let clickMoveTutorialGoal = 3;
                 let eventLF = function () {
                     clickMoveTutorialCounter++;
+                    if (clickMoveTutorialCounter < clickMoveTutorialGoal) {
+                        document.querySelector('#tutorial6CameraTrack1').innerHTML = `${clickMoveTutorialCounter}`;
+                    } else {
+                        document.querySelector('#tutorial6CameraTrack1').innerHTML = `${clickMoveTutorialGoal}`;
+                    }
                     if (clickMoveTutorialCounter >= clickMoveTutorialGoal) { //if the user has clicked enough times
                         nextStep(currentTutorialMethodNum, currentTutorialStep);
                     }
@@ -950,6 +955,39 @@ if there's a mismatch in number of videos seen, send back to first window to res
                 console.log('Alert 3');
             }
         },
+        /*
+        {
+            type: 0,
+            sectionID: 6,
+            stepNum: 3,
+            message: "To move further, hold the mouse button (<p id=\"tutorial6li3\" style=\"display:inline-block;\"> <span id='tutorial6CameraTrack2'>0</span>"+"/"+netYawChangeThreshold+")",
+            verifyFunc: function () {
+                let prevMouseX = mouseX;
+                let prevMouseY = mouseY;
+                let eventLF = function () {
+                    let tempMouseX = event.clientX;
+                    let tempMouseY = event.clientY;
+                    netYawChange += Math.abs(tempMouseX - prevMouseX);
+                    netPitchChange += Math.abs(tempMouseY - prevMouseY);
+                    prevMouseX = tempMouseX;
+                    prevMouseY = tempMouseY;
+                    if (netYawChange >= netYawChangeThreshold) { //if the user has moved far enough
+                        nextStep(currentTutorialMethodNum, currentTutorialStep);
+                    }
+                }
+                document.getElementById("cursorBox6").addEventListener('click', eventLF)
+                console.log('Alert 2');
+            }
+        },
+        {
+            type: 1,
+            sectionID: 6,
+            stepNum: 3,
+            message: "Well done! Click this button to go to the next step.",
+            verifyFunc: function () {
+                console.log('Alert 3');
+            }
+        },*/
         {
             type: 0,
             sectionID: 6,

@@ -1356,7 +1356,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
     //Probably should've started this in the main page but I guess having this on the tutorial page first lets me try
     //to get a look on how it'll look when I make tutorials for this, so that's still not entirely bad
     function clickCameraMove(event) { //function for moving camera in control 5 (click and move)
-        let animationID; // to keep track of the animation requested if we need to stop/cancel it
+        //let animationID; // to keep track of the animation requested if we need to stop/cancel it
 
         mouseX = event.clientX;
         mouseY = event.clientY;
@@ -1770,8 +1770,6 @@ if there's a mismatch in number of videos seen, send back to first window to res
         }
     }
 
-
-
     //provides a random video to load, based on which video has been selected
     function videoRandomization(){
         /* Here are the video ID's
@@ -1915,7 +1913,9 @@ if there's a mismatch in number of videos seen, send back to first window to res
 
 
     //function below for camera control is currently defunct, but could potentially be used for future implementation
+    /*
     let animationID; // to keep track of the animation requested if we need to stop/cancel it
+
     function lookUpLeft() {
         let newSettings = player.getSphericalProperties();
         newSettings['pitch'] += 2.5;
@@ -1988,7 +1988,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
 
     function stopCamera() {
         cancelAnimationFrame(animationID);
-    }
+    }*/
 
 </script>
 

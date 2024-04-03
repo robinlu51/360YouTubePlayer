@@ -816,9 +816,10 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 4,
             stepNum: 2,
-            message: "To move the camera around, click the highlighted button wheel, camera will move in the direction you click on",
+            message: "Empty",
             verifyFunc: function () {
-                if (true) {//TODO this currently just advances to the next step, since I don't know what to check for, without a eventListener I can add
+                let somevariable = 0;
+                if (true) { //For drag & drop tutorial, it will not be interactive, so we auto proceed to next step
                     nextStep(currentTutorialMethodNum, currentTutorialStep);
                 }
                 console.log('Alert 2');
@@ -828,7 +829,8 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 1,
             sectionID: 4,
             stepNum: 2,
-            message: "Well done! Click this button to go to the next step.",
+            message: "To move the camera around, hold down your mouse button and drag it to move it around. " +
+                "When you're ready, click on 'Next' to move on",
             verifyFunc: function () {
                 console.log('Alert 3');
             }
@@ -872,11 +874,23 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 5,
             stepNum: 2,
-            message: "To move the camera around, click the highlighted button wheel, camera will move in the direction you click on",
+            message: "To move the camera around, click on where you'd like your camera to turn towards. The location you click on will be centered on your screen. Do this 3 times, (<p id=\"tutorial5li2\" style=\"display:inline-block;\"> <span id='tutorial5CameraTrack1'>0</span>"+"/3)",
             verifyFunc: function () {
-                if (true) {//TODO this currently just advances to the next step, since I don't know what to check for, without a eventListener I can add
-                    nextStep(currentTutorialMethodNum, currentTutorialStep);
+                let clickMoveTutorialCounter = 0;
+                let clickMoveTutorialGoal = 3;
+                let eventLF = function () {
+                    clickMoveTutorialCounter++;
+                    if (clickMoveTutorialCounter < clickMoveTutorialGoal) {
+                        document.querySelector('#tutorial5CameraTrack1').innerHTML = `${clickMoveTutorialCounter}`;
+                    } else {
+                        document.querySelector('#tutorial5CameraTrack1').innerHTML = `${clickMoveTutorialGoal}`;
+                    }
+                    if (clickMoveTutorialCounter >= clickMoveTutorialGoal) { //if the user has clicked enough times
+                        document.getElementById("clickAndMoveBox0").removeEventListener('click', eventLF)
+                        nextStep(currentTutorialMethodNum, currentTutorialStep);
+                    }
                 }
+                document.getElementById("clickAndMoveBox0").addEventListener('click', eventLF);
                 console.log('Alert 2');
             }
         },
@@ -893,6 +907,35 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 5,
             stepNum: 3,
+            message: "Try and click on the top left corner of the video, (<p id=\"tutorial5li2\" style=\"display:inline-block;\"> <span id='tutorial5CameraTrack1'>0</span>"+"/3)",
+            verifyFunc: function () {
+                let clickCoordinateX = 100;//TODO add in dynamic cursor location tracking
+                let clickCoordinateY = 0;
+                let eventLF = function () {
+                    if (clickCoordinateX <= windowWidthPublicHolder/3) { //if the user has clicked on the left side of the player
+                        console.log(windowWidthPublicHolder);
+                        nextStep(currentTutorialMethodNum, currentTutorialStep);
+                    }
+                }
+                document.getElementById("clickAndMoveBox0").addEventListener('click', eventLF)
+                //console.log(clickCoordinateX);
+                //console.log(windowWidthPublicHolder/2);
+
+            }
+        },
+        {
+            type: 1,
+            sectionID: 5,
+            stepNum: 3,
+            message: "Well done! Click this button to go to the next step.",
+            verifyFunc: function () {
+                console.log('Alert 3');
+            }
+        },
+        {
+            type: 0,
+            sectionID: 5,
+            stepNum: 4,
             message: "Congratulations! You've completed this tutorial. Here is the code: 1234",
             verifyFunc: function () {
                 console.log('Alert 4');

@@ -830,7 +830,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
             sectionID: 4,
             stepNum: 2,
             message: "To move the camera around, hold down your mouse button and drag it to move it around. " +
-                "When you're ready, click on 'Next' to move on",
+                "Once you've tried it yourself a couple of times, click on 'Next' to move on",
             verifyFunc: function () {
                 console.log('Alert 3');
             }
@@ -1017,7 +1017,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 6,
             stepNum: 2,
-            message: "To move the camera around, CLICK and HOLD your mouse on where you'd like your camera to turn towards, do this 3 times, (<p id=\"tutorial6li2\" style=\"display:inline-block;\"> <span id='tutorial6CameraTrack1'>0</span>"+"/3)",
+            message: "To move the camera around, CLICK and HOLD your mouse on where you'd like your camera to turn towards. The further your cursor is from the center, the faster the camera moves. If you release the cursor, the camera stops. Do this 3 times, (<p id=\"tutorial6li2\" style=\"display:inline-block;\"> <span id='tutorial6CameraTrack1'>0</span>"+"/3)",
             verifyFunc: function () {
                 let clickMoveTutorialCounter = 0;
                 let clickMoveTutorialGoal = 3;
@@ -1195,7 +1195,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
     // if implementation changes, this will cause camera to behave like the center is at top left corner, until you move safe zone once
 
     let cursorBox0Active = true; //indicates if the cursor box is active
-    $('#cursorSafeZone0').click(function () {
+    $('#cursorBox0').click(function () {
         if (showVisualIndicator) {
             if (cursorBox0Active) {
                 $('#cursorSafeZone0').css('background-color', 'yellow');

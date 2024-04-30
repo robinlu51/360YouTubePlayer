@@ -417,7 +417,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
                         //$('#tutorial1Checkbox3').prop('checked', true);
                         nextStep(currentTutorialMethodNum, currentTutorialStep);
                         //$('#tutorial1Step4').css('display', 'inline');
-                        // get rid of event handler because it is not necessary anymore
+                        // get rid of event listener because it is not necessary anymore
                         document.getElementById("cursorSafeZone0").removeEventListener('mouseenter', eventLF);
                     }
                 }
@@ -891,7 +891,6 @@ if there's a mismatch in number of videos seen, send back to first window to res
                     }
                 }
                 document.getElementById("clickAndMoveBox0").addEventListener('click', eventLF);
-                console.log('Alert 2');
             }
         },
         {
@@ -907,20 +906,29 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 5,
             stepNum: 3,
-            message: "Try and click on the top left corner of the video, (<p id=\"tutorial5li2\" style=\"display:inline-block;\"> <span id='tutorial5CameraTrack1'>0</span>"+"/3)",
+            message: "Try and click on the left side of the video, (<p id=\"tutorial5li3\" style=\"display:inline-block;\"> <span id='tutorial5CameraTrack2'>0</span>"+"/3)",
             verifyFunc: function () {
-                let clickCoordinateX = 100;//TODO add in dynamic cursor location tracking
-                let clickCoordinateY = 0;
-                let eventLF = function () {
-                    if (clickCoordinateX <= windowWidthPublicHolder/3) { //if the user has clicked on the left side of the player
-                        console.log(windowWidthPublicHolder);
-                        nextStep(currentTutorialMethodNum, currentTutorialStep);
+                let leftSideClickCount = 0; //tracks how many times the user has clicked on the left side of the screen
+                let leftSideClickGoal = 3; //the amount of times the users needs to click on the left side
+                let clickCoordinateX = 0; // the coordinates of this click, in respect to the video player's top left corner
+                let clickCoordinateY = 0; // with coordinate 0,0 at the top left. X value increasing as it goes further to the right, Y value increasing as it goes further down
+                let eventLF = function (event) {
+                    clickCoordinateX = event.clientX - playerLeftGapPublicHolder;
+                    clickCoordinateY = event.clientY - control1HeightPublicHolder;
+                    if (clickCoordinateX <= windowWidthPublicHolder*0.4) { //if the user has clicked on the left 40% side of the player
+                        leftSideClickCount++;
+                        if (leftSideClickCount < leftSideClickGoal){
+                            document.querySelector('#tutorial5CameraTrack2').innerHTML = `${leftSideClickCount}`;
+                        } else {
+                            document.querySelector('#tutorial5CameraTrack2').innerHTML = `${leftSideClickGoal}`;
+                        }
+                        if(leftSideClickCount >= 3){
+                            document.getElementById("clickAndMoveBox0").removeEventListener('click', eventLF);
+                            nextStep(currentTutorialMethodNum, currentTutorialStep);
+                        }
                     }
                 }
                 document.getElementById("clickAndMoveBox0").addEventListener('click', eventLF)
-                //console.log(clickCoordinateX);
-                //console.log(windowWidthPublicHolder/2);
-
             }
         },
         {
@@ -936,6 +944,45 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 5,
             stepNum: 4,
+            message: "Try and click on the right side of the video, (<p id=\"tutorial5li4\" style=\"display:inline-block;\"> <span id='tutorial5CameraTrack3'>0</span>"+"/3)",
+            verifyFunc: function () {
+                let rightSideClickCount = 0; //tracks how many times the user has clicked on the right side of the screen
+                let rightSideClickGoal = 3; //the amount of times the users needs to click on the right side
+                let clickCoordinateX = 0; // the coordinates of this click, in respect to the video player's top left corner
+                let clickCoordinateY = 0; // with coordinate 0,0 at the top left. X value increasing as it goes further to the right, Y value increasing as it goes further down
+                let eventLF = function (event) {
+                    clickCoordinateX = event.clientX - playerLeftGapPublicHolder;
+                    clickCoordinateY = event.clientY - control1HeightPublicHolder;
+                    if (clickCoordinateX >= windowWidthPublicHolder * (1-0.4)) { //if the user has clicked on the right 40% side of the player
+                        rightSideClickCount++;
+                        if (rightSideClickCount < rightSideClickGoal){
+                            document.querySelector('#tutorial5CameraTrack3').innerHTML = `${rightSideClickCount}`;
+                        } else {
+                            document.querySelector('#tutorial5CameraTrack3').innerHTML = `${rightSideClickGoal}`;
+                        }
+                        console.log(rightSideClickCount);
+                        if(rightSideClickCount >= 3){
+                            document.getElementById("clickAndMoveBox0").removeEventListener('click', eventLF);
+                            nextStep(currentTutorialMethodNum, currentTutorialStep);
+                        }
+                    }
+                }
+                document.getElementById("clickAndMoveBox0").addEventListener('click', eventLF)
+            }
+        },
+        {
+            type: 1,
+            sectionID: 5,
+            stepNum: 4,
+            message: "Well done! Click this button to go to the next step.",
+            verifyFunc: function () {
+                console.log('Alert 3');
+            }
+        },
+        {
+            type: 0,
+            sectionID: 5,
+            stepNum: 5,
             message: "Congratulations! You've completed this tutorial. Here is the code: 1234",
             verifyFunc: function () {
                 console.log('Alert 4');
@@ -970,7 +1017,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 6,
             stepNum: 2,
-            message: "To move the camera around, click on where you'd like your camera to turn towards, do this 3 times, (<p id=\"tutorial6li2\" style=\"display:inline-block;\"> <span id='tutorial6CameraTrack1'>0</span>"+"/3)",
+            message: "To move the camera around, CLICK and HOLD your mouse on where you'd like your camera to turn towards, do this 3 times, (<p id=\"tutorial6li2\" style=\"display:inline-block;\"> <span id='tutorial6CameraTrack1'>0</span>"+"/3)",
             verifyFunc: function () {
                 let clickMoveTutorialCounter = 0;
                 let clickMoveTutorialGoal = 3;
@@ -982,6 +1029,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
                         document.querySelector('#tutorial6CameraTrack1').innerHTML = `${clickMoveTutorialGoal}`;
                     }
                     if (clickMoveTutorialCounter >= clickMoveTutorialGoal) { //if the user has clicked enough times
+                        document.getElementById("cursorBox6").removeEventListener('click', eventLF);
                         nextStep(currentTutorialMethodNum, currentTutorialStep);
                     }
                 }
@@ -998,28 +1046,33 @@ if there's a mismatch in number of videos seen, send back to first window to res
                 console.log('Alert 3');
             }
         },
-        /*
         {
             type: 0,
             sectionID: 6,
             stepNum: 3,
-            message: "To move further, hold the mouse button (<p id=\"tutorial6li3\" style=\"display:inline-block;\"> <span id='tutorial6CameraTrack2'>0</span>"+"/"+netYawChangeThreshold+")",
+            message: "Try and click on the left side of the video, (<p id=\"tutorial6li3\" style=\"display:inline-block;\"> <span id='tutorial6CameraTrack2'>0</span>"+"/3)",
             verifyFunc: function () {
-                let prevMouseX = mouseX;
-                let prevMouseY = mouseY;
-                let eventLF = function () {
-                    let tempMouseX = event.clientX;
-                    let tempMouseY = event.clientY;
-                    netYawChange += Math.abs(tempMouseX - prevMouseX);
-                    netPitchChange += Math.abs(tempMouseY - prevMouseY);
-                    prevMouseX = tempMouseX;
-                    prevMouseY = tempMouseY;
-                    if (netYawChange >= netYawChangeThreshold) { //if the user has moved far enough
-                        nextStep(currentTutorialMethodNum, currentTutorialStep);
+                let leftSideClickCount = 0; //tracks how many times the user has clicked on the left side of the screen
+                let leftSideClickGoal = 3; //the amount of times the users needs to click on the left side
+                let clickCoordinateX = 0; // the coordinates of this click, in respect to the video player's top left corner
+                let clickCoordinateY = 0; // with coordinate 0,0 at the top left. X value increasing as it goes further to the right, Y value increasing as it goes further down
+                let eventLF = function (event) {
+                    clickCoordinateX = event.clientX - playerLeftGapPublicHolder;
+                    clickCoordinateY = event.clientY - control1HeightPublicHolder;
+                    if (clickCoordinateX <= windowWidthPublicHolder*0.4) { //if the user has clicked on the left 40% side of the player
+                        leftSideClickCount++;
+                        if (leftSideClickCount < leftSideClickGoal){
+                            document.querySelector('#tutorial6CameraTrack2').innerHTML = `${leftSideClickCount}`;
+                        } else {
+                            document.querySelector('#tutorial6CameraTrack2').innerHTML = `${leftSideClickGoal}`;
+                        }
+                        if(leftSideClickCount >= 3){
+                            document.getElementById("cursorBox6").removeEventListener('click', eventLF);
+                            nextStep(currentTutorialMethodNum, currentTutorialStep);
+                        }
                     }
                 }
                 document.getElementById("cursorBox6").addEventListener('click', eventLF)
-                console.log('Alert 2');
             }
         },
         {
@@ -1030,11 +1083,11 @@ if there's a mismatch in number of videos seen, send back to first window to res
             verifyFunc: function () {
                 console.log('Alert 3');
             }
-        },*/
+        },
         {
             type: 0,
             sectionID: 6,
-            stepNum: 3,
+            stepNum: 4,
             message: "Congratulations! You've completed this tutorial. Here is the code: 1234",
             verifyFunc: function () {
                 console.log('Alert 4');
@@ -1238,7 +1291,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
         mouseHeldDown6 = false;
     });
 
-    let mouseX = 0; // the mouse X coordinate WITH RESPECT TO THE VISIBLE SCREEN
+    let mouseX = 0; // the mouse X coordinate WITH RESPECT TO THE VISIBLE SCREEN WINDOW
     let mouseY = 0; // the code should show it with respect to
 
     //control for Perspective Control 1

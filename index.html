@@ -289,7 +289,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
     //It's name firstYawAlert2, because the 2 indicates it's used for tutorial 2
     let firstPitchAlert2 = false; //keeps track of whether the first pitch change alert has been sent out
     let netYawChangeThreshold = 1500;
-    let netPitchChangeThreshold = 750;
+    let netPitchChangeThreshold = 1500;
 
     let activeControlMethod = 'control1';// this keeps tracks of the current active control method number, currently only used for the tutorial
 
@@ -437,14 +437,14 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 1,
             stepNum: 4,
-            message: "You can also click on the center of the video player to disable camera movement",
+            message: "You can also click anywhere on the video player to disable camera movement",
             verifyFunc: function () {
                 console.log('Alert 6');
                 let eventLF = function () {
+                    document.getElementById("cursorBox0").removeEventListener('click', eventLF)
                     nextStep(currentTutorialMethodNum, currentTutorialStep);
-                    //TODO remember to remove event listener
                 }
-                document.getElementById("cursorSafeZone0").addEventListener('click', eventLF)
+                document.getElementById("cursorBox0").addEventListener('click', eventLF)
             }
         },
         {
@@ -460,13 +460,13 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 1,
             stepNum: 5,
-            message: "Click on the center of the video player again to enable it again",
+            message: "Click anywhere on the video player again to enable it again",
             verifyFunc: function () {
                 let eventLF = function () {
+                    document.getElementById("cursorBox0").removeEventListener('click', eventLF)
                     nextStep(currentTutorialMethodNum, currentTutorialStep);
-                    //TODO remember to remove event listener
                 }
-                document.getElementById("cursorSafeZone0").addEventListener('click', eventLF);
+                document.getElementById("cursorBox0").addEventListener('click', eventLF);
             }
         },
         {

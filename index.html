@@ -268,7 +268,16 @@ if there's a mismatch in number of videos seen, send back to first window to res
         $('#control3').css('display', 'none');
         $('#control4').css('display', 'none');
         $('#control5').css('display', 'none');
-        //TODO check how this is working without hiding control 6
+        $('#control6').css('display', 'none');
+
+        if(showTutorial==0){
+            $('#tutorialSection1').css('display', 'none');
+            $('#tutorialSection2').css('display', 'none');
+            $('#tutorialSection3').css('display', 'none');
+            $('#tutorialSection4').css('display', 'none');
+            $('#tutorialSection5').css('display', 'none');
+            $('#tutorialSection6').css('display', 'none');
+        }
 
         document.getElementById("savechange").addEventListener("click", function(){
             $('#videoSeenCountModal').modal('hide');
@@ -1165,10 +1174,9 @@ if there's a mismatch in number of videos seen, send back to first window to res
         hideControlOption = defaultHideControlOption;
     }
 
-    //TODO this is currently unused, need to implement feature
     let showTutorial = myURL.searchParams.get("showTutorial"); //URL parameter for whether the tutorial is shown
-    let defaultShowTutorial = '0';
-    if (!showTutorial > '') { // if there's no input for this, default to 0, which shows tutorial
+    let defaultShowTutorial = '1';
+    if (!showTutorial > '') { // if there's no input for this, default to 1, which shows tutorial
         showTutorial = defaultShowTutorial;
     }
 

@@ -1765,7 +1765,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
     }
 
     // The API will call this function when the video player is ready.
-    function onPlayerReady(event) { //currently unused
+    function onPlayerReady(event) {
         //event.target.playVideo();
         showBigPlayButton();
     }
@@ -1776,6 +1776,10 @@ if there's a mismatch in number of videos seen, send back to first window to res
         $('#cursorBox1').css('pointer-events', 'auto');
         $('#cursorSafeZone1').css('pointer-events', 'auto');
         $('#cursorBox6').css('pointer-events', 'auto');
+        //DO NOT remove
+        // temporary fix for cursorbox not being in focus
+        toggleVisualIndicator();
+        toggleVisualIndicator();
     }
 
     function onLoadClick() {

@@ -35,7 +35,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
                 </button>
             </div>
             <div class="modal-body">
-                <p>Please select the number of videos you have watched so far</p>
+                <p>Please select the number of videos you have watched so far, except for the panda video</p>
                 <form name="videoSeenCountForm">
                     <input type="radio" id="videoSeenCount0" name="videoCount" value="0">
                     <label for="videoSeenCount0">0</label><br>
@@ -492,8 +492,9 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 1,
             stepNum: 6,
-            message: "Congratulations! You've completed this tutorial. Here is the code: 1214",
+            message: "Congratulations! You've completed this tutorial. Here is the code: 1214, copy and paste the code into the survey question. Once entered, you can close this tab.",
             verifyFunc: function () {
+                //pauseVideo();
                 console.log('Alert 10');
             }
         }
@@ -736,8 +737,9 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 2,
             stepNum: 9,
-            message: "Congratulations! You've completed this tutorial. Here is the code: 1234",
+            message: "Congratulations! You've completed this tutorial. Here is the code: 1234, copy and paste the code into the survey question. Once entered, you can close this tab.",
             verifyFunc: function () {
+                //pauseVideo();
                 console.log('Alert 16');
             }
         }
@@ -791,8 +793,9 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 3,
             stepNum: 3,
-            message: "Congratulations! You've completed this tutorial. Here is the code: 1234",
+            message: "Congratulations! You've completed this tutorial. Here is the code: 1234, copy and paste the code into the survey question. Once entered, you can close this tab.",
             verifyFunc: function () {
+                //pauseVideo();
                 console.log('Alert 4');
             }
         }
@@ -849,8 +852,9 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 4,
             stepNum: 3,
-            message: "Congratulations! You've completed this tutorial. Here is the code: 81346",
+            message: "Congratulations! You've completed this tutorial. Here is the code: 81346, copy and paste the code into the survey question. Once entered, you can close this tab.",
             verifyFunc: function () {
+                //pauseVideo();
                 console.log('Alert 4');
             }
         }
@@ -993,8 +997,9 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 5,
             stepNum: 5,
-            message: "Congratulations! You've completed this tutorial. Here is the code: 818",
+            message: "Congratulations! You've completed this tutorial. Here is the code: 818, copy and paste the code into the survey question. Once entered, you can close this tab.",
             verifyFunc: function () {
+                //pauseVideo();
                 console.log('Alert 4');
             }
         }
@@ -1060,7 +1065,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 6,
             stepNum: 3,
-            message: "Try and click on the left side of the video, (<p id=\"tutorial6li3\" style=\"display:inline-block;\"> <span id='tutorial6CameraTrack2'>0</span>"+"/3)",
+            message: "Try and click on the left side of the video, do this 3 times, (<p id=\"tutorial6li3\" style=\"display:inline-block;\"> <span id='tutorial6CameraTrack2'>0</span>"+"/3)",
             verifyFunc: function () {
                 let leftSideClickCount = 0; //tracks how many times the user has clicked on the left side of the screen
                 let leftSideClickGoal = 3; //the amount of times the users needs to click on the left side
@@ -1098,8 +1103,9 @@ if there's a mismatch in number of videos seen, send back to first window to res
             type: 0,
             sectionID: 6,
             stepNum: 4,
-            message: "Congratulations! You've completed this tutorial. Here is the code: 661829",
+            message: "Congratulations! You've completed this tutorial. Here is the code: 661829, copy and paste the code into the survey question. Once entered, you can close this tab.",
             verifyFunc: function () {
+                //pauseVideo();
                 console.log('Alert 4');
             }
         }

@@ -25,36 +25,37 @@ TODO change the auto mute on the video player
 <!--
 if there's a mismatch in number of videos seen, send back to first window to reselect.
 -->
-<div class="modal fade" id="videoSeenCountModal" tabindex="-1" role="dialog" aria-labelledby="videoSeenCountModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="videoSeenCountModalLabel">Video Library</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Please select the number of videos you have watched so far, except for the panda video</p>
-                <form name="videoSeenCountForm">
-                    <input type="radio" id="videoSeenCount0" name="videoCount" value="0">
-                    <label for="videoSeenCount0">0</label><br>
-                    <input type="radio" id="videoSeenCount1" name="videoCount" value="1">
-                    <label for="videoSeenCount1">1</label><br>
-                    <input type="radio" id="videoSeenCount2" name="videoCount" value="2">
-                    <label for="videoSeenCount2">2</label><br>
-                    <input type="radio" id="videoSeenCount3" name="videoCount" value="3">
-                    <label for="videoSeenCount3">3</label><br>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <!-- change the video-->
-                <button type="button" id = "savechange" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
+
+<!--<div class="modal fade" id="videoSeenCountModal" tabindex="-1" role="dialog" aria-labelledby="videoSeenCountModalLabel" aria-hidden="true">-->
+<!--    <div class="modal-dialog" role="document">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h5 class="modal-title" id="videoSeenCountModalLabel">Video Library</h5>-->
+<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true">&times;</span>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <p>Please select the number of videos you have watched so far, except for the panda video</p>-->
+<!--                <form name="videoSeenCountForm">-->
+<!--                    <input type="radio" id="videoSeenCount0" name="videoCount" value="0">-->
+<!--                    <label for="videoSeenCount0">0</label><br>-->
+<!--                    <input type="radio" id="videoSeenCount1" name="videoCount" value="1">-->
+<!--                    <label for="videoSeenCount1">1</label><br>-->
+<!--                    <input type="radio" id="videoSeenCount2" name="videoCount" value="2">-->
+<!--                    <label for="videoSeenCount2">2</label><br>-->
+<!--                    <input type="radio" id="videoSeenCount3" name="videoCount" value="3">-->
+<!--                    <label for="videoSeenCount3">3</label><br>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+<!--                &lt;!&ndash; change the video&ndash;&gt;-->
+<!--                <button type="button" id = "savechange" class="btn btn-primary">Save changes</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
 
 <div class="modal fade" id="videoSeenModal" tabindex="-1" role="dialog" aria-labelledby="videoSeenModalLabel" aria-hidden="true">
@@ -247,12 +248,12 @@ if there's a mismatch in number of videos seen, send back to first window to res
     let videoCount = 4; //total number of videos available from videoRandomization() process
     let videoSeenCount = 0;
     //adds event listener for the radio buttons that's used to keep track of how many videos the user has seen
-    let radios = document.forms["videoSeenCountForm"].elements["videoCount"];
-    for(let i = 0, max = radios.length; i < max; i++) {
-        radios[i].onclick = function() {
-            videoSeenCount = this.value;
-        }
-    }
+    // let radios = document.forms["videoSeenCountForm"].elements["videoCount"];
+    // for(let i = 0, max = radios.length; i < max; i++) {
+    //     radios[i].onclick = function() {
+    //         videoSeenCount = this.value;
+    //     }
+    // }
 
     let PROPERTIES = ['yaw', 'pitch', 'roll', 'fov'];
     let player;
@@ -279,15 +280,15 @@ if there's a mismatch in number of videos seen, send back to first window to res
             $('#tutorialSection6').css('display', 'none');
         }
 
-        document.getElementById("savechange").addEventListener("click", function(){
-            $('#videoSeenCountModal').modal('hide');
-            $('#videoSeenModal').modal('show');
-            $('#videoSeenModal').css("overflow", "auto");
-        })
+        // document.getElementById("savechange").addEventListener("click", function(){
+        //     $('#videoSeenCountModal').modal('hide');
+        //     $('#videoSeenModal').modal('show');
+        //     $('#videoSeenModal').css("overflow", "auto");
+        // })
 
         //auto show the modal window on load to check which video the user has seen
-        $('#videoSeenCountModal').modal('show');
-        //$('#videoSeenModal').modal('show');
+        //$('#videoSeenCountModal').modal('show');
+        $('#videoSeenModal').modal('show');
     });
 
     let netYawChange = 0; //keeps track of how much the horizontal FOV has changed
@@ -1710,7 +1711,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
                     'onStateChange': onStateChange
                 }
             });
-            $('#videoSeenCountModal').modal('hide');//auto hide modal window if a specific video ID is given,
+            //$('#videoSeenCountModal').modal('hide');//auto hide modal window if a specific video ID is given,
             //since we don't need to randomize for a video any more
         }
 
@@ -1912,11 +1913,11 @@ if there's a mismatch in number of videos seen, send back to first window to res
         }
         //human error checking, making sure the number of videos seen that the user provided on first modal window
         // match with the number of videos they selected on the second modal window
-        if (videoSeenCount != (4-uncheckedVideoCount)){
-            alert("The number of video seen does not match videos selected! Please reload page before proceeding.");
-            location.reload();
-            return;
-        }
+        // if (videoSeenCount != (4-uncheckedVideoCount)){
+        //     alert("The number of video seen does not match videos selected! Please reload page before proceeding.");
+        //     location.reload();
+        //     return;
+        // }
 
         if(uncheckedVideoCount == 0){ //if the user has already watched all videos, serve up a default video
             //TODO show a toast popup window https://getbootstrap.com/docs/5.0/components/toasts/

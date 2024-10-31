@@ -68,7 +68,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
                 </button>
             </div>
             <div class="modal-body">
-                Please select the videos you have already seen <br>
+                Please select the videos you have already seen, do not select any if you have not seen any of them <br>
                 <br>
                 <!-- TODO adjust thumbnail to appropriate size-->
                 <input type="checkbox" id="video1ModalCheckbox">
@@ -1712,6 +1712,7 @@ if there's a mismatch in number of videos seen, send back to first window to res
                 }
             });
             //$('#videoSeenCountModal').modal('hide');//auto hide modal window if a specific video ID is given,
+            $('#videoSeenModal').modal('hide');//auto hide modal window if a specific video ID is given,
             //since we don't need to randomize for a video any more
         }
 

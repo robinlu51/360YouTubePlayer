@@ -23,9 +23,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="69f41ab2-6a1d-4f47-96ac-5c043c1176f2" name="Default Changelist" comment="Moved camera movement logging into its own data structure.">
+      <change afterPath="$PROJECT_DIR$/Recruitment.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rollercoaster.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rollercoaster.jpg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,8 +35,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="XSLT Stylesheet" />
-        <option value="HTML File" />
         <option value="CSS File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -221,7 +220,8 @@
       <workItem from="1729186554488" duration="1033000" />
       <workItem from="1729793296093" duration="1065000" />
       <workItem from="1730398981365" duration="1275000" />
-      <workItem from="1730489269797" duration="2939000" />
+      <workItem from="1730489269797" duration="3047000" />
+      <workItem from="1731522072949" duration="656000" />
     </task>
     <task id="LOCAL-00001" summary="Moved camera movement logging into its own data structure.">
       <created>1631044767407</created>

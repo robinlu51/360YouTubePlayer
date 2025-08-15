@@ -40,6 +40,14 @@ body {
     border-width: 1px;
 }
 
+.demoButton {
+    padding: 1px 6px;
+    border: 1px outset;
+    border-radius: 3px;
+    color: buttontext;
+    background-color: buttonface;
+    text-decoration: none;
+}
 
 .cursorBox {
     position: absolute;
@@ -52,6 +60,25 @@ body {
     cursor: crosshair;
     /* z-index: 6; */
 }
+
+.flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    /*background-color: black;*/
+}
+
+.flex-container > div {
+    /*background-color: #f1f1f1;*/
+    width: 300px;
+    margin: 30px;
+    text-align: center;
+    line-height: 40px;
+    font-size: 15px;
+}
+
+
 
 .highlightBox {
     position: absolute;

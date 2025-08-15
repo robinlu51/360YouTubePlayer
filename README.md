@@ -1,8 +1,14 @@
 # 360YouTubePlayer
- My 360 video player with YouTube iframe API. 
+ This is the repository for my 360-degree video player, implemented with the YouTube iframe API. 
  Developed in JavaScript and HTML.
- The main goal of this project is to develop alternative control methods for 360-degree videos on a 2D screen, without requiring additional hardware that could be inaccessible for many like VR headsets.
- You can visit the live page for trial use at https://robinlu51.github.io/360YouTubePlayer/
+ This project is part of my graduate thesis at Virginia Tech, you can access the full thesis document here: https://vtechworks.lib.vt.edu/items/546ac03c-bdcb-4b2e-b67a-249021bfe21a
+
+ The main goal of this project is to investigate and develop alternative control methods for 360-degree videos on 2D screens, without requiring additional hardware that could be inaccessible for many like VR headsets.
+ And through the quantitative and qualitative analysis, understand what design elements can improve both usability and user experience.
+
+ If this is your first time using this, I recommend you start with the Demo Directory Page here: https://robinlu51.github.io/360YouTubePlayer/DemoDirectory.html
  
- Disclaimer, this page is still under active development and new features quality-of-life improvements are still being added on weekly basis, there's an interactive tutorial in place for some of the features and control methods, the rest will be added as each part is completed (You can access the tutorial by clicking the "Tutorial" button on top left of the main page).
- 
+You can visit the full live page for trial use at https://robinlu51.github.io/360YouTubePlayer/ 
+
+ Disclaimer: As of relative-recent developments (at the time of writing) from YouTube's end, advertisements are being shown in these embedded videos,
+ regardless of our preferences. You may need to watch/skip the ads before you can access the intended content.
